@@ -1,0 +1,24 @@
+<!-- BEGIN SIDEBAR -->
+          <div class="sidebar col-md-3 col-sm-4">
+            <ul class="list-group margin-bottom-25 sidebar-menu">
+              <?php foreach ($categories as $category):?>
+                <li class="list-group-item clearfix dropdown">
+                  <a href="<?php echo base_url()?>category/<?php echo $category->slug?>">
+                    <i class="fa fa-angle-right"></i>
+                    <?php echo $category->category?>
+                    
+                  </a>
+                  <ul class="dropdown-menu">
+                    <?php
+                      $this->db->order_by('subcategories.subcategory', 'asc');
+                      $subcategories = $this->db->get_where('subcategories', ['category' => $category->category])->result();
+                      
+                      foreach ($subcategories as $subcategory):?>
+                      <li><a href="<?php echo base_url()?>category/<?php echo $subcategory->slug?>"><i class="fa fa-angle-right"></i> <?php echo $subcategory->subcategory?></a></li>
+                    <?php endforeach;?>
+                  </ul>
+                </li>
+              <?php endforeach;?>
+            </ul>
+          </div>
+          <!-- END SIDEBAR -->
