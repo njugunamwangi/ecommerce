@@ -48,6 +48,10 @@ class Auth extends MX_Controller
 			$data['user_account'] = $this->ion_auth->user()->row();
 
 			$data['total_orders'] = $this->get_total_orders();
+
+			$data['total_sales_amount'] = $this->total_sales();
+
+			$data['last_ten_orders'] = $this->last_ten_orders();
 			
 			//USAGE NOTE - you can do more complicated queries like this
 			//$data['users'] = $this->ion_auth->where('field', 'value')->users()->result();
@@ -132,7 +136,11 @@ class Auth extends MX_Controller
 				'type' => 'password',
 			];
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['store_phone_number'] = $this->storephonenumber();
+
+			$data['store_email'] = $this->storeemailaddress();
 
 			$this->_render_page('auth/login', $data);
 		}
@@ -1739,7 +1747,9 @@ class Auth extends MX_Controller
 
 			$data['orders'] = $this->ion_auth_model->get_orders();
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['store_currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/list_orders', $data);
@@ -1772,11 +1782,41 @@ class Auth extends MX_Controller
 
 			$data['user_account'] = $this->ion_auth->user()->row();
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['store_currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/view_order', $data);
 			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * @return last 10 orders
+	 */
+	public function last_ten_orders() {
+		$this->db->limit(10);
+		$this->db->order_by('orders.order_id', 'desc');
+		return $this->db->get('orders')->result();
+	}
+
+	// public function users() {
+	// 	$this->db->limit(10);
+	// 	$this->db->order_by('')
+	// }
+	
+	public function orders() {
+		$orders = $this->db->get('orders')->result();
+		foreach ($orders as $order) {
+			$cart_items = json_decode($order->orders);
+
+			// echo print_r($cart_items);
+			foreach ($cart_items as $cart_item) {
+				echo '<pre>';
+				
+				echo $cart_item->id, ' => ', $cart_item->qty, ' => ', number_format($cart_item->price, 2), ' => ', number_format($cart_item->subtotal, 2);
+			}
 		}
 	}
 
@@ -1800,13 +1840,13 @@ class Auth extends MX_Controller
 
 			$data['user_account'] = $this->ion_auth->user()->row();
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
 
-			$data['store_email'] = $this->db->get_where('info', ['field' => 'email-address'])->row()->value;
+			$data['store_email'] = $this->storeemailaddress();
 
-			$data['store_phone_number'] = $this->db->get_where('info', ['field' => 'phone-number'])->row()->value;
+			$data['store_phone_number'] = $this->storephonenumber();
 
-			$data['store_currency'] = $this->db->get_where('info', ['field' => 'currency'])->row()->value;
+			$data['store_currency'] = $this->storecurrency();
 
 			$data['store_location'] = $this->db->get_where('info', ['field' => 'location'])->row()->value;
 
@@ -1814,6 +1854,17 @@ class Auth extends MX_Controller
 			$this->_render_page('auth/general_settings', $data);
 			$this->_render_page('templates/footer');
 		}
+	}
+
+	/**
+	 * @param int
+	 *
+	 * @return total sales
+	 */
+	public function total_sales() {
+		$this->db->select_sum('total_orders');
+		$result =  $this->db->get('orders')->row();
+		return $result->total_orders;
 	}
 
 	/**

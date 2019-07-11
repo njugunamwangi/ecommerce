@@ -915,7 +915,7 @@
                                                         } elseif ($group->name === 'customer') {
                                                             ?>
                                                             <span >
-                                                                <a href="<?php echo base_url('auth/make_admin/'. $user->id)?>" class="label label-sm label-default"><i class="fa fa-user-secret"></i> <?php echo lang('make_admin')?></a>
+                                                                <a href="<?php echo base_url('auth/make_wholesaler/'. $user->id)?>" class="label label-sm label-default"><i class="fa fa-user-secret"></i> <?php echo lang('make_wholesaler')?></a>
                                                             </span> 
                                                             <?php
                                                         }

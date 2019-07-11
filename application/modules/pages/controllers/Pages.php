@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-/*ob_start();*/
-
 class Pages extends MX_Controller {
 
 	public function __construct() {
@@ -83,8 +81,10 @@ class Pages extends MX_Controller {
 		$this->load->view('pages/subcategory', $data);
 	}
 
+	/**
+	 * add product to cart
+	 */
 	public function add() {
-
 		$product = $this->pages_model->get($this->input->post('id'));
 		if ($this->ion_auth->is_wholesaler()) {
 			$data = [
@@ -272,6 +272,51 @@ class Pages extends MX_Controller {
 	}
 
 	/**
+	 * @return my-orders history
+	 */
+	public function my_orders() {
+		if (!$this->ion_auth->logged_in()) {
+			redirect('login', 'refresh');
+		} else {
+			$data['title'] = $this->lang->line('my_orders_heading');
+			$data['name_of_store'] = $this->name_of_store();
+			$data['store_email'] = $this->store_email();
+			$data['store_phone_number'] = $this->store_phone_number();
+			$data['store_currency'] = $this->store_currency();
+			$data['cart_items'] = $this->cart->contents();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['my_orders'] = $this->pages_model->my_orders();
+
+			$this->_render_page('pages/my-orders', $data);
+		}
+	}
+
+	/**
+	 * @return each order
+	 */
+	public function view_order($order_id = NULL) {
+		if (!$this->ion_auth->logged_in()) {
+			redirect('login', 'refresh');
+		} else {
+			$data['my_order'] = $this->pages_model->my_orders($order_id);
+
+			if (empty($data['my_order'])) {
+				show_404();
+			}
+
+			$data['title'] = $data['my_order']->order_id;
+			$data['name_of_store'] = $this->name_of_store();
+			$data['store_email'] = $this->store_email();
+			$data['store_phone_number'] = $this->store_phone_number();
+			$data['store_currency'] = $this->store_currency();
+			$data['cart_items'] = $this->cart->contents();
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$this->_render_page('pages/view-order', $data);
+		}
+	}
+
+	/**
 	 * confirm order
 	 */
 	public function confirm_order() {
@@ -315,9 +360,203 @@ class Pages extends MX_Controller {
 		if ($this->form_validation->run() === TRUE && $this->db->insert('orders', $data)) {
 			
 			$this->cart->destroy();
-			redirect('/', 'refresh');
+			redirect('/my-account/orders', 'refresh');
 		} else {
 			redirect('checkout');
+		}
+	}
+
+	/**
+	 * add product to wishlist
+	 */
+	public function add_to_wishlist() {
+		// form validaton
+		$this->form_validation->set_rules('wishlist_code', $this->lang->line('wishlist_code_validation_label'), 'required|is_unique[wishlist.wishlist_code]');
+
+		if ($this->form_validation->run() === TRUE) {
+			$data = [
+				'customer_id' => $this->input->post('customer_id'),
+				'product_id' => $this->input->post('product_id'),
+				'wishlist_code' => $this->input->post('wishlist_code'),
+				'time' => time()
+			];
+		}
+		
+		if ($this->form_validation->run() === TRUE && $this->db->insert('wishlist', $data)) {
+			$data['success_message'] = $this->lang->line('product_added_to_wishlist');
+			redirect('/');
+		} else {
+			$data['error_message'] = $this->lang->line('product_in_wishlist');
+			redirect('/');
+		}	
+	}
+
+	/**
+	 * @return wishlist page
+	 */
+	public function my_wishlist() {
+		if (!$this->ion_auth->logged_in()) {
+			redirect('login', 'redirect');
+		} else {
+			$data['title'] = $this->lang->line('my_wishlist_heading');
+			$data['name_of_store'] = $this->name_of_store();
+			$data['store_email'] = $this->store_email();
+			$data['store_phone_number'] = $this->store_phone_number();
+			$data['store_currency'] = $this->store_currency();
+			$data['cart_items'] = $this->cart->contents();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['wishlists'] = $this->pages_model->my_wishlist();
+
+			$this->_render_page('pages/my-wishlist', $data);
+		}
+	}
+
+	/**
+	 * remove product from wishlist
+	 */
+	public function remove_from_wishlist() {
+		$id = $this->input->post('id');
+		$this->db->delete('wishlist', ['id' => $id]);
+		redirect('my-account/wishlist');
+	}
+
+	/**
+	 * add product to cart from wishlist
+	 */
+	public function addtocart() {
+		$product = $this->pages_model->get($this->input->post('id'));
+		if ($this->ion_auth->is_wholesaler()) {
+			$data = [
+				'id' => $this->input->post('id'),
+				'qty' => 5,
+				'price' => $product->wholesale_price,
+				'name' => $product->name,
+				'image' => $product->image,
+				'slug' => $product->slug
+			];
+		} else {
+			$data = [
+				'id' => $this->input->post('id'),
+				'qty' => 1,
+				'price' => $product->sale_price,
+				'name' => $product->name,
+				'image' => $product->image,
+				'slug' => $product->slug
+			];
+		}
+
+		if ($this->cart->insert($data)) {
+			$id = $this->input->post('id');
+			$this->db->delete('wishlist', ['id' => $id]);
+			redirect('my-account/wishlist');
+		}
+	}
+
+	/**
+	 * edit account information
+	 */
+	public function edit_account() {
+		$data['title'] = $this->lang->line('edit_account_infomation_heading');
+
+		if (!$this->ion_auth->logged_in()) {
+			
+			// if the user is not logged in
+			redirect('login', 'refresh');
+		} else {
+			$user_id = $this->ion_auth->user()->row()->id;
+			$user_email = $this->ion_auth->user()->row()->email;
+			$user_phone = $this->ion_auth->user()->row()->phone;
+
+			// form validation
+			$this->form_validation->set_rules('first_name', $this->lang->line('edit_account_first_name_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('last_name', $this->lang->line('edit_account_last_name_validation_label'), 'trim|required');
+			if ($user_id === 'id') {
+				$this->form_validation->set_rules('phone', $this->lang->line('edit_account_phone_validation_label'), 'trim|required|min_length[10]|max_length[12]|is_unique[users.phone]', 
+					[
+						'is_unique' => $this->lang->line('phone_already_registered')
+					]
+				);
+				$this->form_validation->set_rules('email', $this->lang->line('edit_account_email_validation_label'), 'trim|required|valid_email|is_unique[users.email]',
+					[
+						'valid_email' => $this->lang->line('enter_valid_email'),
+						'is_unique' => $this->lang->line('email_already_registered')
+					]
+				);
+			} else {
+				$this->form_validation->set_rules('phone', $this->lang->line('edit_account_phone_validation_label'), 'trim|required|min_length[10]|max_length[12]');
+				$this->form_validation->set_rules('email', $this->lang->line('edit_account_email_validation_label'), 'trim|required|valid_email',
+					[
+						'valid_email' => $this->lang->line('enter_valid_email')
+					]
+				);
+			}
+				
+
+			if ($this->form_validation->run() === TRUE) {
+				$email = strtolower($this->input->post('email'));
+				$username_arr = explode('@', $email, 2);
+				$username = $username_arr[0];
+
+				$data = [
+					'first_name' => $this->input->post('first_name'),
+					'last_name' => $this->input->post('last_name'),
+					'email' => $email,
+					'username' => $username,
+					'phone' => $this->input->post('phone')
+				];
+			}
+
+			if ($this->form_validation->run() === TRUE && $this->ion_auth->update($user_id, $data)) {
+				redirect('my-account', 'refresh');
+			} else {
+				$data['name_of_store'] = $this->name_of_store();
+				$data['store_email'] = $this->store_email();
+				$data['store_phone_number'] = $this->store_phone_number();
+				$data['store_currency'] = $this->store_currency();
+				$data['cart_items'] = $this->cart->contents();
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$this->_render_page('pages/edit-account', $data);
+			}
+		}
+	}
+
+	/**
+	 * reset account password
+	 */ 
+	public function reset_password() {
+		$data['title'] = $this->lang->line('reset_password_heading');
+
+		// check if the user is logged in
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect them to the login page
+			redirect('login', 'refresh');
+		} else {
+			$user_id = $this->ion_auth->user()->row()->id;
+
+			// form validation
+			$this->form_validation->set_rules('password', $this->lang->line('reset_password_validation_password_label', 'required|min_length['.$this->config->item('min_password_length', 'ion_auth').']|matches[password_confirm]'));
+			$this->form_validation->set_rules('password_confirm', $this->lang->line('reset_password_validation_password_confirm_label'));
+
+			if ($this->form_validation->run() === TRUE) {
+				$password = $this->ion_auth_model->hash_password($this->input->post('password'));
+				$data = ['password' => $password];
+			}
+
+			if ($this->form_validation->run() === TRUE && $this->ion_auth->update($user_id, $data)) {
+				$this->session->session_destroy();
+				redirect('login', 'refresh');
+			} else {
+				$data['name_of_store'] = $this->name_of_store();
+				$data['store_email'] = $this->store_email();
+				$data['store_phone_number'] = $this->store_phone_number();
+				$data['store_currency'] = $this->store_currency();
+				$data['cart_items'] = $this->cart->contents();
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$this->_render_page('pages/reset-password', $data);
+			}
 		}
 	}
 

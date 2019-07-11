@@ -19,7 +19,7 @@ License: You must have a valid license purchased only from themeforest (the abov
 <!-- Head BEGIN -->
 <head>
   <meta charset="utf-8">
-  <title><?php echo $name_of_store?></title>
+  <title><?php echo $title?> | <?php echo $name_of_store?></title>
 
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -38,8 +38,7 @@ License: You must have a valid license purchased only from themeforest (the abov
   <link rel="shortcut icon" href="favicon.ico">
 
   <!-- Fonts START -->
-  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"><!--- fonts for slider on the index page -->  
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"> 
   <!-- Fonts END -->
 
   <!-- Global styles START -->          
@@ -50,22 +49,19 @@ License: You must have a valid license purchased only from themeforest (the abov
   <!-- Page level plugin styles START -->
   <link href="<?php echo base_url()?>public/assets/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.css" rel="stylesheet">
-  <link href="<?php echo base_url()?>public/assets/global/plugins/slider-layer-slider/css/layerslider.css" rel="stylesheet">
   <!-- Page level plugin styles END -->
 
   <!-- Theme styles START -->
   <link href="<?php echo base_url()?>public/assets/global/css/components.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/pages/css/style-shop.css" rel="stylesheet" type="text/css">
-  <link href="<?php echo base_url()?>public/assets/frontend/pages/css/style-layer-slider.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
   <!-- Theme styles END -->
-
 </head>
 <!-- Head END -->
-
+<?php $i = 1; ?>
 <!-- Body BEGIN -->
 <body class="corporate">
     <!-- BEGIN STYLE CUSTOMIZER -->
@@ -144,7 +140,7 @@ License: You must have a valid license purchased only from themeforest (the abov
     <!-- BEGIN HEADER -->
     <div class="header">
       <div class="container">
-        <!-- <a class="site-logo" href="<?php echo base_url()?>"><img src="<?php echo base_url()?>public/assets/frontend/layout/img/logos/logo-shop-red.png" alt="<?php echo lang('site_title');?>"></a> -->
+        <!-- <a class="site-logo" href="shop-index.html"><img src="<?php echo base_url()?>public/assets/frontend/layout/img/logos/logo-shop-red.png" alt="Metronic Shop UI"></a> -->
         <a class="site-logo" style="text-decoration: none;" href="<?php echo base_url()?>" ><h2><strong><?php echo $name_of_store?></strong></h2></a>
         <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
 
@@ -194,11 +190,10 @@ License: You must have a valid license purchased only from themeforest (the abov
         <!-- BEGIN NAVIGATION -->
         <div class="header-navigation">
           <ul>
-            <li class="active"><a href="<?php echo base_url();?>">Shop</a></li>
+            <li><a href="<?php echo base_url();?>">Shop</a></li>
             <li><a href="<?php echo base_url();?>cart">Cart</a></li>
             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
-
-            <li><a href="<?php echo base_url();?>my-account">My Account</a></li>
+            <li class="active"><a href="<?php echo base_url();?>my-account">My Account</a></li>
 
             <!-- BEGIN TOP SEARCH -->
             <li class="menu-search">
@@ -222,83 +217,350 @@ License: You must have a valid license purchased only from themeforest (the abov
       </div>
     </div>
     <!-- Header END -->
-
+    
     <div class="main">
       <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="<?php echo base_url()?>">Home</a></li>
+            <li><a href="<?php echo base_url()?>my-account"><?php echo $this->lang->line('my_account_heading')?></a></li>
+            <li><?php echo $this->lang->line('order_heading')?></li>
+            <li class="active"><?php echo $my_order->order_id?></li>
+        </ul>
         <!-- BEGIN SIDEBAR & CONTENT -->
-        <div class="row margin-bottom-40 ">
-          <!-- BEGIN CONTENT -->
-          <div class="row product-list">
-            <?php foreach($products as $product):?>
-            <!-- PRODUCT ITEM START -->
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <?php echo form_open('pages/add');?>
-                    <div class="pi-img-wrapper">
-                      <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="img-responsive" alt="<?php echo $product->name?>">
-                      <div>
-                        <a href="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="btn btn-default fancybox-button">Zoom</a>
-                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a><br><br>
+        <div class="row margin-bottom-40">
+
+          <?php
+            if (!$this->ion_auth->logged_in()) {
+              ?>
+                <div class="col-md-12 col-sm-12">
+                  <h1><?php echo $this->lang->line('shopping_cmy_account_headingart_heading')?></h1>
+                  <div class="shopping-cart-page">
+                    <h1><?php echo $title?></h1>
+                    <div class="shopping-cart-data clearfix">
+                      <p><?php echo $this->lang->line('my_account_login_message')?></p>
+                    </div>
+                    <a href="<?php echo base_url()?>login" class="btn btn-primary"><i class="fa fa-key"> Login </i></a>
+                  </div>
+                </div>
+              <?php
+            } else {
+              ?>
+              <!-- BEGIN SIDEBAR -->
+              <div class="sidebar col-md-3 col-sm-3">
+                <ul class="list-group margin-bottom-25 sidebar-menu">
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/orders"><i class="fa fa-angle-right"></i><?php echo $this->lang->line('my_orders_heading')?></a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>reset_password"><i class="fa fa-angle-right"></i> Reset Password</a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/wishlist"><i class="fa fa-angle-right"></i> Wish list</a></li>
+                  <!-- <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Returns</a></li> -->
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>newsletter"><i class="fa fa-angle-right"></i> Newsletter</a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>logout"><i class="fa fa-angle-right"></i> Logout</a></li>
+                </ul>
+              </div>
+              <!-- END SIDEBAR -->
+
+              <!-- BEGIN CONTENT -->
+              <div class="col-md-9 col-sm-7">      
+                <div class="tab-pane active" id="tab_1">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                      <div class="portlet yellow-crusta box">
+                        <div class="portlet-title">
+                          <div class="caption">
+                            <i class="fa fa-user"></i>Order Details
+                          </div>
+                        </div>
+                        <div class="portlet-body">
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Order #:
+                            </div>
+                            <div class="col-md-7 value">
+                               <?php echo $my_order->order_id?> <span class="label label-info label-sm">
+                              Email confirmation was sent </span>
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Order Date & Time:
+                            </div>
+                            <div class="col-md-7 value">
+                               <?php echo date('jS M, Y', $my_order->order_id)?> at <?php echo date('H:i:s', $my_order->order_id)?> 
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Order Status:
+                            </div>
+                            <?php
+                              if ($my_order->status == 0) {
+                                ?>
+                                  <div class="col-md-7 value">
+                                    <span class="label label-danger">
+                                    Not Processed </span>
+                                  </div>
+                                <?php
+                              } elseif ($my_order->status == 1) {
+                                ?>
+                                  <div class="col-md-7 value">
+                                    <span class="label label-info">
+                                    Processed </span>
+                                  </div>
+                                <?php
+                              } elseif ($my_order->status == 2) {
+                                ?>
+                                  <div class="col-md-7 value">
+                                    <span class="label label-warning">
+                                    In Transit </span>
+                                  </div>
+                                <?php
+                              } elseif ($my_order->status == 3) {
+                                ?>
+                                  <div class="col-md-7 value">
+                                    <span class="label label-default">
+                                    Cancelled </span>
+                                  </div>
+                                <?php
+                              } else {
+                                ?>
+                                  <div class="col-md-7 value">
+                                    <span class="label label-success">
+                                    Delivered & Closed </span>
+                                  </div>
+                                <?php
+                              }
+                            ?>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Grand Total:
+                            </div>
+                            <div class="col-md-7 value">
+                              <?php
+                                $fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row();
+                                echo $store_currency;
+                                $shipment_fee = $fee->fee;
+                                $total_order_cost = $my_order->total_orders;
+                                echo ' ', number_format($shipment_fee + $total_order_cost, 2);
+                              ?>
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Payment Information:
+                            </div>
+                            <div class="col-md-7 value">
+                              <?php echo $my_order->method_of_payment?>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <h3><a href="<?php echo base_url($product->slug)?>"><?php echo ucwords($product->name)?></a></h3>
-                    <?php
-                      if ($this->ion_auth->is_wholesaler()) {
-                        ?>
-                          <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->wholesale_price)?></div>
-                        <?php
-                      } else {
-                        ?>
-                          <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->sale_price)?></div>
-                        <?php
-                      }
-                    ?>
-                    <?php echo form_hidden('id', $product->id); ?>
-                    <button type="submit" class="btn btn-default add2cart">Add to Cart</button>
-                  <?php echo form_close();?>
-                  <?php 
-                    if ($this->ion_auth->logged_in()) {
-                      ?>
-                        <?php echo form_open('pages/add_to_wishlist');?>
-                          <?php echo form_hidden('product_id', $product->id);?>
-                          <?php echo form_hidden('customer_id', $this->ion_auth->user()->row()->id);?>
-                          <?php echo form_hidden('wishlist_code', $this->ion_auth->user()->row()->id.$product->id)?>
-                          <button type="submit" class="btn btn-default add2cart" title="Add to Wishlist"><i class="fa fa-heart"></i></button>
-                        <?php echo form_close();?>
-                      <?php
-                    }
-                  ?>
+                    <div class="col-md-6 col-sm-12">
+                      <div class="portlet blue-hoki box">
+                        <div class="portlet-title">
+                          <div class="caption">
+                            <i class="fa fa-info"></i>Customer Information
+                          </div>
+                        </div>
+                        <div class="portlet-body">
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Customer Name:
+                            </div>
+                            <div class="col-md-7 value">
+                              <?php echo $my_order->first_name?> <?php echo $my_order->last_name?>
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Email:
+                            </div>
+                            <div class="col-md-7 value">
+                               <?php echo $my_order->email?>
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               State:
+                            </div>
+                            <div class="col-md-7 value">
+                              <?php echo $my_order->subcounty?>
+                            </div>
+                          </div>
+                          <div class="row static-info">
+                            <div class="col-md-5 name">
+                               Phone Number:
+                            </div>
+                            <div class="col-md-7 value">
+                              <?php echo $my_order->phone?>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                      <div class="portlet red-sunglo box">
+                        <div class="portlet-title">
+                          <div class="caption">
+                            <i class="fa fa-send"></i>Shipping Address
+                          </div>
+                        </div>
+                        <div class="portlet-body">
+                          <div class="row static-info">
+                            <div class="col-md-12 value">
+                              <?php echo $my_order->first_name?> <?php echo $my_order->last_name?><br>
+                               <?php echo $my_order->address?><br>
+                               <?php echo $my_order->county?><br>
+                               <?php echo $my_order->subcounty?>, <?php echo $my_order->postal_code?> <?php echo $my_order->county?><br>
+                               Kenya<br>
+                               T: <?php echo $my_order->phone?><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                      <div class="portlet grey-cascade box">
+                        <div class="portlet-title">
+                          <div class="caption">
+                            <i class="fa fa-shopping-cart"></i>Shopping Cart
+                          </div>
+                        </div>
+                        <div class="portlet-body">
+                          <div class="table-responsive">
+                            <table class="table table-hover table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th>
+                                     Product
+                                  </th>
+                                  <th>
+                                     Item Status
+                                  </th>
+                                  <th>
+                                     Price
+                                  </th>
+                                  <th>
+                                     Quantity
+                                  </th>
+                                  <th>
+                                     Total
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php
+                                  $arr = json_decode($my_order->orders);
+                                  foreach ($arr as $cart_item) {
+                                    ?>
+                                      <tr>
+                                        <td>
+                                          <?php echo ucwords($cart_item->name) ?>
+                                        </td>
+                                        <td>
+                                          <span class="label label-sm label-success">
+                                          Available
+                                        </td>
+                                        <td>
+                                          <?php echo $store_currency?> <?php echo number_format($cart_item->price, 2)?>
+                                        </td>
+                                        <td>
+                                          <?php echo $cart_item->qty?>
+                                        </td>
+                                        <td>
+                                          <?php echo $store_currency?> <?php echo number_format($cart_item->subtotal, 2)?>
+                                        </td>
+                                      </tr>
+                                    <?php
+                                  }
+                                ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
+                      <div class="well">
+                        <div class="row static-info align-reverse">
+                          <div class="col-md-6 name">
+                             Sub Total:
+                          </div>
+                          <div class="col-md-6 value">
+                             <?php echo $store_currency?> <?php echo number_format($my_order->total_orders, 2)?>
+                          </div>
+                        </div>
+                        <div class="row static-info align-reverse">
+                          <div class="col-md-6 name">
+                             Shipping Cost:
+                          </div>
+                          <div class="col-md-6 value">
+                            <?php
+                              $shipment_fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row();
+                              echo $store_currency;
+                              echo ' ', number_format($shipment_fee->fee, 2);
+                            ?>
+                          </div>
+                        </div>
+                        <div class="row static-info align-reverse">
+                          <div class="col-md-6 name">
+                             Grand Total:
+                          </div>
+                          <div class="col-md-6 value">
+                            <?php
+                              $fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row();
+                              echo $store_currency;
+                              $shipment_fee = $fee->fee;
+                              $total_order_cost = $my_order->total_orders;
+                              echo ' ', number_format($shipment_fee + $total_order_cost, 2);
+                            ?>
+                          </div>
+                        </div>
+                        <!-- <div class="row static-info align-reverse">
+                          <div class="col-md-8 name">
+                             Total Paid:
+                          </div>
+                          <div class="col-md-3 value">
+                             $1,260.00
+                          </div>
+                        </div>
+                        <div class="row static-info align-reverse">
+                          <div class="col-md-8 name">
+                             Total Refunded:
+                          </div>
+                          <div class="col-md-3 value">
+                             $0.00
+                          </div>
+                        </div>
+                        <div class="row static-info align-reverse">
+                          <div class="col-md-8 name">
+                             Total Due:
+                          </div>
+                          <div class="col-md-3 value">
+                             $1,124.50
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            <!-- PRODUCT ITEM END -->
-            <?php endforeach?>
-          </div>
-          <!-- END CONTENT -->
+              <!-- END CONTENT -->
+              <?php
+            }
+          ?>
         </div>
         <!-- END SIDEBAR & CONTENT -->
       </div>
     </div>
-
-    <!-- BEGIN BRANDS -->
-    <!-- <div class="brands">
-      <div class="container">
-            <div class="owl-carousel owl-carousel6-brands">
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/canon.jpg" alt="canon" title="canon"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/esprit.jpg" alt="esprit" title="esprit"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/gap.jpg" alt="gap" title="gap"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/next.jpg" alt="next" title="next"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/puma.jpg" alt="puma" title="puma"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/zara.jpg" alt="zara" title="zara"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/canon.jpg" alt="canon" title="canon"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/esprit.jpg" alt="esprit" title="esprit"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/gap.jpg" alt="gap" title="gap"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/next.jpg" alt="next" title="next"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/puma.jpg" alt="puma" title="puma"></a>
-              <a href="shop-product-list.html"><img src="<?php echo base_url()?>public/assets/frontend/pages/img/brands/zara.jpg" alt="zara" title="zara"></a>
-            </div>
-        </div>
-    </div> -->
-    <!-- END BRANDS -->
 
     <!-- BEGIN PRE-FOOTER -->
     <div class="pre-footer">
@@ -404,74 +666,11 @@ License: You must have a valid license purchased only from themeforest (the abov
     </div>
     <!-- END FOOTER -->
 
-    <!-- BEGIN fast view of a product -->
-    <!-- <div id="product-pop-up" style="display: none; width: 700px;">
-      <div class="product-page product-pop-up">
-        <div class="row">
-          <div class="col-md-6 col-sm-6 col-xs-3">
-            <div class="product-main-image">
-              <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" alt="Cool green dress with red bell" class="img-responsive">
-            </div>
-            <div class="product-other-images">
-              <a href="javascript:;" class="active"><img alt="Berry Lace Dress" src="<?php echo base_url()?>public/assets/frontend/pages/img/products/model3.jpg"></a>
-              <a href="javascript:;"><img alt="Berry Lace Dress" src="<?php echo base_url()?>public/assets/frontend/pages/img/products/model4.jpg"></a>
-              <a href="javascript:;"><img alt="Berry Lace Dress" src="<?php echo base_url()?>public/assets/frontend/pages/img/products/model5.jpg"></a>
-            </div>
-          </div>
-          <div class="col-md-6 col-sm-6 col-xs-9">
-            <h2><?php echo $product->name?></h2>
-            <div class="price-availability-block clearfix">
-              <div class="price">
-                <strong><span>Kes</span> <?php echo $product->sale_price?></strong>
-                <em>Kes<span> <?php echo $product->regular_price?></span></em>
-              </div>
-              <div class="availability">
-                Availability: <strong>In Stock</strong>
-              </div>
-            </div>
-            <div class="description">
-              <p><?php echo $product->description?>.</p>
-            </div>
-            <div class="product-page-options">
-              <div class="pull-left">
-                <label class="control-label">Size:</label>
-                <select class="form-control input-sm">
-                  <option>L</option>
-                  <option>M</option>
-                  <option>XL</option>
-                </select>
-              </div>
-              <div class="pull-left">
-                <label class="control-label">Color:</label>
-                <select class="form-control input-sm">
-                  <option>Red</option>
-                  <option>Blue</option>
-                  <option>Black</option>
-                </select>
-              </div>
-            </div>
-            <div class="product-page-cart">
-              <div class="product-quantity">
-                  <input id="product-quantity" type="text" value="1" readonly name="product-quantity" class="form-control input-sm">
-              </div>
-              <button class="btn btn-primary" type="submit">Add to cart</button>
-              <a href="shop-item.html" class="btn btn-default">More details</a>
-            </div>
-          </div>
-
-          <div class="sticker sticker-sale"></div>
-        </div>
-      </div>
-    </div> -->
-    <!-- END fast view of a product -->
-
     <!-- Load javascripts at bottom, this will reduce page load time -->
-    <!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+    <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
     <!--[if lt IE 9]>
     <script src="<?php echo base_url()?>public/assets/global/plugins/respond.min.js"></script>  
-    <![endif]-->
-
-    <script type="text/javascript" src="<?php echo base_url()?>public/custom/jquery-3.1.0.min.js"></script>
+    <![endif]-->  
     <script src="<?php echo base_url()?>public/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
@@ -482,26 +681,12 @@ License: You must have a valid license purchased only from themeforest (the abov
     <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
     <script src="<?php echo base_url()?>public/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
     <script src="<?php echo base_url()?>public/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
-    <script src='<?php echo base_url()?>public/assets/global/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
-    <script src="<?php echo base_url()?>public/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
-
-    <!-- BEGIN LayerSlider -->
-    <script src="<?php echo base_url()?>public/assets/global/plugins/slider-layer-slider/js/greensock.js" type="text/javascript"></script><!-- External libraries: GreenSock -->
-    <script src="<?php echo base_url()?>public/assets/global/plugins/slider-layer-slider/js/layerslider.transitions.js" type="text/javascript"></script><!-- LayerSlider script files -->
-    <script src="<?php echo base_url()?>public/assets/global/plugins/slider-layer-slider/js/layerslider.kreaturamedia.jquery.js" type="text/javascript"></script><!-- LayerSlider script files -->
-    <script src="<?php echo base_url()?>public/assets/frontend/pages/scripts/layerslider-init.js" type="text/javascript"></script>
-    <!-- END LayerSlider -->
-
-
 
     <script src="<?php echo base_url()?>public/assets/frontend/layout/scripts/layout.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function() {
             Layout.init();    
             Layout.initOWL();
-            LayersliderInit.initLayerSlider();
-            Layout.initImageZoom();
-            Layout.initTouchspin();
             Layout.initTwitter();
         });
     </script>

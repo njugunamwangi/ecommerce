@@ -42,3 +42,28 @@ $lang['subscribe_newsletter_validation_email_label'] 	= 'Email';
 $lang['my_account_heading']						= 'My Account';
 $lang['my_account_login_message']				= 'Please login to view your account';
 
+// My Orders
+$lang['my_orders_heading']		= 'My Orders';
+$lang['order_heading']			= 'Order';
+$lang['no_orders']				= 'You have not made any orders yet';
+
+// Pages
+$lang['wishlist_page_heading']	= 'Wishlist';
+
+// Wishlist
+$lang['wishlist_code_validation_label']		= 'Wishlist Code';
+$lang['my_wishlist_heading']				= 'My Wishlist';
+$lang['empty_wishlist']						= 'You have no products on your wishlist';
+
+// Edit Account Information
+$lang['edit_account_infomation_heading']					= 'Edit My Account';
+$lang['reset_password_heading']								= 'Reset Password';
+$lang['edit_account_first_name_validation_label']			= 'First Name';
+$lang['edit_account_last_name_validation_label']			= 'Last Name';
+$lang['edit_account_email_validation_label']				= 'Email';
+$lang['edit_account_email_validation_label']				= 'Phone';
+$lang['enter_valid_email']									= 'Please enter a valid email address';
+$lang['email_already_registered']							= 'The email address is registered by another user';
+$lang['phone_already_registered']							= 'The phone number is registered by another user';
+$lang['reset_password_validation_password_label']			= 'Password';
+$lang['reset_password_validation_password_confirm_label']	= 'Password Confirm';

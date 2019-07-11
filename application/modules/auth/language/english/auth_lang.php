@@ -215,3 +215,4 @@ $lang['activate_a_suspended_user']	= 'Activate';
 $lang['make_admin']					= 'Make Admin';
 $lang['login_as_an_admin']			= 'Login as admin';
 $lang['user_never_logged_in']		= 'Never logged in';
+$lang['make_wholesaler']			= 'Make Wholesaler';

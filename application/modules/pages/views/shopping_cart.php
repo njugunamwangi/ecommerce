@@ -114,7 +114,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                             <?php
                           } else {
                             ?>
-                              <li><a href="<?php echo base_url();?>wishlist">My Wishlist</a></li>
+                              <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
                               <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                               <?php
                                 if ($this->ion_auth->is_admin()) {
@@ -150,27 +150,40 @@ License: You must have a valid license purchased only from themeforest (the abov
         <div class="top-cart-block">
           <div class="top-cart-info">
             <a href="javascript:void(0);" class="top-cart-info-count"><?php echo $this->cart->total_items()?> item(s)</a>
-            <a href="javascript:void(0);" class="top-cart-info-value"><?php echo $store_currency?> <?php echo $this->cart->total()?></a>
+            <a href="javascript:void(0);" class="top-cart-info-value"><?php echo $store_currency?> <?php echo number_format($this->cart->total(), 2)?></a>
           </div>
           <i class="fa fa-shopping-cart"></i>
                         
           <div class="top-cart-content-wrapper">
             <div class="top-cart-content">
-              <ul class="scroller" style="height: 250px;">
-                <?php foreach($cart_items as $cart_item):?>
-                  <li>
-                    <a href="<?php echo base_url($cart_item['slug'])?>"><img src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" alt="<?php echo $cart_item['name']?>" width="37" height="34"></a>
-                    <span class="cart-content-count">x <?php echo $cart_item['qty']?></span>
-                    <strong><a href="<?php echo $cart_item['slug']?>"><?php echo $cart_item['name']?></a></strong>
-                    <em><?php echo $store_currency?> <?php echo $cart_item['price']?></em>
-                    <?php echo anchor('pages/removefromhome/'.$cart_item['rowid'], 'x')?>
-                  </li>
-                <?php endforeach?>
-              </ul>
-              <div class="text-right">
-                <a href="<?php echo base_url()?>pages/clearcart" class="btn btn-danger">Clear Cart</a>
-                <a href="<?php echo base_url()?>checkout" class="btn btn-primary">Checkout</a>
-              </div>
+              <?php
+                if (!empty($this->cart->contents())) {
+                  ?>
+                    <ul class="scroller" style="height: 200px;">
+                      <?php foreach($cart_items as $cart_item):?>
+                        <li>
+                          <a href="<?php echo base_url($cart_item['slug'])?>"><img src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" alt="<?php echo $cart_item['name']?>" width="37" height="34"></a>
+                          <span class="cart-content-count">x <?php echo $cart_item['qty']?></span>
+                          <strong><a href="<?php echo $cart_item['slug']?>"><?php echo $cart_item['name']?></a></strong>
+                          <em><?php echo $store_currency?> <?php echo number_format($cart_item['price'], 2)?></em>
+                          <?php echo anchor('pages/removefromhome/'.$cart_item['rowid'], 'x')?>
+                        </li>
+                      <?php endforeach?>
+                    </ul>
+                    <div class="text-right">
+                      <a href="<?php echo base_url()?>cart" class="btn btn-default">View Cart</a>
+                      <a href="<?php echo base_url()?>pages/clearcart" class="btn btn-danger">Clear Cart</a>
+                      <a href="<?php echo base_url()?>checkout" class="btn btn-primary">Checkout</a>
+                    </div>
+                  <?php
+                } else {
+                  ?>
+                    <ul class="scroller" style="height: 50px;">
+                      <p><?php echo $this->lang->line('empty_cart')?></p>
+                    </ul>
+                  <?php
+                }
+              ?>
             </div>
           </div>            
         </div>
@@ -221,7 +234,6 @@ License: You must have a valid license purchased only from themeforest (the abov
             if (!empty($cart_items)) {
               ?>
                 <div class="col-md-12 col-sm-12">
-                  <h1><?php echo $this->lang->line('shopping_cart_heading')?></h1>
                   <div class="goods-page">
                     <div class="goods-data clearfix">
                       <div class="table-wrapper-responsive">
@@ -263,10 +275,10 @@ License: You must have a valid license purchased only from themeforest (the abov
                               </div>
                             </td>
                             <td class="goods-page-price">
-                              <strong><span><?php echo $store_currency?> </span><?php echo $cart_item['price']?></strong>
+                              <strong><span><?php echo $store_currency?> </span><?php echo number_format($cart_item['price'], 2)?></strong>
                             </td>
                             <td class="goods-page-total">
-                              <strong><span><?php echo $store_currency?> </span><?php echo $cart_item['subtotal']?></span></strong>
+                              <strong><span><?php echo $store_currency?> </span><?php echo number_format($cart_item['subtotal'], 2)?></span></strong>
                             </td>
                             
                           </tr>
@@ -278,7 +290,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                         <ul>
                           <li class="shopping-total-price">
                             <em>Total</em>
-                            <strong class="price"><span><?php echo $store_currency?> </span><?php echo $this->cart->total()?>
+                            <strong class="price"><span><?php echo $store_currency?> </span><?php echo number_format($this->cart->total(),2)?>
                             </strong>
                           </li>
                         </ul>
@@ -395,7 +407,7 @@ License: You must have a valid license purchased only from themeforest (the abov
         <div class="row">
           <!-- BEGIN COPYRIGHT -->
           <div class="col-md-6 col-sm-6 padding-top-10">
-            <?php echo date('Y')?> © <?php echo lang('site_title')?>. ALL Rights Reserved. 
+            <?php echo date('Y')?> © <?php echo $name_of_store?>. ALL Rights Reserved. 
           </div>
           <!-- END COPYRIGHT -->
           <!-- BEGIN PAYMENTS -->

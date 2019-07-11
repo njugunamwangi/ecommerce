@@ -65,7 +65,7 @@ License: You must have a valid license purchased only from themeforest (the abov
 <!-- Body BEGIN -->
 <body class="corporate">
     <!-- BEGIN STYLE CUSTOMIZER -->
-    <div class="color-panel hidden-sm">
+    <!-- <div class="color-panel hidden-sm">
       <div class="color-mode-icons icon-color"></div>
       <div class="color-mode-icons icon-color-close"></div>
       <div class="color-mode">
@@ -79,7 +79,7 @@ License: You must have a valid license purchased only from themeforest (the abov
           <li class="color-turquoise" data-style="turquoise"></li>
         </ul>
       </div>
-    </div>
+    </div> -->
     <!-- END BEGIN STYLE CUSTOMIZER --> 
 
     <!-- BEGIN TOP BAR -->
@@ -111,7 +111,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <?php
                         } else {
                           ?>
-                            <li><a href="<?php echo base_url();?>wishlist">My Wishlist</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -148,35 +148,40 @@ License: You must have a valid license purchased only from themeforest (the abov
         <div class="top-cart-block">
           <div class="top-cart-info">
             <a href="javascript:void(0);" class="top-cart-info-count"><?php echo $this->cart->total_items()?> item(s)</a>
-            <a href="javascript:void(0);" class="top-cart-info-value"><?php echo $store_currency?> <?php echo $this->cart->total()?></a>
+            <a href="javascript:void(0);" class="top-cart-info-value"><?php echo $store_currency?> <?php echo number_format($this->cart->total(), 2)?></a>
           </div>
           <i class="fa fa-shopping-cart"></i>
                         
           <div class="top-cart-content-wrapper">
             <div class="top-cart-content">
-              <ul class="scroller" style="height: 200px;">
-                <?php foreach($cart_items as $cart_item):?>
-                  <li>
-                    <a href="<?php echo base_url($cart_item['slug'])?>"><img src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" alt="<?php echo $cart_item['name']?>" width="37" height="34"></a>
-                    <span class="cart-content-count">x <?php echo $cart_item['qty']?></span>
-                    <strong><a href="<?php echo $cart_item['slug']?>"><?php echo $cart_item['name']?></a></strong>
-                    <em><?php echo $store_currency?> <?php echo $cart_item['price']?></em>
-                    <?php echo anchor('pages/removefromhome/'.$cart_item['rowid'], 'x')?>
-                  </li>
-                <?php endforeach?>
-              </ul>
               <?php
                 if (!empty($this->cart->contents())) {
                   ?>
+                    <ul class="scroller" style="height: 200px;">
+                      <?php foreach($cart_items as $cart_item):?>
+                        <li>
+                          <a href="<?php echo base_url($cart_item['slug'])?>"><img src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" alt="<?php echo $cart_item['name']?>" width="37" height="34"></a>
+                          <span class="cart-content-count">x <?php echo $cart_item['qty']?></span>
+                          <strong><a href="<?php echo $cart_item['slug']?>"><?php echo $cart_item['name']?></a></strong>
+                          <em><?php echo $store_currency?> <?php echo number_format($cart_item['price'], 2)?></em>
+                          <?php echo anchor('pages/removefromhome/'.$cart_item['rowid'], 'x')?>
+                        </li>
+                      <?php endforeach?>
+                    </ul>
                     <div class="text-right">
                       <a href="<?php echo base_url()?>cart" class="btn btn-default">View Cart</a>
                       <a href="<?php echo base_url()?>pages/clearcart" class="btn btn-danger">Clear Cart</a>
                       <a href="<?php echo base_url()?>checkout" class="btn btn-primary">Checkout</a>
                     </div>
                   <?php
+                } else {
+                  ?>
+                    <ul class="scroller" style="height: 50px;">
+                      <p><?php echo $this->lang->line('empty_cart')?></p>
+                    </ul>
+                  <?php
                 }
               ?>
-              
             </div>
           </div>            
         </div>
@@ -241,9 +246,9 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <!-- BEGIN SIDEBAR -->
               <div class="sidebar col-md-3 col-sm-3">
                 <ul class="list-group margin-bottom-25 sidebar-menu">
-                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>reset_password"><i class="fa fa-angle-right"></i> Reset Password</a></li>
-                  <!-- <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Address book</a></li> -->
-                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>wishlist"><i class="fa fa-angle-right"></i> Wish list</a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/orders"><i class="fa fa-angle-right"></i><?php echo $this->lang->line('my_orders_heading')?></a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/reset-password"><i class="fa fa-angle-right"></i> Reset Password</a></li>
+                  <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/wishlist"><i class="fa fa-angle-right"></i><?php echo $this->lang->line('wishlist_page_heading')?></a></li>
                   <!-- <li class="list-group-item clearfix"><a href="javascript:;"><i class="fa fa-angle-right"></i> Returns</a></li> -->
                   <li class="list-group-item clearfix"><a href="<?php echo base_url()?>newsletter"><i class="fa fa-angle-right"></i> Newsletter</a></li>
                   <li class="list-group-item clearfix"><a href="<?php echo base_url()?>logout"><i class="fa fa-angle-right"></i> Logout</a></li>
@@ -256,16 +261,16 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <div class="content-page">
                   <h3>My Account</h3>
                   <ul>
-                    <li><a href="javascript:;">Edit your account information</a></li>
-                    <li><a href="javascript:;">Change your password</a></li>
+                    <li><a href="<?php echo base_url()?>my-account/edit">Edit your account information</a></li>
+                    <li><a href="<?php echo base_url()?>my-account/reset-password">Change your password</a></li>
                     <li><a href="javascript:;">Modify your address book entries</a></li>
-                    <li><a href="javascript:;">Modify your wish list</a></li>
+                    <li><a href="<?php echo base_url()?>my-account/wishlist">Modify your wish list</a></li>
                   </ul>
                   <hr>
 
                   <h3>My Orders</h3>
                   <ul>
-                    <li><a href="javascript:;">View your order history</a></li>
+                    <li><a href="<?php echo base_url()?>my-account/orders">View your order history</a></li>
                     <li><a href="javascript:;">Downloads</a></li>
                     <li><a href="javascript:;">Your Reward Points</a></li>
                     <li><a href="javascript:;">View your return requests</a></li>

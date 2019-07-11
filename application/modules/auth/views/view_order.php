@@ -849,44 +849,45 @@
 																 Order Status:
 															</div>
 															<?php
-																if ($order->status == 0) {
-																	?>
-																		<div class="col-md-7 value">
-																			<span class="label label-danger">
-																			Not Processed </span>
-																		</div>
-																	<?php
-																} elseif ($order->status == 1) {
-																	?>
-																		<div class="col-md-7 value">
-																			<span class="label label-info">
-																			Processed </span>
-																		</div>
-																	<?php
-																} elseif ($order->status == 2) {
-																	?>
-																		<div class="col-md-7 value">
-																			<span class="label label-warning">
-																			In Transit </span>
-																		</div>
-																	<?php
-																} else {
-																	?>
-																		<div class="col-md-7 value">
-																			<span class="label label-success">
-																			Closed </span>
-																		</div>
-																	<?php
-																}
-															?>
-															
+					                                          if ($order->status == 0) {
+					                                            ?>
+					                                            	<div class="col-md-7 value">
+					                                              		<span class="label label-sm label-danger">Pending</span>
+					                                            	</div>
+					                                            <?php
+					                                          } elseif ($order->status == 1) {
+					                                            ?>
+						                                            <div class="col-md-7 value">
+						                                            	<span class="label label-sm label-info">Processed</span>
+						                                            </div>  
+					                                            <?php
+					                                          } elseif ($order->status == 2) {
+					                                            ?>
+					                                            	<div class="col-md-7 value">
+					                                              		<span class="label label-sm label-warning">In Transit</span>
+					                                              	</div>
+					                                            <?php
+					                                          } elseif ($order->status == 3) {
+					                                            ?>
+					                                            	<div class="col-md-7 value">
+					                                            		<span class="label label-sm label-default">Cancelled</span>
+					                                            	</div>
+					                                            <?php
+					                                          } else {
+					                                            ?>
+					                                            	<div class="col-md-7 value">
+					                                            		<span class="label label-sm label-success">Delivered & Closed</span>
+					                                            	</div>
+					                                            <?php
+					                                          }
+					                                        ?>
 														</div>
 														<div class="row static-info">
 															<div class="col-md-5 name">
 																 Grand Total:
 															</div>
 															<div class="col-md-7 value">
-																<?php echo $this->config->item('currency')?> <?php echo $order->total_orders;?>
+																<?php echo $store_currency?> <?php echo $order->total_orders;?>
 															</div>
 														</div>
 														<div class="row static-info">
@@ -1050,13 +1051,13 @@
 																						Available
 																					</td>
 																					<td>
-																						<?php echo $this->config->item('currency')?> <?php echo $cart_item->price?>
+																						<?php echo $store_currency?> <?php echo $cart_item->price?>
 																					</td>
 																					<td>
 																						<?php echo $cart_item->qty?>
 																					</td>
 																					<td>
-																						<?php echo $this->config->item('currency')?> <?php echo $cart_item->subtotal?>
+																						<?php echo $store_currency?> <?php echo $cart_item->subtotal?>
 																					</td>
 																				</tr>
 																			<?php
@@ -1079,7 +1080,7 @@
 															 Sub Total:
 														</div>
 														<div class="col-md-3 value">
-															 <?php echo $this->config->item('currency')?> <?php echo $order->total_orders?>
+															 <?php echo $store_currency?> <?php echo $order->total_orders?>
 														</div>
 													</div>
 													<div class="row static-info align-reverse">
@@ -1089,7 +1090,7 @@
 														<div class="col-md-3 value">
 															<?php
 																$shipment_fee = $this->db->get_where('shipment', ['ship_to' => $order->subcounty])->row();
-																echo $this->config->item('currency');
+																echo $store_currency;
 																echo ' ', $shipment_fee->fee;
 															?>
 														</div>
@@ -1101,7 +1102,7 @@
 														<div class="col-md-3 value">
 															<?php
 																$fee = $this->db->get_where('shipment', ['ship_to' => $order->subcounty])->row();
-																echo $this->config->item('currency');
+																echo $store_currency;
 																$shipment_fee = $fee->fee;
 																$total_order_cost = $order->total_orders;
 																echo ' ', $shipment_fee + $total_order_cost;

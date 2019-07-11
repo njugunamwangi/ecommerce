@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2019 at 01:55 AM
+-- Generation Time: Jul 02, 2019 at 12:39 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -360,7 +360,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
 (2, '127.0.0.1', 'desmondnjuguna.m@gmail.com', '$2y$12$6uo1DefxPUFrubYBeUD55u/mm8LGZIIugmUdIvqwDyaHlAveiXu2y', 'desmondnjuguna.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1556364105, 1561707366, 1, 'Desmond', 'Njuguna', 'ReCode', '0704502454'),
 (3, '127.0.0.1', 'morganwagachaki.m@gmail.com', '$2y$10$jT6Y5KXXdBgB9QNdPVoRZu/T5RWqucAVgDi8Kuuc05gvfMQAZfM6q', 'morganwagachaki.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1560858486, 1561716241, 1, 'Morgan', 'Wagachaki', NULL, '0706243406'),
-(4, '127.0.0.1', 'lennywainaina.m@gmail.com', '$2y$10$UJ1kIFVyNUf8f.jvbn4wbeJXCLJJ3Ckhm4Z4tk54snRGwGVmM0wG6', 'lennywainaina.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1561539193, 1561718468, 1, 'Lenny', 'Wainaina', 'ReCode', '0771045082');
+(4, '127.0.0.1', 'lennywainaina.m@gmail.com', '$2y$10$UJ1kIFVyNUf8f.jvbn4wbeJXCLJJ3Ckhm4Z4tk54snRGwGVmM0wG6', 'lennywainaina.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1561539193, 1561718468, 1, 'Lenny', 'Wainaina', 'ReCode', '0771045082'),
+(5, '127.0.0.1', 'admin@admin.com', '$2y$10$eHLUk.kQXXjkv7rmayYPYeJ9vD83eAeHkZ257B0bSCJX8p//T3ny2', 'admin@admin.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1562063173, 1562063184, 1, 'ecommerce', 'admin', NULL, '0700000000');
 
 -- --------------------------------------------------------
 
@@ -381,7 +382,8 @@ CREATE TABLE `users_groups` (
 INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 (9, 2, 1),
 (6, 3, 2),
-(8, 4, 4);
+(8, 4, 4),
+(10, 5, 1);
 
 --
 -- Indexes for dumped tables
@@ -566,13 +568,13 @@ ALTER TABLE `subcategories`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users_groups`
 --
 ALTER TABLE `users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

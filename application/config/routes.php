@@ -61,6 +61,11 @@ $route['checkout']						= 'pages/checkout';
 $route['register']						= 'auth/register';
 $route['(:any)']						= 'pages/product/$1';
 $route['category/(:any)']				= 'pages/categories/$1';
+$route['my-account/orders']				= 'pages/my_orders';
+$route['my-account/order/(:any)']		= 'pages/view_order/$1';
+$route['my-account/wishlist']			= 'pages/my_wishlist';
+$route['my-account/edit']				= 'pages/edit_account';
+$route['my-account/reset-password']		= 'pages/reset_password';
 
 // Admin Dashboard
 $route['admin/products/categories'] 		= 'auth/categories';

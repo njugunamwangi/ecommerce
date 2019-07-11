@@ -64,7 +64,7 @@ License: You must have a valid license purchased only from themeforest (the abov
 <!-- Body BEGIN -->
 <body class="corporate">
     <!-- BEGIN STYLE CUSTOMIZER -->
-    <div class="color-panel hidden-sm">
+    <!-- <div class="color-panel hidden-sm">
       <div class="color-mode-icons icon-color"></div>
       <div class="color-mode-icons icon-color-close"></div>
       <div class="color-mode">
@@ -78,7 +78,7 @@ License: You must have a valid license purchased only from themeforest (the abov
           <li class="color-turquoise" data-style="turquoise"></li>
         </ul>
       </div>
-    </div>
+    </div> -->
     <!-- END BEGIN STYLE CUSTOMIZER --> 
     
     <!-- BEGIN TOP BAR -->
@@ -88,8 +88,8 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <!-- BEGIN TOP BAR LEFT PART -->
                 <div class="col-md-6 col-sm-6 additional-shop-info">
                     <ul class="list-unstyled list-inline">
-                        <li><i class="fa fa-phone"></i><span>+254 792 233 992</span></li>
-                        <li><a href="mailto:info@rabaii.co.ke"><i class="fa fa-envelope-o"></i><span>info@rabaii.co.ke</span></a></li>
+                        <li><i class="fa fa-phone"></i><span><?php echo $store_phone_number?></span></li>
+                        <li><a href="mailto:<?php echo $store_email?>"><i class="fa fa-envelope-o"></i><span><?php echo $store_email?></span></a></li>
                     </ul>
                 </div>
                 <!-- END TOP BAR LEFT PART -->
@@ -97,7 +97,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <div class="col-md-6 col-sm-6 additional-nav">
                     <ul class="list-unstyled list-inline pull-right">
                         <li><a href="<?php echo base_url()?>login">Log In</a></li>
-                        <li><a href="<?php echo base_url()?>register">Registration</a></li>
+                        <li><a href="<?php echo base_url()?>register">Register</a></li>
                     </ul>
                 </div>
                 <!-- END TOP BAR MENU -->
@@ -109,7 +109,7 @@ License: You must have a valid license purchased only from themeforest (the abov
     <div class="header">
       <div class="container">
         <!-- <a class="site-logo" href="<?php echo base_url(); ?>"><img src="<?php echo base_url();?>public/assets/frontend/layout/img/logos/logo-shop-red.png" alt="Metronic Shop UI"></a> -->
-        <a class="site-logo" style="text-decoration: none;" href="<?php echo base_url()?>" ><h2><?php echo $name_of_store?></h2></a>
+        <a class="site-logo" style="text-decoration: none;" href="<?php echo base_url()?>" ><h2><strong><?php echo $name_of_store?></strong></h2></a>
         <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
 
         <!-- BEGIN NAVIGATION -->
@@ -118,21 +118,21 @@ License: You must have a valid license purchased only from themeforest (the abov
             <li><a href="<?php echo base_url();?>">Shop</a></li>
             <li><a href="<?php echo base_url();?>cart">Cart</a></li>
             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
-            <li><a href="<?php echo base_url();?>myaccount">My Account</a></li>
+            <li><a href="<?php echo base_url();?>my-account">My Account</a></li>
 
             <!-- BEGIN TOP SEARCH -->
             <li class="menu-search">
               <span class="sep"></span>
               <i class="fa fa-search search-btn"></i>
               <div class="search-box">
-                <form action="#">
+                <?php echo form_open('pages/search_product');?>
                   <div class="input-group">
-                    <input type="text" placeholder="Search" class="form-control">
+                    <input type="text" placeholder="Search" name="product" class="form-control">
                     <span class="input-group-btn">
                       <button class="btn btn-primary" type="submit">Search</button>
                     </span>
                   </div>
-                </form>
+                <?php echo form_close();?>
               </div> 
             </li>
             <!-- END TOP SEARCH -->
@@ -155,9 +155,9 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="sidebar col-md-3 col-sm-3">
             <ul class="list-group margin-bottom-25 sidebar-menu">
               <li class="list-group-item clearfix"><a href="<?php echo base_url()?>register"><i class="fa fa-angle-right"></i> Register</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>reset_password"><i class="fa fa-angle-right"></i> Restore Password</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>myaccount"><i class="fa fa-angle-right"></i> My account</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>wishlist"><i class="fa fa-angle-right"></i> Wish list</a></li>
+              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/reset-password"><i class="fa fa-angle-right"></i> Restore Password</a></li>
+              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account"><i class="fa fa-angle-right"></i> My account</a></li>
+              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/wishlist"><i class="fa fa-angle-right"></i> Wish list</a></li>
             </ul>
           </div>
           <!-- END SIDEBAR -->
@@ -197,8 +197,6 @@ License: You must have a valid license purchased only from themeforest (the abov
                   <div class="form-info">
                     <h2><em>Important</em> Information</h2>
                     <p>Log in to access your account information</p>
-
-                    <button type="button" class="btn btn-default">More details</button>
                   </div>
                 </div>
               </div>
@@ -241,8 +239,8 @@ License: You must have a valid license purchased only from themeforest (the abov
             <address class="margin-bottom-40">
               35, Lorem Lis Street, Park Ave<br>
               Kiambu, Kenya<br>
-              Phone: +254 792 233 992<br>
-              Email: <a href="mailto:info@rabaii.co.ke">info@rabaii.co.ke</a><br>
+              Phone: <?php echo $store_phone_number?><br>
+              Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>
           <!-- END BOTTOM CONTACTS -->

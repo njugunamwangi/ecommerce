@@ -874,30 +874,32 @@
 																<?php echo htmlspecialchars($order->subcounty,ENT_QUOTES,'UTF-8');?>
 															</td>
 															<td>
-																<?php echo $this->config->item('currency')?> <?php echo htmlspecialchars($order->total_orders,ENT_QUOTES,'UTF-8');?>
+																<?php echo $store_currency?> <?php echo htmlspecialchars(number_format($order->total_orders, 2),ENT_QUOTES,'UTF-8');?>
 															</td>
 															<td>
 																<?php
-			                                                		if ($order->status == 0) {
-			                                                			?>
-			                                                				<span >
-					                                                            <a href="<?php echo base_url($order->slug)?>" class="label label-sm label-danger"><i class="fa fa-exclamation-triangle"></i> Not Processed</a>
-					                                                        </span>
-			                                                			<?php
-			                                                		} elseif ($order->status == 1) {
-			                                                			?>
-			                                                				<span >
-					                                                            <a href="<?php echo base_url($order->slug)?>" class="label label-sm label-success"><i class="fa fa-check-square-o"></i> Processed</a>
-					                                                        </span>
-			                                                			<?php
-			                                                		} elseif ($order->status == 2) {
-			                                                			?>
-			                                                				<span >
-					                                                            <a href="<?php echo base_url($order->slug)?>" class="label label-sm label-warning"><i class="fa fa-times"></i> Cancelled</a>
-					                                                        </span>
-			                                                			<?php
-			                                                		}
-			                                                	?>
+						                                          if ($order->status == 0) {
+						                                            ?>
+						                                              <span class="label label-sm label-danger">Pending</span>
+						                                            <?php
+						                                          } elseif ($order->status == 1) {
+						                                            ?>
+						                                              <span class="label label-sm label-info">Processed</span>
+						                                            <?php
+						                                          } elseif ($order->status == 2) {
+						                                            ?>
+						                                              <span class="label label-sm label-warning">In Transit</span>
+						                                            <?php
+						                                          } elseif ($order->status == 3) {
+						                                            ?>
+						                                              <span class="label label-sm label-default">Cancelled</span>
+						                                            <?php
+						                                          } else {
+						                                            ?>
+						                                              <span class="label label-sm label-success">Delivered & Closed</span>
+						                                            <?php
+						                                          }
+						                                        ?>
 															</td>
 															<td>
 																<span >

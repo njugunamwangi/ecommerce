@@ -103,8 +103,41 @@ class Pages_model extends CI_Model {
 	 * @param string
 	 */
 	public function search($product) {
-		$this->db->like('name', $product);
+		$array = ['name' => $product, 'description' => $product, 'categories' => $product, 'tags' => $product, 'sale_price' => $product, 'wholesale_price' => $product];
+		$this->db->or_like($array);
 		$query = $this->db->get('products')->result();
+		return $query;
+	}
+
+	/**
+	 * @return customer orders
+	 *
+	 * @param string
+	 */
+	public function my_orders($order_id = FALSE) {
+		if ($order_id === FALSE) {
+			$customer_id = $this->ion_auth->user()->row()->id;
+			$query = $this->db->get_where('orders', ['customer_id' => $customer_id])->result();
+			return $query;
+		}
+
+		$query = $this->db->get_where('orders', ['order_id' => $order_id])->row();
+		return $query;
+	}
+
+	/**
+	 * @return customer's wishlist 
+	 *
+	 * @param string 
+	 */
+	public function my_wishlist($wishlist_code = FALSE) {
+		if ($wishlist_code === FALSE) {
+			$customer_id = $this->ion_auth->user()->row()->id;
+			$query = $this->db->get_where('wishlist', ['customer_id' => $customer_id])->result();
+			return $query;
+		}
+
+		$query = $this->db->get_where('wishlist', ['wishlist_code' => $wishlist_code])->row();
 		return $query;
 	}
 }
