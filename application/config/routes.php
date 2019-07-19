@@ -49,6 +49,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+
+// Vendor Dashboard
+$route['vendor']						= 'vendors/index';
+$route['vendor/products/publish']		= 'vendors/publish_product';
+$route['vendor/products']				= 'vendors/list_products';
+$route['vendor/product/(:any)']			= 'vendors/view_product/$1';
+
 $route['login']							= 'auth/login';
 $route['logout']						= 'auth/logout';
 $route['admin']							= 'auth/index';
@@ -67,6 +74,7 @@ $route['my-account/wishlist']			= 'pages/my_wishlist';
 $route['my-account/edit']				= 'pages/edit_account';
 $route['my-account/reset-password']		= 'pages/reset_password';
 
+
 // Admin Dashboard
 $route['admin/products/categories'] 		= 'auth/categories';
 $route['admin/products/categories/add'] 	= 'auth/publish_category';
@@ -76,6 +84,7 @@ $route['admin/products/tags/add']			= 'auth/publish_tag';
 $route['admin/products/publish']			= 'auth/publish_product';
 $route['admin/products']					= 'auth/products';
 $route['admin/product/edit/(:any)']			= 'auth/edit_product/$1';
+$route['admin/product/(:any)']				= 'auth/view_product/$1';
 $route['admin/shipments/add']				= 'auth/add_shipment';
 $route['admin/shipments']					= 'auth/list_shipments';
 $route['admin/orders']						= 'auth/list_orders';
@@ -83,3 +92,8 @@ $route['admin/order/(:any)']				= 'auth/view_order/$1';
 $route['admin/products']					= 'auth/list_products';
 $route['admin/settings/general']			= 'auth/general_settings';
 $route['admin/users']						= 'auth/users';
+$route['admin/user/edit/(:any)']			= 'auth/edit_user/$1';
+$route['admin/users/create']				= 'auth/create_user';
+$route['admin/groups']						= 'auth/list_groups';
+$route['admin/group/edit/(:any)']			= 'auth/edit_group/$1';
+

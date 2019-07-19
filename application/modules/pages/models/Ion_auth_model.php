@@ -2832,4 +2832,47 @@ class Ion_auth_model extends CI_Model
         $query = $this->db->get_where('products', ['slug' => $slug]);
         return $query->row();
 	}
+
+	/**
+	 * set_order
+	 *
+	 * @return message
+	 *
+	 * @param string
+	 * @author Desmond Njuguna
+	 */
+	public function set_order() {
+		$cart_items = $this->cart->contents();
+		$customer_id = $this->ion_auth->user()->row()->id;
+		$method_of_payment = $this->input->post('payment_method');
+		$status = 0;
+
+		$data = [
+			'customer_id' => $customer_id,
+			'order_id' => time(),
+			'orders' => json_encode($cart_items),
+			'total_orders' => $this->cart->total(),
+			'first_name' => $this->input->post('first_name'),
+			'last_name' => $this->input->post('last_name'),
+			'email' => $this->input->post('email'), 
+			'phone' => $this->input->post('phone'),
+			'address' => $this->input->post('address'),
+			'postal_code' => $this->input->post('postal_code'),
+			'subcounty' => $this->input->post('subcounty'),
+			'county' => $this->input->post('county'),
+			'method_of_payment' => $method_of_payment,
+			'status' => $status,
+			'slug' => time()
+		];
+
+		$this->db->insert('orders', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('order_set_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_set');
+			return FALSE;
+		}
+	}
 }

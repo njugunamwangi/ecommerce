@@ -119,7 +119,14 @@ License: You must have a valid license purchased only from themeforest (the abov
                               <?php
                                 if ($this->ion_auth->is_admin()) {
                                   ?>
-                                  <li><a href="<?php echo base_url();?>admin"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                  <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                  <?php
+                                } elseif ($this->ion_auth->is_vendor()) {
+                                  $baseurl = base_url();
+                                  $baseurlinfo = explode('//', $baseurl, 2);
+                                  $base = $baseurlinfo[1];
+                                  ?>
+                                  <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
                                   <?php
                                 } else {
                                   ?>

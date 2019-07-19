@@ -119,7 +119,14 @@ License: You must have a valid license purchased only from themeforest (the abov
                             <?php
                               if ($this->ion_auth->is_admin()) {
                                 ?>
-                                <li><a href="<?php echo base_url();?>admin"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                              } elseif ($this->ion_auth->is_vendor()) {
+                                $baseurl = base_url();
+                                $baseurlinfo = explode('//', $baseurl, 2);
+                                $base = $baseurlinfo[1];
+                                ?>
+                                <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
                                 <?php
                               } else {
                                 ?>
@@ -288,8 +295,8 @@ License: You must have a valid license purchased only from themeforest (the abov
                     </div>
                     <a href="javascript:;"><?php
                         $this->db->where('product_id', $product->id);
-                        $query = $this->db->get('reviews')->num_rows();
-                        echo $query
+                        $num_of_reviews = $this->db->get('reviews')->num_rows();
+                        echo $num_of_reviews
                       ?> review(s)</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
                   </div>
                   <!-- <ul class="social-icons">
@@ -305,12 +312,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                   <ul id="myTab" class="nav nav-tabs">
                     <li><a href="#Description" data-toggle="tab">Description</a></li>
                     <!-- <li><a href="#Information" data-toggle="tab">Information</a></li> -->
-                    <li class="active"><a href="#Reviews" data-toggle="tab">Reviews 
-                      <?php
-                        $this->db->where('product_id', $product->id);
-                        $query = $this->db->get('reviews')->num_rows();
-                        echo $query
-                      ?>
+                    <li class="active"><a href="#Reviews" data-toggle="tab">Reviews (<?php echo $num_of_reviews;?>)
                     </a></li>
                   </ul>
                   <div id="myTabContent" class="tab-content">

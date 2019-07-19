@@ -7,7 +7,7 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
+			<a href="<?php echo base_url()?>vendor">
 			<img src="<?php echo base_url()?>public/assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
@@ -77,10 +77,15 @@
 				<ul class="nav navbar-nav pull-right">
 					<li class="separator hide">
 					</li>
+					<?php 
+						$baseurl = base_url();
+						$base_url = explode('.', $baseurl, 3);
+						$base = $base_url[1].'.'.$base_url[2];
+					?>
 					<li class="dropdown dropdown-extended dropdown-notification dropdown-dark">
-						<a href="<?php echo base_url()?>" class="dropdown-toggle" title="Go Shopping" target="_blank">
-						<i class="fa fa-shopping-cart"></i>
-						<?php echo $name_of_store?>
+						<a href="<?php echo prep_url($base)?>" class="dropdown-toggle" title="Go Shopping" target="_blank">
+							<i class="fa fa-shopping-cart"></i>
+							<?php echo $name_of_store?>
 						</a>
 					</li>
 					<li class="separator hide">
@@ -391,7 +396,7 @@
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 						<span class="username username-hide-on-mobile">
-						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?> </span>
+						<?php echo $vendor_info->first_name?> <?php echo $vendor_info->last_name?> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
 						<img alt="" class="img-circle" src="<?php echo base_url()?>public/assets/admin/layout4/img/avatar9.jpg"/>
 						</a>
@@ -456,72 +461,10 @@
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 			<ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 				<li class="start active">
-					<a href="<?php echo base_url()?>admin">
+					<a href="<?php echo base_url()?>vendor">
 					<i class="fa fa-home"></i>
 					<span class="title">Dashboard</span>
 					</a>
-				</li>
-				<li>
-					<a href="javascript:;">
-					<i class="fa fa-users"></i>
-					<span class="title">Users</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="<?php echo base_url()?>admin/users/create">
-							<i class="fa fa-plus"></i>
-							Create User</a>
-						</li>
-						<li>
-							<a href="<?php echo base_url()?>admin/users">
-							<i class="fa fa-list"></i>
-							List Users</a>
-						</li>
-						<li>
-							<a href="javascript:;">
-							<i class="fa fa-user"></i>
-							<span class="title">User Profile</span>
-							<span class="arrow "></span>
-							</a>
-							<ul class="sub-menu">
-								<li>
-									<a href="<?php echo base_url()?>admin/profile">
-									<i class="fa fa-home"></i>
-									Profile</a>
-								</li>
-								<li>
-									<a href="<?php echo base_url()?>admin/account">
-									<i class="fa fa-cogs"></i>
-									Account Settings</a>
-								</li>
-								<li>
-									<a href="<?php echo base_url()?>admin/tasks">
-									<i class="fa fa-check-square-o"></i>
-									Tasks</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="javascript:;">
-							<i class="fa fa-users"></i>
-							<span class="title">User Groups</span>
-							<span class="arrow "></span>
-							</a>
-							<ul class="sub-menu">
-								<li>
-									<a href="<?php echo base_url()?>admin/groups/create">
-									<i class="fa fa-plus"></i>
-									Create User Group</a>
-								</li>
-								<li>
-									<a href="<?php echo base_url()?>admin/groups">
-									<i class="fa fa-list"></i>
-									List User Group</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
 				</li>
 				<li>
 					<a href="javascript:;">
@@ -531,12 +474,12 @@
 					</a>
 					<ul class="sub-menu">
 						<li >
-							<a href="<?php echo base_url()?>admin/products/publish">
+							<a href="<?php echo base_url()?>vendor/products/publish">
 							<i class="fa fa-check-square-o"></i>
 							Publish Product</a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/products">
+							<a href="<?php echo base_url()?>vendor/products">
 							<i class="fa fa-list"></i>
 							List Products</a>
 						</li>
@@ -548,17 +491,17 @@
 							</a>
 							<ul class="sub-menu">
 								<li >
-									<a href="<?php echo base_url()?>admin/products/categories/add">
+									<a href="<?php echo base_url()?>vendor/products/categories/add">
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
 								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
+									<a href="<?php echo base_url()?>vendor/products/subcategories/add">
 									<i class="fa fa-check-square"></i>
 									Publish Sub Category</a>
 								</li>
 								<li>
-									<a href="<?php echo base_url()?>admin/products/categories">
+									<a href="<?php echo base_url()?>vendor/products/categories">
 									<i class="fa fa-list"></i>
 									List Category</a>
 								</li>
@@ -573,12 +516,12 @@
 							</a>
 							<ul class="sub-menu">
 								<li >
-									<a href="<?php echo base_url()?>admin/products/tags/add">
+									<a href="<?php echo base_url()?>vendor/products/tags/add">
 									<i class="fa fa-check-square-o"></i>
 									Publish Tag</a>
 								</li>
 								<li>
-									<a href="<?php echo base_url()?>admin/products/tags">
+									<a href="<?php echo base_url()?>vendor/products/tags">
 									<i class="fa fa-list"></i>
 									List Tags</a>
 								</li>
@@ -595,66 +538,14 @@
 					</a>
 					<ul class="sub-menu">
 						<li >
-							<a href="<?php echo base_url()?>admin/orders/new">
+							<a href="<?php echo base_url()?>vendor/orders/new">
 							<i class="fa fa-check-square-o"></i>
 							New Order </a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/orders">
+							<a href="<?php echo base_url()?>vendor/orders">
 							<i class="fa fa-list"></i>
 							List Orders</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="javascript:;">
-					<i class="fa fa-money"></i>
-					<span class="title">Payments</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="<?php echo base_url()?>admin/payments/new">
-							<i class="fa fa-check-square-o"></i>
-							New Payment </a>
-						</li>
-						<li>
-							<a href="<?php echo base_url()?>admin/payments">
-							<i class="fa fa-list"></i>
-							List Payment</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="javascript:;">
-					<i class="fa fa-paper-plane-o"></i>
-					<span class="title">Shipments</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="<?php echo base_url()?>admin/shipments/add">
-							<i class="fa fa-check-square-o"></i>
-							Add Shipment </a>
-						</li>
-						<li>
-							<a href="<?php echo base_url()?>admin/shipments">
-							<i class="fa fa-list"></i>
-							List Shipments</a>
-						</li>
-					</ul>
-				</li>
-				<li class="last">
-					<a href="javascript:;">
-					<i class="fa fa-cogs"></i>
-					<span class="title">Settings</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="<?php echo base_url()?>admin/settings/general">
-							<i class="fa fa-cog"></i>
-							<?php echo $this->lang->line('general_settings_heading')?>  </a>
 						</li>
 					</ul>
 				</li>
@@ -790,7 +681,7 @@
 			<!-- BEGIN PAGE BREADCRUMB -->
 			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a href="<?php echo base_url()?>admin">Home</a>
+					<a href="<?php echo base_url()?>vendor">Home</a>
 					<i class="fa fa-circle"></i>
 				</li>
 				<li class="active">
@@ -865,17 +756,7 @@
 					<div class="dashboard-stat2">
 						<div class="display">
 							<div class="number">
-								<h3 class="font-blue-sharp">
-									<small class="font-blue-sharp">
-									<?php 
-										if ($total_orders < 1) {
-											echo '0.00';
-										} else {
-											$average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2);
-										}
-									?>
-									</small>
-								</h3>
+								<h3 class="font-blue-sharp"><small class="font-blue-sharp"><?php $average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2) ?></small></h3>
 								<small>AVERAGE ORDER</small>
 							</div>
 							<div class="icon">
@@ -984,7 +865,7 @@
 														?>
 															<tr>
 																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>">
+																	<a href="<?php echo base_url('vendor/product/'.$product->slug)?>">
 																	<?php echo $product->name?> </a>
 																</td>
 																<td>
@@ -997,17 +878,14 @@
 																			$cart_items = json_decode($order->orders);
 																			foreach ($cart_items as $cart_item) {
 																				if ($cart_item->id == $product->id) {
-																					$data = [];
-																					$product_sales = $cart_item->qty. ', ';
-																					$sold_items = array_push($data, $product_sales);
-																					echo array_sum($data);
+																					print_r($cart_item->qty);
 																				}
 																			}
 																		}
 																	?>
 																</td>
 																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>" class="btn default btn-xs green-stripe">
+																	<a href="<?php echo base_url('vendor/product/'.$product->slug)?>" class="btn default btn-xs green-stripe">
 																	View </a>
 																</td>
 															</tr>
@@ -1079,7 +957,7 @@
 														?>
 															<tr>
 																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>">
+																	<a href="<?php echo base_url('vendor/user/'.$user->id)?>">
 																	<?php echo $user->first_name, ' ', $user->last_name?> </a>
 																</td>
 																<td>
@@ -1097,7 +975,7 @@
 																	?>
 																</td>
 																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>" class="btn default btn-xs green-stripe">
+																	<a href="<?php echo base_url('vendor/user/'.$user->id)?>" class="btn default btn-xs green-stripe">
 																	View </a>
 																</td>
 															</tr>
@@ -1135,7 +1013,7 @@
 																<td>
 																	<?php $this->db->from('users')->where('id', $order->customer_id);
 																		$customer_info = $this->db->get()->row();?>
-																	<a href="<?php echo base_url('admin/user/'.$customer_info->id)?>">
+																	<a href="<?php echo base_url('vendor/user/'.$customer_info->id)?>">
 																		<?php
 																			echo $customer_info->first_name, ' ', $customer_info->last_name;
 																		?> 
@@ -1173,7 +1051,7 @@
 							                                        ?>
 																</td>
 																<td>
-																	<a href="<?php echo base_url('admin/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
+																	<a href="<?php echo base_url('vendor/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
 																	View </a>
 																</td>
 															</tr>

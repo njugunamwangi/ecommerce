@@ -333,37 +333,13 @@ class Pages extends MX_Controller {
 
 		if ($this->form_validation->run() === TRUE) {
 			
-			$cart_items = $this->cart->contents();
-			$customer_id = $this->ion_auth->user()->row()->id;
-			$method_of_payment = $this->input->post('payment_method');
-			$status = 0;
-
-			$data = [
-				'customer_id' => $customer_id,
-				'order_id' => time(),
-				'orders' => json_encode($cart_items),
-				'total_orders' => $this->cart->total(),
-				'first_name' => $this->input->post('first_name'),
-				'last_name' => $this->input->post('last_name'),
-				'email' => $this->input->post('email'), 
-				'phone' => $this->input->post('phone'),
-				'address' => $this->input->post('address'),
-				'postal_code' => $this->input->post('postal_code'),
-				'subcounty' => $this->input->post('subcounty'),
-				'county' => $this->input->post('county'),
-				'method_of_payment' => $method_of_payment,
-				'status' => $status,
-				'slug' => time()
-			];
-		}
-
-		if ($this->form_validation->run() === TRUE && $this->db->insert('orders', $data)) {
-			
+			$this->ion_auth_model->set_order();
 			$this->cart->destroy();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect('/my-account/orders', 'refresh');
 		} else {
 			redirect('checkout');
-		}
+		} 
 	}
 
 	/**
@@ -501,7 +477,7 @@ class Pages extends MX_Controller {
 					'first_name' => $this->input->post('first_name'),
 					'last_name' => $this->input->post('last_name'),
 					'email' => $email,
-					'username' => $username,
+					'username' => $email,
 					'phone' => $this->input->post('phone')
 				];
 			}

@@ -67,3 +67,7 @@ $lang['email_already_registered']							= 'The email address is registered by an
 $lang['phone_already_registered']							= 'The phone number is registered by another user';
 $lang['reset_password_validation_password_label']			= 'Password';
 $lang['reset_password_validation_password_confirm_label']	= 'Password Confirm';
+
+// Set order
+$lang['order_set_successfully']				= 'Your Order has been received. Thank you for shoping with us';
+$lang['order_not_set']						= 'Please check your form';

@@ -935,8 +935,6 @@ class Ion_auth_model extends CI_Model
 
 				$this->update_last_login($user->id);
 
-				$this->set_login($user->id);
-
 				$this->clear_login_attempts($identity);
 				$this->clear_forgotten_password_code($identity);
 
@@ -1892,29 +1890,6 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * set_login
-	 *
-	 * @param string
-	 *
-	 * @author Desmond Njuguna
-	 */
-	public function set_login($id) {
-		$this->load->helper('date');
-
-		$ip_address = $this->input->ip_address();
-
-		$data = [
-			'customer_id' => $id,
-			'ip_address' => $ip_address,
-			'time' => time()
-		];
-
-		$this->db->insert('logins', $data);
-
-		return $this->db->affected_rows() == 1;
-	}
-
-	/**
 	 * set_lang
 	 *
 	 * @param string $lang
@@ -2845,22 +2820,6 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * @return products 
-	 *
-	 * @param string
-	 */
-	public function get_products($id = FALSE) {
-        if ($id === FALSE) {
-            $this->db->order_by('products.name', 'asc');
-            $query = $this->db->get('products')->result();
-            return $query;
-        }
-
-        $query = $this->db->get_where('products', ['id' => $id]);
-        return $query->row();
-	}
-
-	/**
 	 * @return orders as a string
 	 */
 	public function get_orders($slug = FALSE) {
@@ -2891,13 +2850,9 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * set product 
-	 *
-	 * @return products
-	 *
-	 * @param string
+	 * publish product
 	 */
-	public function set_product($filename = '') {
+	public function publish_product($filename = '') {
 		$slug = url_title($this->input->post('name'), 'dash', TRUE);
 
 		$vendor_id = $this->ion_auth->user()->row()->created_on;
@@ -2925,7 +2880,7 @@ class Ion_auth_model extends CI_Model
 		$this->db->insert('products', $data);
 
 		if ($this->db->affected_rows() === 1) {
-			$this->set_message('product_added_successfully');
+			$this->set_message('product_successfully_added');
 			return TRUE;
 		} else {
 			$this->set_error('error_adding_product');
@@ -2934,44 +2889,24 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * update product info
-	 *
-	 * @return product update
+	 * @return products 
 	 *
 	 * @param string
 	 */
-	public function update_product() {
-		$slug = url_title($this->input->post('name'), 'dash', TRUE);
+	public function get_products($slug = FALSE) {
+		$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2);
+		$subdomain_name = $subdomain_arr[0];
 
-		$date_updated = time();
+		$this->db->from('users')->where('created_on', $subdomain_name);
+		$vendor_id = $this->db->get()->row()->created_on;
 
-		$product_id = $this->input->post('id');
+        if ($slug === FALSE) {
+            $this->db->order_by('products.date_created', 'asc');
+            $query = $this->db->get_where('products', ['vendor_id' => $vendor_id])->result();
+            return $query;
+        }
 
-		$data = [
-			'name' => $this->input->post('name'),
-			'snippet' => $this->input->post('snippet'),
-			'description' => $this->input->post('description'),
-			'categories' => json_encode($this->input->post('categories')),
-			'tags' => json_encode($this->input->post('tags')),
-			'colors' => json_encode($this->input->post('colors')),
-			'sizes' => json_encode($this->input->post('sizes')),
-			'regular_price' => $this->input->post('regular_price'),
-			'sale_price' => $this->input->post('sale_price'),
-			'wholesale_price' => $this->input->post('wholesale_price'),
-			'date_updated' => $date_updated,
-			'slug' => $slug,
-			'status' => $this->input->post('status')
-		];
-
-		$this->db->where('id', $product_id);
-		$this->db->update('products', $data);
-
-		if ($this->db->affected_rows() === 1) {
-			$this->set_message('product_updated_successfully');
-			return TRUE;
-		} else {
-			$this->set_error('product_update_failed');
-			return FALSE;
-		}
+        $query = $this->db->get_where('products', ['slug' => $slug]);
+        return $query->row();
 	}
 }

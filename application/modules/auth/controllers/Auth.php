@@ -13,7 +13,7 @@ class Auth extends MX_Controller
 	{
 		parent::__construct();
 		$this->load->database();
-		$this->load->library(['ion_auth', 'form_validation', 'upload']);
+		$this->load->library(['ion_auth', 'form_validation', 'upload', 'parser']);
 		$this->load->helper(['url', 'language', 'date', 'url_helper', 'array']);
 
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
@@ -65,6 +65,8 @@ class Auth extends MX_Controller
 
 			$data['currency'] = $this->storecurrency();
 
+			$data['products'] = $this->ion_auth_model->get_products();
+
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/index', $data);
 			$this->_render_page('templates/footer');
@@ -107,6 +109,15 @@ class Auth extends MX_Controller
 					// if the user is a customer
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
 					redirect('/', 'refresh');
+				} else {
+					
+					// if the user is a vendor
+					$vendor_id = $this->ion_auth->user()->row()->created_on;
+					$baseurl = base_url();
+					$baseurlinfo = explode('//', $baseurl, 2);
+					$base = $baseurlinfo[1];
+					$this->session->set_flashdata('message', $this->ion_auth->messages());
+					redirect(prep_url($vendor_id.'.'.$base.'./vendor'), 'refresh');
 				}
 			}
 			else
@@ -299,13 +310,20 @@ class Auth extends MX_Controller
 		if ($identity_column !== 'email')
 		{
 			$this->form_validation->set_rules('identity', $this->lang->line('create_user_validation_identity_label'), 'trim|required|is_unique[' . $tables['users'] . '.' . $identity_column . ']');
-			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email');
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email', 
+				[
+					'valid_email' => $this->lang->line('use_valid_email')
+				]);
 		}
 		else
 		{
-			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email|is_unique[' . $tables['users'] . '.email]');
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email|is_unique[' . $tables['users'] . '.email]', 
+				[
+					'is_unique' => $this->lang->line('email_already_registered'),
+					'valid_email' => $this->lang->line('use_valid_email')
+				]);
 		}
-		$this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim|required|is_unique[users.phone]');
+		$this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim|required|is_unique[users.phone]|min_length[10]');
 		$this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
 		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
 
@@ -448,7 +466,7 @@ class Auth extends MX_Controller
 			];
 
 			// render
-			$this->_render_page('auth/change_password', $data);
+			$this->_render_page('auth/change-password', $data);
 		}
 		else
 		{
@@ -508,7 +526,7 @@ class Auth extends MX_Controller
 
 			// set any errors and display the form
 			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
-			$this->_render_page('auth/forgot_password', $data);
+			$this->_render_page('auth/forgot-password', $data);
 		}
 		else
 		{
@@ -601,7 +619,7 @@ class Auth extends MX_Controller
 				$data['code'] = $code;
 
 				// render
-				$this->_render_page('auth/reset_password', $data);
+				$this->_render_page('auth/reset-password', $data);
 			}
 			else
 			{
@@ -702,7 +720,7 @@ class Auth extends MX_Controller
 			$data['csrf'] = $this->_get_csrf_nonce();
 			$data['user'] = $this->ion_auth->user($id)->row();
 
-			$this->_render_page('auth/deactivate_user', $data);
+			$this->_render_page('auth/deactivate-user', $data);
 		}
 		else
 		{
@@ -778,7 +796,7 @@ class Auth extends MX_Controller
 			// check to see if we are creating the user
 			// redirect them back to the admin page
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
-			redirect("auth", 'refresh');
+			redirect("admin/users", 'refresh');
 		}
 		else
 		{
@@ -835,7 +853,13 @@ class Auth extends MX_Controller
 				'value' => $this->form_validation->set_value('password_confirm'),
 			];
 
-			$this->_render_page('auth/create_user', $data);
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/create-user', $data);
+			$this->_render_page('templates/footer');
 		}
 	}
 	/**
@@ -988,7 +1012,7 @@ class Auth extends MX_Controller
 			'type' => 'password'
 		];
 
-		$this->_render_page('auth/edit_user', $data);
+		$this->_render_page('auth/edit-user', $data);
 	}
 
 	/**
@@ -1017,7 +1041,7 @@ class Auth extends MX_Controller
 			}
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/list_users', $data);
+			$this->_render_page('auth/list-users', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -1067,7 +1091,7 @@ class Auth extends MX_Controller
 				'value' => $this->form_validation->set_value('description'),
 			];
 
-			$this->_render_page('auth/create_group', $data);
+			$this->_render_page('auth/create-group', $data);
 		}
 	}
 
@@ -1139,7 +1163,37 @@ class Auth extends MX_Controller
 			'value' => $this->form_validation->set_value('group_description', $group->description),
 		];
 
-		$this->_render_page('auth/edit_group', $data);
+		$this->_render_page('auth/edit-group', $data);
+	}
+
+	/**
+	 * list groups
+	 *
+	 * @return user groups
+	 *
+	 * @param string
+	 */
+	public function list_groups() {
+		$data['title'] = $this->lang->line('list_user_groups_heading');
+
+		// login check
+		if (!$this->ion_auth->logged_in()) {
+			
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['groups'] = $this->ion_auth->groups()->result();
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/list-groups', $data);
+			$this->_render_page('templates/footer');
+		}
 	}
 
 	/**
@@ -1198,7 +1252,7 @@ class Auth extends MX_Controller
 				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
 
 				$this->_render_page('templates/header', $head);
-				$this->_render_page('auth/publish_category', $data);
+				$this->_render_page('auth/publish-category', $data);
 				$this->_render_page('templates/footer');
 			}
 		}
@@ -1259,7 +1313,7 @@ class Auth extends MX_Controller
 				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
 
 				$this->_render_page('templates/header');
-				$this->_render_page('auth/publish_subcategory', $data);
+				$this->_render_page('auth/publish-subcategory', $data);
 				$this->_render_page('templates/footer');
 			}
 		}
@@ -1367,7 +1421,7 @@ class Auth extends MX_Controller
 				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
 
 				$this->_render_page('templates/header', $head);
-				$this->_render_page('auth/publish_tag', $data);
+				$this->_render_page('auth/publish-tag', $data);
 				$this->_render_page('templates/footer');
 			}
 		}
@@ -1448,37 +1502,13 @@ class Auth extends MX_Controller
 					$upload_error = $this->upload->display_errors();
 				}
 
-				$slug = url_title($this->input->post('name'), 'dash', TRUE);
-
-				$data = [
-					'image' => $file_name,
-					'name' => $this->input->post('name'),
-					'snippet' => $this->input->post('snippet'),
-					'description' => $this->input->post('description'),
-					'categories' => json_encode($this->input->post('categories[]')),
-					'tags' => json_encode($this->input->post('tags[]')),
-					'colors' => json_encode($this->input->post('colors[]')),
-					'sizes' => json_encode($this->input->post('sizes[]')),
-					'regular_price' => $this->input->post('regular_price'),
-					'sale_price' => $this->input->post('sale_price'),
-					'wholesale_price' => $this->input->post('wholesale_price'),
-					'date_created' => time(),
-					'available_from' => $this->input->post('available_from'),
-					'available_to' => $this->input->post('available_to'),
-					'status' => $this->input->post('status'),
-					'slug' => $slug
-				];
-			}
-
-			if ($this->form_validation->run() === TRUE && $this->db->insert('products', $data)) {
-				
-				// check whether we are creating a new product
-				// redirect to products page
+				$this->ion_auth_model->set_product($file_name);
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				redirect('admin/products', 'refresh');
 			} else {
 
 				// if the form doesn't pass the form validations
-				$data['form_error'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
+				// $data['form_error'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
 
 				$data['name'] = [
 					'name' => 'name',
@@ -1559,7 +1589,7 @@ class Auth extends MX_Controller
 				$data['name_of_store'] = $this->nameofstore();
 
 				$this->_render_page('templates/header', $head);
-				$this->_render_page('auth/publish_product', $data);
+				$this->_render_page('auth/publish-product', $data);
 				$this->_render_page('templates/footer');
 			}
 		}
@@ -1585,16 +1615,20 @@ class Auth extends MX_Controller
 			// show admin access only error
 			show_error($this->lang->line('admin_access_only'));
 		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
 			$data['user_account'] = $this->ion_auth->user()->row();
 
 			$data['products'] = $this->ion_auth_model->get_products();
 
 			$data['categories'] = $this->ion_auth_model->get_categories();
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/list_products', $data);
+			$this->_render_page('auth/list-products', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -1602,7 +1636,7 @@ class Auth extends MX_Controller
 	/**
 	 * edit product
 	 */
-	public function edit_product($slug = NULL) {
+	public function edit_product($id = NULL) {
 		if (!$this->ion_auth->logged_in()) {
 			
 			redirect('login', 'refresh');
@@ -1610,14 +1644,87 @@ class Auth extends MX_Controller
 			
 			show_error($this->lang->line('admin_access_only'));
 		} else {
-			$data['product'] = $this->ion_auth_model->get_products($slug);
+			$data['product'] = $this->ion_auth_model->get_products($id);
 
 			if (empty($data['product'])) {
 				show_404();
 			} 
-			$data['title'] = $data['product']->name;
+			$data['title'] = $this->lang->line('edit_product_heading');
 
-			$this->_render_page('auth/edit_product', $data);
+			// form validation
+			$this->form_validation->set_rules('name', $this->lang->line('edit_product_name_of_product_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('snippet', $this->lang->line('edit_product_snippet_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('description', $this->lang->line('edit_product_desciption_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('categories[]', $this->lang->line('edit_product_categories_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('tags[]', $this->lang->line('edit_product_tags_validation_label'), 'trim|required');
+			$this->form_validation->set_rules('colors[]', $this->lang->line('edit_product_colors_validation_label'), 'trim');
+			$this->form_validation->set_rules('sizes[]', $this->lang->line('edit_product_sizes_validation_label'), 'trim');
+			$this->form_validation->set_rules('regular_price', $this->lang->line('edit_product_regular_price_validation_label'), 'required|differs[sale_price]|numeric', 
+				[
+					'differs' => $this->lang->line('regular_price_should_differ_sale_price')
+				]
+			);
+			$this->form_validation->set_rules('sale_price', $this->lang->line('edit_product_sale_price_validation_label'), 'required|differs[wholesale_price]|numeric', 
+				[
+					'differs' => $this->lang->line('sale_price_should_differ_wholesale_price')
+				]
+			);
+			$this->form_validation->set_rules('wholesale_price', $this->lang->line('edit_product_wholesale_price_validation_label'), 'required|numeric');
+			$this->form_validation->set_rules('status', $this->lang->line('edit_product_status_validation_label'), 'trim|required');
+
+			if ($this->form_validation->run() === TRUE) {
+				
+				$this->ion_auth_model->update_product();
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			} else {
+				$data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+				$data['name_of_store'] = $this->nameofstore();
+
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$data['categories'] = $this->ion_auth_model->get_categories();
+
+				$this->_render_page('templates/header');
+				$this->_render_page('auth/edit-product', $data);
+				$this->_render_page('templates/footer');
+			}
+		}
+	}
+
+	/**
+	 * view product
+	 *
+	 * @return product information
+	 *
+	 * @param string
+	 */
+	public function view_product($id = NULL) {
+		// login & user credential check
+		if (!$this->ion_auth->logged_in()) {
+			
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// show error 
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['product'] = $this->ion_auth_model->get_products($id);
+
+			if (empty($data['product'])) {
+				show_404();
+			}
+
+			$data['title'] = $data['product']->name;
+			$data['name_of_store'] = $this->nameofstore();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['orders'] = $this->ion_auth_model->get_orders();
+			$data['currency'] = $this->storecurrency();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/view-product', $data);
+			$this->_render_page('templates/footer');
 		}
 	}
 
@@ -1681,7 +1788,7 @@ class Auth extends MX_Controller
 				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
 
 				$this->_render_page('templates/header');
-				$this->_render_page('auth/add_shipment', $data);
+				$this->_render_page('auth/add-shipment', $data);
 				$this->_render_page('templates/footer');
 			}
 		}
@@ -1708,10 +1815,12 @@ class Auth extends MX_Controller
 
 			$data['shipments'] = $this->ion_auth_model->get_shipments();
 
-			$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/list_shipments', $data);
+			$this->_render_page('auth/list-shipments', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -1752,7 +1861,7 @@ class Auth extends MX_Controller
 			$data['store_currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/list_orders', $data);
+			$this->_render_page('auth/list-orders', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -1787,7 +1896,7 @@ class Auth extends MX_Controller
 			$data['store_currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/view_order', $data);
+			$this->_render_page('auth/view-order', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -1810,12 +1919,10 @@ class Auth extends MX_Controller
 		$orders = $this->db->get('orders')->result();
 		foreach ($orders as $order) {
 			$cart_items = json_decode($order->orders);
-
-			// echo print_r($cart_items);
 			foreach ($cart_items as $cart_item) {
 				echo '<pre>';
 				
-				echo $cart_item->id, ' => ', $cart_item->qty, ' => ', number_format($cart_item->price, 2), ' => ', number_format($cart_item->subtotal, 2);
+				print_r($cart_item);
 			}
 		}
 	}
@@ -1851,7 +1958,7 @@ class Auth extends MX_Controller
 			$data['store_location'] = $this->db->get_where('info', ['field' => 'location'])->row()->value;
 
 			$this->_render_page('templates/header');
-			$this->_render_page('auth/general_settings', $data);
+			$this->_render_page('auth/general-settings', $data);
 			$this->_render_page('templates/footer');
 		}
 	}

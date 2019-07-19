@@ -1,6 +1,6 @@
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
-            <div class="page-footer-inner" value="fixed"> <?php echo date('Y')?> &copy; <?php echo $this->lang->line('site_title')?>
+            <div class="page-footer-inner" value="fixed"> <?php echo date('Y')?> &copy; <?php echo $name_of_store?>
             </div>
             <div class="scroll-to-top">
                 <i class="icon-arrow-up"></i>
@@ -82,14 +82,16 @@
 	<script type="text/javascript" src="<?php echo base_url();?>public/assets/global/plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
 	<script type="text/javascript" src="<?php echo base_url();?>public/assets/global/plugins/bootstrap-markdown/lib/markdown.js"></script>
 	<!-- END PAGE LEVEL PLUGINS -->
+	<script src="<?php echo base_url();?>public/assets/admin/pages/scripts/ui-toastr.js"></script>
 	<script src="<?php echo base_url('public/assets/global/scripts/metronic.js'); ?>" type="text/javascript"></script>
 	<script src="<?php echo base_url('public/assets/admin/layout4/scripts/layout.js'); ?>" type="text/javascript"></script>
 	<script src="<?php echo base_url('public/assets/admin/layout4/scripts/demo.js'); ?>" type="text/javascript"></script>
 	<script>
 	jQuery(document).ready(function() {       
-	   Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	Demo.init(); // init demo features
+	   	Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+		Demo.init(); // init demo features
+		UIToastr.init();
 	});
 	</script>
 	<!-- END JAVASCRIPTS -->

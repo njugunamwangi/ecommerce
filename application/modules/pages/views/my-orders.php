@@ -116,7 +116,14 @@ License: You must have a valid license purchased only from themeforest (the abov
                             <?php
                               if ($this->ion_auth->is_admin()) {
                                 ?>
-                                <li><a href="<?php echo base_url();?>admin"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                              } elseif ($this->ion_auth->is_vendor()) {
+                                $baseurl = base_url();
+                                $baseurlinfo = explode('//', $baseurl, 2);
+                                $base = $baseurlinfo[1];
+                                ?>
+                                <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
                                 <?php
                               } else {
                                 ?>
@@ -244,7 +251,16 @@ License: You must have a valid license purchased only from themeforest (the abov
               <?php
             } else {
               ?>
-                <!-- BEGIN SIDEBAR -->
+              <?php
+                  if ($this->session->flashdata('message')) {
+                  ?>
+                      <div class="alert alert-info">
+                          <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
+                      </div>
+                      <?php
+                  }
+              ?>
+              <!-- BEGIN SIDEBAR -->
               <div class="sidebar col-md-3 col-sm-3">
                 <ul class="list-group margin-bottom-25 sidebar-menu">
                   <li class="list-group-item clearfix active"><a href="<?php echo base_url()?>my-account/orders"><i class="fa fa-angle-right"></i><?php echo $this->lang->line('my_orders_heading')?></a></li>

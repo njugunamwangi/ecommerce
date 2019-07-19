@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2019 at 12:39 PM
+-- Generation Time: Jul 19, 2019 at 07:26 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -39,7 +39,8 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `category`, `slug`) VALUES
-(1, 'Electronics', 'electronics');
+(1, 'Electronics', 'electronics'),
+(2, 'Household', 'household');
 
 -- --------------------------------------------------------
 
@@ -147,12 +148,35 @@ CREATE TABLE `info` (
 
 INSERT INTO `info` (`id`, `field`, `value`) VALUES
 (1, 'site-logo', NULL),
-(2, 'name-of-store', 'eCommerce'),
-(3, 'phone-number', '+254700000000'),
+(2, 'name-of-store', 'e-Commerce'),
+(3, 'phone-number', '+254700000009'),
 (4, 'email-address', 'info@ecommerce.com'),
 (5, 'location', NULL),
 (6, 'site-icon', NULL),
 (7, 'currency', 'KES');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logins`
+--
+
+CREATE TABLE `logins` (
+  `id` int(20) UNSIGNED NOT NULL,
+  `customer_id` int(20) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `logins`
+--
+
+INSERT INTO `logins` (`id`, `customer_id`, `ip_address`, `time`) VALUES
+(1, 7, '127.0.0.1', 1563556667),
+(2, 7, '127.0.0.1', 1563556778),
+(3, 8, '127.0.0.1', 1563556892),
+(4, 9, '127.0.0.1', 1563557057);
 
 -- --------------------------------------------------------
 
@@ -203,14 +227,6 @@ CREATE TABLE `orders` (
   `slug` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `orders`
---
-
-INSERT INTO `orders` (`id`, `customer_id`, `order_id`, `orders`, `total_orders`, `first_name`, `last_name`, `email`, `phone`, `address`, `postal_code`, `subcounty`, `county`, `method_of_payment`, `status`, `slug`) VALUES
-(1, 2, 1560242523, '{\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":1,\"price\":65000,\"name\":\"Fridge\",\"image\":\"fridge_1.jpg\",\"slug\":\"fridge\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":65000}}', '65000', 'Desmond', 'Njuguna', 'desmondnjuguna.m@gmail.com', '0704502454', '219 Sabasaba', '01020', 'Kiambu', 'Kiambu', 'Cash on Delivery', 0, '1560242523'),
-(2, 2, 1560850556, '{\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":1,\"price\":10000,\"name\":\"Ukitel\",\"image\":\"c12_phone.jpg\",\"slug\":\"ukitel\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":10000},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":1,\"price\":40000,\"name\":\"Hisense\",\"image\":\"hisense_431.jpg\",\"slug\":\"hisense\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":40000}}', '50000', 'Desmond', 'Njuguna', 'desmondnjuguna.m@gmail.com', '0704502454', '219 Sabasaba', '01020', 'Kiambu', 'Kiambu', 'Cash on Delivery', 0, '1560850556');
-
 -- --------------------------------------------------------
 
 --
@@ -231,6 +247,7 @@ CREATE TABLE `pd_tags` (
 
 CREATE TABLE `products` (
   `id` int(11) UNSIGNED NOT NULL,
+  `vendor_id` int(11) UNSIGNED NOT NULL,
   `image` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
@@ -243,6 +260,7 @@ CREATE TABLE `products` (
   `sale_price` varchar(128) NOT NULL,
   `wholesale_price` varchar(128) NOT NULL,
   `date_created` int(11) UNSIGNED NOT NULL,
+  `date_updated` int(11) UNSIGNED DEFAULT NULL,
   `slug` varchar(255) NOT NULL,
   `available_from` int(11) UNSIGNED DEFAULT NULL,
   `available_to` int(11) UNSIGNED DEFAULT NULL,
@@ -253,11 +271,16 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `image`, `name`, `description`, `snippet`, `categories`, `tags`, `colors`, `sizes`, `regular_price`, `sale_price`, `wholesale_price`, `date_created`, `slug`, `available_from`, `available_to`, `status`) VALUES
-(1, 'fridge_1.jpg', 'Fridge', '<p>Fridge</p>', 'Fridge', '[\"Electronics\",\"Fridges\"]', '[\"Fridge\"]', '[\"\"]', '[\"\"]', '67000', '65000', '63000', 1559400289, 'fridge', NULL, NULL, 1),
-(2, 'c12_phone.jpg', 'Ukitel', '<p>6.0\" display</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phones\"]', '[\"\"]', '[\"\"]', '12000', '10000', '8500', 1559400519, 'ukitel', NULL, NULL, 1),
-(4, 'infinix_smart_2.jpg', 'Infinix Smart 2', '<p>5.5\"</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phone\"]', '[\"\"]', '[\"\"]', '15000', '13000', '10000', 1559400769, 'infinix-smart-2', NULL, NULL, 1),
-(5, 'hisense_431.jpg', 'Hisense', '<p>43\"</p>', 'Television', '[\"Electronics\",\"Televisions\"]', '[\"Television\"]', '[\"\"]', '[\"\"]', '43000', '40000', '38000', 1559400872, 'hisense', NULL, NULL, 1);
+INSERT INTO `products` (`id`, `vendor_id`, `image`, `name`, `description`, `snippet`, `categories`, `tags`, `colors`, `sizes`, `regular_price`, `sale_price`, `wholesale_price`, `date_created`, `date_updated`, `slug`, `available_from`, `available_to`, `status`) VALUES
+(1, 1556364105, 'fridge_1.jpg', 'Fridge', '<p>2 door</p>', 'Fridge', '[\"Electronics\",\"Fridges\"]', '[\"electronics, Fridges, Samsung Fridges\"]', '[\"\"]', '[\"\"]', '67000', '65000', '63000', 1559400289, 1563193054, 'fridge', NULL, NULL, 1),
+(2, 1556364105, 'c12_phone.jpg', 'Ukitel', '<p>6.0\" display</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phones\"]', '[\"\"]', '[\"\"]', '12000', '10000', '8500', 1559400519, NULL, 'ukitel', NULL, NULL, 1),
+(4, 1556364105, 'infinix_smart_2.jpg', 'Infinix Smart 2', '<p>5.5\"</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phone\"]', '[\"\"]', '[\"\"]', '15000', '13000', '10000', 1559400769, NULL, 'infinix-smart-2', NULL, NULL, 1),
+(5, 1556364105, 'hisense_431.jpg', 'Hisense', '<p>43\"</p>', 'Television', '[\"Electronics\",\"Televisions\"]', '[\"Television\"]', '[\"\"]', '[\"\"]', '43000', '40000', '38000', 1559400872, NULL, 'hisense', NULL, NULL, 1),
+(6, 1556364105, 'Ezee-Trolley1.gif', 'Kenpoly Ezee Trolley', '<p>4 stack trolley</p>\r\n\r\n<p>4 stands </p>', 'trolley', '[\"Household\",\"Trolley\"]', '[\"Household, Kenpoly, Trolley, Ezee trolley\"]', '[\"Blue, brown, orange, pink\"]', '[\"\"]', '650', '550', '450', 1562928262, NULL, 'kenpoly-ezee-trolley', NULL, NULL, 1),
+(7, 1560858486, 'Round-Trolley.gif', 'Kenpoly Round Trolley', '<p>3-4 stack</p>\r\n\r\n<p>4 stands</p>', 'Round Trolley', '[\"Household\",\"Trolley\"]', '[\"Household, Kenpoly, Trolley, Round Trolley\"]', '[\"Blue. Brown, Pink\"]', '[\"\"]', '600', '550', '450', 1563120049, NULL, 'kenpoly-round-trolley', NULL, NULL, 1),
+(8, 1556364105, 'Chair-2014.gif', 'Kenpoly Chair 2014', '<p>Chair with arms</p>', 'Chair', '[\"Household\",\"Chairs\"]', '[\"Kenpoly, Chair, Household\"]', '[\"Blue, Green, Yellow, Brown\"]', '[\"\"]', '700', '650', '550', 1563543201, NULL, 'kenpoly-chair-2014', NULL, NULL, 1),
+(9, 1556364105, 'Chair-2032-without-arms1.gif', 'Kenpoly Chair 2032', '<p>Armless Chair</p>', 'Armless Chair', '[\"Household\",\"Chairs\"]', '[\"Household, Kenpoly, Chairs, Armless Chair\"]', '[\"Blue, Brown\"]', '[\"\"]', '750', '700', '600', 1563543585, NULL, 'kenpoly-chair-2032', NULL, NULL, 1),
+(10, 1556364105, 'Frosty-No-5.gif', 'Kenpoly Frosty Bucket', '<p>Bucket with lid</p>', 'Frosty Bucket', '[\"Household\",\"Buckets\"]', '[\"Household, Kenpoly, buckets, Frosty Bucket\"]', '[\"Purple\"]', '[\"\"]', '500', '400', '350', 1563555365, NULL, 'kenpoly-frosty-bucket', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -272,15 +295,9 @@ CREATE TABLE `reviews` (
   `email` varchar(128) NOT NULL,
   `review` text NOT NULL,
   `date_created` int(11) UNSIGNED NOT NULL,
-  `ratings` float(10,2) NOT NULL
+  `ratings` float(10,2) NOT NULL,
+  `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `reviews`
---
-
-INSERT INTO `reviews` (`id`, `product_id`, `name`, `email`, `review`, `date_created`, `ratings`) VALUES
-(1, 1, 'Desmond', 'desmondnjuguna.m@gmail.com', 'ha', 1560849502, 4.00);
 
 -- --------------------------------------------------------
 
@@ -323,7 +340,10 @@ INSERT INTO `subcategories` (`id`, `subcategory`, `category`, `slug`) VALUES
 (1, 'Fridges', 'Electronics', 'fridges'),
 (2, 'Televisions', 'Electronics', 'televisions'),
 (3, 'Phones', 'Electronics', 'phones'),
-(4, 'Laptop', 'Electronics', 'laptop');
+(4, 'Laptop', 'Electronics', 'laptop'),
+(5, 'Trolley', 'Household', 'trolley'),
+(6, 'Chairs', 'Household', 'chairs'),
+(7, 'Buckets', 'Household', 'buckets');
 
 -- --------------------------------------------------------
 
@@ -358,10 +378,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(2, '127.0.0.1', 'desmondnjuguna.m@gmail.com', '$2y$12$6uo1DefxPUFrubYBeUD55u/mm8LGZIIugmUdIvqwDyaHlAveiXu2y', 'desmondnjuguna.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1556364105, 1561707366, 1, 'Desmond', 'Njuguna', 'ReCode', '0704502454'),
-(3, '127.0.0.1', 'morganwagachaki.m@gmail.com', '$2y$10$jT6Y5KXXdBgB9QNdPVoRZu/T5RWqucAVgDi8Kuuc05gvfMQAZfM6q', 'morganwagachaki.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1560858486, 1561716241, 1, 'Morgan', 'Wagachaki', NULL, '0706243406'),
-(4, '127.0.0.1', 'lennywainaina.m@gmail.com', '$2y$10$UJ1kIFVyNUf8f.jvbn4wbeJXCLJJ3Ckhm4Z4tk54snRGwGVmM0wG6', 'lennywainaina.m@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1561539193, 1561718468, 1, 'Lenny', 'Wainaina', 'ReCode', '0771045082'),
-(5, '127.0.0.1', 'admin@admin.com', '$2y$10$eHLUk.kQXXjkv7rmayYPYeJ9vD83eAeHkZ257B0bSCJX8p//T3ny2', 'admin@admin.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1562063173, 1562063184, 1, 'ecommerce', 'admin', NULL, '0700000000');
+(7, '127.0.0.1', 'testaccount1@gmail.com', '$2y$12$a6sETxL3wsaFN3ThdalIwOmE6ml9S7Dznz0oPHLBbqRj0iixWihhu', 'testaccount1@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556647, 1563556778, 1, 'Test', 'Account 1', NULL, '0700010203'),
+(8, '127.0.0.1', 'testaccount2@gmail.com', '$2y$10$cWKnrV1lhSSJFQKV02G5Re9IgaKo7EIu7q7BBpQWjKJnS512g6vk.', 'testaccount2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556838, 1563556892, 1, 'Test', 'Account 2', NULL, '0700020202'),
+(9, '127.0.0.1', 'testaccount3@gmail.com', '$2y$10$2axejRFIvN2PsFZZ.M8LxesZLcoK9GWk4495CMPgBmGMckI0LEKO6', 'testaccount3@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557036, 1563557057, 1, 'Test', 'Account 3', NULL, '0703030303'),
+(10, '127.0.0.1', 'testaccount4@gmail.com', '$2y$10$EvTTrf91Mx6KCF6OE96GYezAdLLVpsRnYOr0ZYmTcClowu99IRjgu', 'testaccount4@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557142, NULL, 1, 'Test', 'Account 4', NULL, '0704040404');
 
 -- --------------------------------------------------------
 
@@ -380,10 +400,39 @@ CREATE TABLE `users_groups` (
 --
 
 INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
-(9, 2, 1),
-(6, 3, 2),
-(8, 4, 4),
-(10, 5, 1);
+(13, 7, 1),
+(14, 8, 2),
+(15, 9, 3),
+(16, 10, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist`
+--
+
+CREATE TABLE `wishlist` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `customer_id` int(11) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `wishlist_code` int(11) UNSIGNED NOT NULL,
+  `time` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `customer_id`, `product_id`, `wishlist_code`, `time`) VALUES
+(15, 6, 1, 61, 1562748994),
+(17, 2, 6, 26, 1562928296),
+(18, 3, 1, 31, 1563004819),
+(19, 4, 1, 41, 1563095242),
+(20, 4, 6, 46, 1563095246),
+(21, 2, 7, 27, 1563121269),
+(22, 2, 4, 24, 1563193439),
+(23, 3, 4, 34, 1563434054),
+(24, 3, 2, 32, 1563542916);
 
 --
 -- Indexes for dumped tables
@@ -415,6 +464,12 @@ ALTER TABLE `groups`
 ALTER TABLE `info`
   ADD PRIMARY KEY (`id`),
   ADD KEY `field` (`field`);
+
+--
+-- Indexes for table `logins`
+--
+ALTER TABLE `logins`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `login_attempts`
@@ -489,6 +544,12 @@ ALTER TABLE `users_groups`
   ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
 
 --
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -496,7 +557,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `counties`
@@ -517,6 +578,12 @@ ALTER TABLE `info`
   MODIFY `id` tinyint(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `logins`
+--
+ALTER TABLE `logins`
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
@@ -532,7 +599,7 @@ ALTER TABLE `newsletter`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pd_tags`
@@ -544,13 +611,13 @@ ALTER TABLE `pd_tags`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `shipment`
@@ -562,19 +629,25 @@ ALTER TABLE `shipment`
 -- AUTO_INCREMENT for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users_groups`
 --
 ALTER TABLE `users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables

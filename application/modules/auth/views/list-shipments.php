@@ -1,5 +1,6 @@
 	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
 </head>
+<?php $i=0;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
@@ -7,8 +8,8 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
-			<img src="<?php echo base_url()?>public/assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
+			<a href="index.html">
+			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -455,7 +456,7 @@
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 			<ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-				<li class="start active">
+				<li class="start ">
 					<a href="<?php echo base_url()?>admin">
 					<i class="fa fa-home"></i>
 					<span class="title">Dashboard</span>
@@ -523,7 +524,7 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li >
 					<a href="javascript:;">
 					<i class="fa fa-gift"></i>
 					<span class="title">Products</span>
@@ -540,7 +541,7 @@
 							<i class="fa fa-list"></i>
 							List Products</a>
 						</li>
-						<li>
+						<li >
 							<a href="javascript:;">
 							<i class="fa fa-bookmark-o"></i>
 							<span class="title">Categories</span>
@@ -553,14 +554,14 @@
 									Publish Category</a>
 								</li>
 								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
+									<a href="<?php echo base_url()?>admin/products/categories/add">
 									<i class="fa fa-check-square"></i>
 									Publish Sub Category</a>
 								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
-									List Category</a>
+									List Categories</a>
 								</li>
 								
 							</ul>
@@ -575,7 +576,7 @@
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
 									<i class="fa fa-check-square-o"></i>
-									Publish Tag</a>
+									Publish Tags</a>
 								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/tags">
@@ -625,11 +626,11 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li class="active">
 					<a href="javascript:;">
 					<i class="fa fa-paper-plane-o"></i>
 					<span class="title">Shipments</span>
-					<span class="arrow "></span>
+					<span class="arrow open"></span>
 					</a>
 					<ul class="sub-menu">
 						<li >
@@ -637,7 +638,7 @@
 							<i class="fa fa-check-square-o"></i>
 							Add Shipment </a>
 						</li>
-						<li>
+						<li class="active">
 							<a href="<?php echo base_url()?>admin/shipments">
 							<i class="fa fa-list"></i>
 							List Shipments</a>
@@ -654,7 +655,7 @@
 						<li >
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
-							<?php echo $this->lang->line('general_settings_heading')?>  </a>
+							<?php echo lang('general_settings_heading')?> </a>
 						</li>
 					</ul>
 				</li>
@@ -693,7 +694,7 @@
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1>Dashboard <small>dashboard & statistics</small></h1>
+					<h1> Shipments Listing </h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -794,599 +795,154 @@
 					<i class="fa fa-circle"></i>
 				</li>
 				<li class="active">
-					<a href="#">Dashboard</a>
+					Shipments
 				</li>
 			</ul>
 			<!-- END PAGE BREADCRUMB -->
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
-			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								</small><h3 class="font-green-sharp"><small class="font-green-sharp"><?php echo $currency?> <?php echo number_format($total_sales_amount, 2) ?></h3>
-								<small>TOTAL SALES</small>
-							</div>
-							<div class="icon">
-								<i class="icon-pie-chart"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 76%;" class="progress-bar progress-bar-success green-sharp">
-								<span class="sr-only">76% progress</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 progress
-								</div>
-								<div class="status-number">
-									 76%
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								<h3 class="font-red-haze"><?php echo $total_orders?></h3>
-								<small>TOTAL ORDERS</small>
-							</div>
-							<div class="icon">
-								<i class="icon-like"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 85%;" class="progress-bar progress-bar-success red-haze">
-								<span class="sr-only">85% change</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 change
-								</div>
-								<div class="status-number">
-									<?php 
-										$percent = $total_orders/$this->config->item('order_target');
-										echo $percentage =  $percent*100;
-										echo '%';
-									?>
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								<h3 class="font-blue-sharp">
-									<small class="font-blue-sharp">
-									<?php 
-										if ($total_orders < 1) {
-											echo '0.00';
-										} else {
-											$average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2);
-										}
-									?>
-									</small>
-								</h3>
-								<small>AVERAGE ORDER</small>
-							</div>
-							<div class="icon">
-								<i class="icon-basket"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 45%;" class="progress-bar progress-bar-success blue-sharp">
-								<span class="sr-only">45% grow</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 grow
-								</div>
-								<div class="status-number">
-									 45%
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<!-- Begin: life time stats -->
-					<div class="portlet light">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="icon-bar-chart font-green-sharp"></i>
-								<span class="caption-subject font-green-sharp bold uppercase">Overview</span>
-								<span class="caption-helper">weekly stats...</span>
-							</div>
-							<div class="tools">
-								<a href="javascript:;" class="collapse">
-								</a>
-								<a href="#portlet-config" data-toggle="modal" class="config">
-								</a>
-								<a href="javascript:;" class="reload">
-								</a>
-								<a href="javascript:;" class="fullscreen">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body">
-							<div class="tabbable-line">
-								<ul class="nav nav-tabs">
-									<li class="active">
-										<a href="#overview_1" data-toggle="tab">
-										Top Selling </a>
-									</li>
-									<!-- <li>
-										<a href="#overview_2" data-toggle="tab">
-										Most Viewed </a>
-									</li> -->
-									<li>
-										<a href="#overview_3" data-toggle="tab">
-										Customers </a>
-									</li>
-									<li class="dropdown">
-										<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-										Orders <i class="fa fa-angle-down"></i>
-										</a>
-										<ul class="dropdown-menu" role="menu">
-											<li>
-												<a href="#overview_4" tabindex="-1" data-toggle="tab">
-												Latest 10 Orders </a>
-											</li>
-											<li>
-												<a href="#overview_5" tabindex="-1" data-toggle="tab">
-												Pending Orders </a>
-											</li>
-											<li>
-												<a href="#overview_6" tabindex="-1" data-toggle="tab">
-												Completed Orders </a>
-											</li>
-											<li>
-												<a href="#overview_7" tabindex="-1" data-toggle="tab">
-												Rejected Orders </a>
-											</li>
-										</ul>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="overview_1">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Product Name
-														</th>
-														<th>
-															 Price
-														</th>
-														<th>
-															 Sold
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach ($products as $product) {
-														?>
-															<tr>
-																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>">
-																	<?php echo $product->name?> </a>
-																</td>
-																<td>
-																	<?php echo $currency, ' ', number_format($product->sale_price, 2) ?>
-																</td>
-																<td>
-																	<?php
-																		$orders = $this->db->get('orders')->result();
-																		foreach ($orders as $order) {
-																			$cart_items = json_decode($order->orders);
-																			foreach ($cart_items as $cart_item) {
-																				if ($cart_item->id == $product->id) {
-																					$data = [];
-																					$product_sales = $cart_item->qty. ', ';
-																					$sold_items = array_push($data, $product_sales);
-																					echo array_sum($data);
-																				}
-																			}
-																		}
-																	?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													} ?>		
-												</tbody>
-											</table>
+			<?php
+            	if (empty($shipments)) {
+            		?>
+	            		<div class="alert alert-danger">
+	                        <div id="infoMessage"> No Shipmens added yet</div>
+	                    </div>
+                    <?php
+            	} else {
+            		?>
+		                <div class="row">
+							<div class="col-md-12">
+								<!-- Begin: life time stats -->
+								<div class="portlet light">
+									<div class="portlet-title">
+										<div class="caption">
+											<i class="fa fa-gift font-green-sharp"></i>
+											<span class="caption-subject font-green-sharp bold uppercase">Shipments</span>
+											<span class="caption-helper">manage shipments...</span>
+										</div>
+										<div class="actions">
+											<div class="btn-group">
+												<a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
+												<i class="fa fa-share"></i> Tools <i class="fa fa-angle-down"></i>
+												</a>
+												<ul class="dropdown-menu pull-right">
+													<li>
+														<a href="javascript:;">
+														Export to Excel </a>
+													</li>
+													<li>
+														<a href="javascript:;">
+														Export to CSV </a>
+													</li>
+													<li>
+														<a href="javascript:;">
+														Export to XML </a>
+													</li>
+													<li class="divider">
+													</li>
+													<li>
+														<a href="javascript:;">
+														Print Invoices </a>
+													</li>
+												</ul>
+											</div>
 										</div>
 									</div>
-									<!-- <div class="tab-pane" id="overview_2">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
+									<div class="portlet-body">
+										<div class="table-container">
+											<div class="table-actions-wrapper">
+												<span>
+												</span>
+												<select class="table-group-action-input form-control input-inline input-small input-sm">
+													<option value="">Select...</option>
+													<option value="publish">Publish</option>
+													<option value="unpublished">Un-publish</option>
+													<option value="delete">Delete</option>
+												</select>
+												<button class="btn btn-sm yellow table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
+											</div>
+											<table class="table table-striped table-bordered table-hover" id="datatable_products">
 												<thead>
-													<tr>
-														<th>
-															 Product Name
+													<tr role="row" class="heading">
+														<th width="1%">
+															 #
 														</th>
-														<th>
-															 Price
+														<th width="15%">
+															 Ship To
 														</th>
-														<th>
-															 Views
+														<th width="15%">
+															 Shipment Fee
 														</th>
-														<th>
+														<th width="10%">
+															 Number of Shipments
 														</th>
+														<th width="10%">
+															 Actions
+														</th>
+													</tr>
+													<tr role="row" class="filter">
+														<td>
+															<input type="text" class="form-control form-filter input-sm" name="shipment_id">
+														</td>
+														<td>
+															<input type="text" class="form-control form-filter input-sm" name="ship_to">
+														</td>
+														<td>
+															<div class="margin-bottom-5">
+																<input type="text" class="form-control form-filter input-sm" name="shipment_fee_from" placeholder="From"/>
+															</div>
+															<input type="text" class="form-control form-filter input-sm" name="shipment_fee_to" placeholder="To"/>
+														</td>
+														<td>
+															<input type="text" class="form-control form-filter input-sm" name="number_of_shipments">
+														</td>
+														<td>
+															<div class="margin-bottom-5">
+																<button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
+															</div>
+															<button class="btn btn-sm red filter-cancel"><i class="fa fa-times"></i> Reset</button>
+														</td>
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															Metronic - Responsive Admin + Frontend Theme </a>
-														</td>
-														<td>
-															 $20.00
-														</td>
-														<td>
-															 11190
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div> -->
-									<div class="tab-pane" id="overview_3">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Total Orders
-														</th>
-														<th>
-															 Total Amount
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach($users as $user) {
-														?>
-															<tr>
-																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>">
-																	<?php echo $user->first_name, ' ', $user->last_name?> </a>
-																</td>
-																<td>
-																	<?php 
-																		$this->db->from('orders')->where('customer_id', $user->id);
-																		echo $query = $this->db->get()->num_rows()
-																	?>
-																</td>
-																<td>
-																	<?php 
-																		$this->db->from('orders')->where('customer_id', $user->id);
-																		$this->db->select_sum('total_orders');
-																		$query = $this->db->get()->row();
-																		echo $currency, ' ',number_format($query->total_orders, 2);
-																	?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													}?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_4">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach($last_ten_orders as $order) {
-														?>
-															<tr>
-																<td>
-																	<?php $this->db->from('users')->where('id', $order->customer_id);
-																		$customer_info = $this->db->get()->row();?>
-																	<a href="<?php echo base_url('admin/user/'.$customer_info->id)?>">
-																		<?php
-																			echo $customer_info->first_name, ' ', $customer_info->last_name;
-																		?> 
-																	</a>
-																</td>
-																<td>
-																	<?php echo date('jS M, Y', $order->order_id), ' at ', date('H:i:s', $order->order_id);?> 
-																</td>
-																<td>
-																	<?php echo $currency, ' ',number_format($order->total_orders, 2) ?>
-																</td>
-																<td>
-																	<?php
-							                                          if ($order->status == 0) {
-							                                            ?>
-							                                              <span class="label label-sm label-danger">Not Processed</span>
-							                                            <?php
-							                                          } elseif ($order->status == 1) {
-							                                            ?>
-							                                              <span class="label label-sm label-info">Processed</span>
-							                                            <?php
-							                                          } elseif ($order->status == 2) {
-							                                            ?>
-							                                              <span class="label label-sm label-warning">In Transit</span>
-							                                            <?php
-							                                          } elseif ($order->status == 3) {
-							                                            ?>
-							                                              <span class="label label-sm label-default">Cancelled</span>
-							                                            <?php
-							                                          } else {
-							                                            ?>
-							                                              <span class="label label-sm label-success">Delivered & Closed</span>
-							                                            <?php
-							                                          }
-							                                        ?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													}?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_5">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_6">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_7">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
+													<?php foreach ($shipments as $shipment):?>
+														<tr>
+															<td>
+		                                                        <?php
+		                                                            echo $i = $i + 1;
+		                                                        ?>                                       
+		                                                    </td>
+												            <td><?php echo htmlspecialchars(ucwords($shipment->ship_to),ENT_QUOTES,'UTF-8');?> 
+												        	</td>
+		                                                    <td>
+		                                                        <?php echo $currency, ' ', number_format($shipment->fee, 2);?>
+		                                                    </td>
+															<td>
+		                                                        <?php
+		                                                        	$this->db->from('orders')->where('subcounty', $shipment->ship_to);
+                                    								$query = $this->db->get()->num_rows();
+
+                                    								echo $query;
+		                                                        ?>
+															</td>
+															<td>
+																<span >
+		                                                            <a href="<?php echo base_url('admin/shipment/'. $shipment->id)?>" class="label label-sm label-info"><i class="fa fa-search"></i> View</a>
+		                                                        </span>
+															</td>
+														</tr>
+													<?php endforeach;?>
 												</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
+								<!-- End: life time stats -->
 							</div>
 						</div>
-					</div>
-					<!-- End: life time stats -->
-				</div>
-				<div class="col-md-6">
-					<!-- Begin: life time stats -->
-					<div class="portlet light">
-						<div class="portlet-title tabbable-line">
-							<div class="caption">
-								<i class="icon-share font-red-sunglo"></i>
-								<span class="caption-subject font-red-sunglo bold uppercase">Revenue</span>
-								<span class="caption-helper">weekly stats...</span>
-							</div>
-							<ul class="nav nav-tabs">
-								<li>
-									<a href="#portlet_tab2" data-toggle="tab" id="statistics_amounts_tab">
-									Amounts </a>
-								</li>
-								<li class="active">
-									<a href="#portlet_tab1" data-toggle="tab">
-									Orders </a>
-								</li>
-							</ul>
-						</div>
-						<div class="portlet-body">
-							<div class="tab-content">
-								<div class="tab-pane active" id="portlet_tab1">
-									<div id="statistics_1" class="chart">
-									</div>
-								</div>
-								<div class="tab-pane" id="portlet_tab2">
-									<div id="statistics_2" class="chart">
-									</div>
-								</div>
-							</div>
-							<div class="well margin-top-10 no-margin no-border">
-								<div class="row">
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-success">
-										Revenue: </span>
-										<h3>$111K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-info">
-										Tax: </span>
-										<h3>$14K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-danger">
-										Shipment: </span>
-										<h3>$10K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-warning">
-										Orders: </span>
-										<h3>2350</h3>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- End: life time stats -->
-				</div>
-			</div>
+		            <?php
+            	}
+            ?>
 			<!-- END PAGE CONTENT-->
 		</div>
 	</div>

@@ -1,5 +1,6 @@
 	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
 </head>
+<?php $i=0;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
@@ -7,8 +8,8 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
-			<img src="<?php echo base_url()?>public/assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
+			<a href="index.html">
+			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -455,7 +456,7 @@
 			<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
 			<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 			<ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-				<li class="start active">
+				<li class="start ">
 					<a href="<?php echo base_url()?>admin">
 					<i class="fa fa-home"></i>
 					<span class="title">Dashboard</span>
@@ -523,7 +524,7 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li >
 					<a href="javascript:;">
 					<i class="fa fa-gift"></i>
 					<span class="title">Products</span>
@@ -535,12 +536,12 @@
 							<i class="fa fa-check-square-o"></i>
 							Publish Product</a>
 						</li>
-						<li>
+						<li >
 							<a href="<?php echo base_url()?>admin/products">
 							<i class="fa fa-list"></i>
 							List Products</a>
 						</li>
-						<li>
+						<li >
 							<a href="javascript:;">
 							<i class="fa fa-bookmark-o"></i>
 							<span class="title">Categories</span>
@@ -553,14 +554,14 @@
 									Publish Category</a>
 								</li>
 								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
+									<a href="<?php echo base_url()?>admin/products/categories/add">
 									<i class="fa fa-check-square"></i>
 									Publish Sub Category</a>
 								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
-									List Category</a>
+									List Categories</a>
 								</li>
 								
 							</ul>
@@ -575,7 +576,7 @@
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
 									<i class="fa fa-check-square-o"></i>
-									Publish Tag</a>
+									Publish Tags</a>
 								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/tags">
@@ -638,23 +639,23 @@
 							Add Shipment </a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/shipments">
+							<a href="<?php echo base_url()?>admin/payments">
 							<i class="fa fa-list"></i>
 							List Shipments</a>
 						</li>
 					</ul>
 				</li>
-				<li class="last">
+				<li class="last active">
 					<a href="javascript:;">
 					<i class="fa fa-cogs"></i>
 					<span class="title">Settings</span>
-					<span class="arrow "></span>
+					<span class="arrow open"></span>
 					</a>
 					<ul class="sub-menu">
-						<li >
+						<li class="active">
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
-							<?php echo $this->lang->line('general_settings_heading')?>  </a>
+							<?php echo $this->lang->line('general_settings_heading')?> </a>
 						</li>
 					</ul>
 				</li>
@@ -693,7 +694,7 @@
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1>Dashboard <small>dashboard & statistics</small></h1>
+					<h1> <?php echo $this->lang->line('settings')?> </h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -794,597 +795,207 @@
 					<i class="fa fa-circle"></i>
 				</li>
 				<li class="active">
-					<a href="#">Dashboard</a>
+					<?php echo $this->lang->line('general_settings_heading')?>
 				</li>
 			</ul>
 			<!-- END PAGE BREADCRUMB -->
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								</small><h3 class="font-green-sharp"><small class="font-green-sharp"><?php echo $currency?> <?php echo number_format($total_sales_amount, 2) ?></h3>
-								<small>TOTAL SALES</small>
-							</div>
-							<div class="icon">
-								<i class="icon-pie-chart"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 76%;" class="progress-bar progress-bar-success green-sharp">
-								<span class="sr-only">76% progress</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 progress
-								</div>
-								<div class="status-number">
-									 76%
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								<h3 class="font-red-haze"><?php echo $total_orders?></h3>
-								<small>TOTAL ORDERS</small>
-							</div>
-							<div class="icon">
-								<i class="icon-like"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 85%;" class="progress-bar progress-bar-success red-haze">
-								<span class="sr-only">85% change</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 change
-								</div>
-								<div class="status-number">
-									<?php 
-										$percent = $total_orders/$this->config->item('order_target');
-										echo $percentage =  $percent*100;
-										echo '%';
-									?>
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-					<div class="dashboard-stat2">
-						<div class="display">
-							<div class="number">
-								<h3 class="font-blue-sharp">
-									<small class="font-blue-sharp">
-									<?php 
-										if ($total_orders < 1) {
-											echo '0.00';
-										} else {
-											$average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2);
-										}
-									?>
-									</small>
-								</h3>
-								<small>AVERAGE ORDER</small>
-							</div>
-							<div class="icon">
-								<i class="icon-basket"></i>
-							</div>
-						</div>
-						<!-- <div class="progress-info">
-							<div class="progress">
-								<span style="width: 45%;" class="progress-bar progress-bar-success blue-sharp">
-								<span class="sr-only">45% grow</span>
-								</span>
-							</div>
-							<div class="status">
-								<div class="status-title">
-									 grow
-								</div>
-								<div class="status-number">
-									 45%
-								</div>
-							</div>
-						</div> -->
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<!-- Begin: life time stats -->
-					<div class="portlet light">
+				<div class="col-md-4">
+					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="icon-bar-chart font-green-sharp"></i>
-								<span class="caption-subject font-green-sharp bold uppercase">Overview</span>
-								<span class="caption-helper">weekly stats...</span>
+								Name of your store
 							</div>
 							<div class="tools">
-								<a href="javascript:;" class="collapse">
-								</a>
-								<a href="#portlet-config" data-toggle="modal" class="config">
-								</a>
-								<a href="javascript:;" class="reload">
-								</a>
-								<a href="javascript:;" class="fullscreen">
+								<a href="" class="reload">
 								</a>
 							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="tabbable-line">
-								<ul class="nav nav-tabs">
-									<li class="active">
-										<a href="#overview_1" data-toggle="tab">
-										Top Selling </a>
-									</li>
-									<!-- <li>
-										<a href="#overview_2" data-toggle="tab">
-										Most Viewed </a>
-									</li> -->
-									<li>
-										<a href="#overview_3" data-toggle="tab">
-										Customers </a>
-									</li>
-									<li class="dropdown">
-										<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-										Orders <i class="fa fa-angle-down"></i>
-										</a>
-										<ul class="dropdown-menu" role="menu">
-											<li>
-												<a href="#overview_4" tabindex="-1" data-toggle="tab">
-												Latest 10 Orders </a>
-											</li>
-											<li>
-												<a href="#overview_5" tabindex="-1" data-toggle="tab">
-												Pending Orders </a>
-											</li>
-											<li>
-												<a href="#overview_6" tabindex="-1" data-toggle="tab">
-												Completed Orders </a>
-											</li>
-											<li>
-												<a href="#overview_7" tabindex="-1" data-toggle="tab">
-												Rejected Orders </a>
-											</li>
-										</ul>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="overview_1">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Product Name
-														</th>
-														<th>
-															 Price
-														</th>
-														<th>
-															 Sold
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach ($products as $product) {
-														?>
-															<tr>
-																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>">
-																	<?php echo $product->name?> </a>
-																</td>
-																<td>
-																	<?php echo $currency, ' ', number_format($product->sale_price, 2) ?>
-																</td>
-																<td>
-																	<?php
-																		$orders = $this->db->get('orders')->result();
-																		foreach ($orders as $order) {
-																			$cart_items = json_decode($order->orders);
-																			foreach ($cart_items as $cart_item) {
-																				if ($cart_item->id == $product->id) {
-																					$data = [];
-																					$product_sales = $cart_item->qty. ', ';
-																					$sold_items = array_push($data, $product_sales);
-																					echo array_sum($data);
-																				}
-																			}
-																		}
-																	?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													} ?>		
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<!-- <div class="tab-pane" id="overview_2">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Product Name
-														</th>
-														<th>
-															 Price
-														</th>
-														<th>
-															 Views
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															Metronic - Responsive Admin + Frontend Theme </a>
-														</td>
-														<td>
-															 $20.00
-														</td>
-														<td>
-															 11190
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div> -->
-									<div class="tab-pane" id="overview_3">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Total Orders
-														</th>
-														<th>
-															 Total Amount
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach($users as $user) {
-														?>
-															<tr>
-																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>">
-																	<?php echo $user->first_name, ' ', $user->last_name?> </a>
-																</td>
-																<td>
-																	<?php 
-																		$this->db->from('orders')->where('customer_id', $user->id);
-																		echo $query = $this->db->get()->num_rows()
-																	?>
-																</td>
-																<td>
-																	<?php 
-																		$this->db->from('orders')->where('customer_id', $user->id);
-																		$this->db->select_sum('total_orders');
-																		$query = $this->db->get()->row();
-																		echo $currency, ' ',number_format($query->total_orders, 2);
-																	?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/user/'.$user->id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													}?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_4">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php foreach($last_ten_orders as $order) {
-														?>
-															<tr>
-																<td>
-																	<?php $this->db->from('users')->where('id', $order->customer_id);
-																		$customer_info = $this->db->get()->row();?>
-																	<a href="<?php echo base_url('admin/user/'.$customer_info->id)?>">
-																		<?php
-																			echo $customer_info->first_name, ' ', $customer_info->last_name;
-																		?> 
-																	</a>
-																</td>
-																<td>
-																	<?php echo date('jS M, Y', $order->order_id), ' at ', date('H:i:s', $order->order_id);?> 
-																</td>
-																<td>
-																	<?php echo $currency, ' ',number_format($order->total_orders, 2) ?>
-																</td>
-																<td>
-																	<?php
-							                                          if ($order->status == 0) {
-							                                            ?>
-							                                              <span class="label label-sm label-danger">Not Processed</span>
-							                                            <?php
-							                                          } elseif ($order->status == 1) {
-							                                            ?>
-							                                              <span class="label label-sm label-info">Processed</span>
-							                                            <?php
-							                                          } elseif ($order->status == 2) {
-							                                            ?>
-							                                              <span class="label label-sm label-warning">In Transit</span>
-							                                            <?php
-							                                          } elseif ($order->status == 3) {
-							                                            ?>
-							                                              <span class="label label-sm label-default">Cancelled</span>
-							                                            <?php
-							                                          } else {
-							                                            ?>
-							                                              <span class="label label-sm label-success">Delivered & Closed</span>
-							                                            <?php
-							                                          }
-							                                        ?>
-																</td>
-																<td>
-																	<a href="<?php echo base_url('admin/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
-																	View </a>
-																</td>
-															</tr>
-														<?php
-													}?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_5">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_6">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="tab-pane" id="overview_7">
-										<div class="table-responsive">
-											<table class="table table-striped table-hover table-bordered">
-												<thead>
-													<tr>
-														<th>
-															 Customer Name
-														</th>
-														<th>
-															 Date
-														</th>
-														<th>
-															 Amount
-														</th>
-														<th>
-															 Status
-														</th>
-														<th>
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+						<div class="portlet-body form">
+							<?php echo form_open('auth/name_of_store');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+											<i class="icon-basket"></i>
+											</span>
+											<input type="text" name="name_of_store" class="form-control" placeholder="e.g. Jumia, Kilimall" value="<?php echo $name_of_store?>">
 										</div>
 									</div>
 								</div>
-							</div>
+								<div class="form-actions">
+									<div class="pull-right ">
+										<button type="button" class="btn btn-xs default">Cancel</button>
+										<button type="submit" class="btn btn-xs blue">Save Changes</button>
+									</div>
+								</div>
+							<?php echo form_close();?>
 						</div>
 					</div>
-					<!-- End: life time stats -->
 				</div>
-				<div class="col-md-6">
-					<!-- Begin: life time stats -->
-					<div class="portlet light">
-						<div class="portlet-title tabbable-line">
+				<div class="col-md-4">
+					<div class="portlet box red">
+						<div class="portlet-title">
 							<div class="caption">
-								<i class="icon-share font-red-sunglo"></i>
-								<span class="caption-subject font-red-sunglo bold uppercase">Revenue</span>
-								<span class="caption-helper">weekly stats...</span>
+								Email
 							</div>
-							<ul class="nav nav-tabs">
-								<li>
-									<a href="#portlet_tab2" data-toggle="tab" id="statistics_amounts_tab">
-									Amounts </a>
-								</li>
-								<li class="active">
-									<a href="#portlet_tab1" data-toggle="tab">
-									Orders </a>
-								</li>
-							</ul>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
 						</div>
-						<div class="portlet-body">
-							<div class="tab-content">
-								<div class="tab-pane active" id="portlet_tab1">
-									<div id="statistics_1" class="chart">
+						<div class="portlet-body form">
+							<?php echo form_open('auth/store_email');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+											<i class="fa fa-envelope"></i>
+											</span>
+											<input type="text" name="store_email" class="form-control" placeholder="info@store.com" value="<?php echo $store_email?>">
+										</div>
 									</div>
 								</div>
-								<div class="tab-pane" id="portlet_tab2">
-									<div id="statistics_2" class="chart">
+								<div class="form-actions">
+									<div class="pull-right">
+										<button type="button" class="btn btn-xs default">Cancel</button>
+										<button type="submit" class="btn btn-xs red">Save Changes</button>
 									</div>
 								</div>
-							</div>
-							<div class="well margin-top-10 no-margin no-border">
-								<div class="row">
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-success">
-										Revenue: </span>
-										<h3>$111K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-info">
-										Tax: </span>
-										<h3>$14K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-danger">
-										Shipment: </span>
-										<h3>$10K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-warning">
-										Orders: </span>
-										<h3>2350</h3>
-									</div>
-								</div>
-							</div>
+							<?php echo form_close();?>
 						</div>
 					</div>
-					<!-- End: life time stats -->
+				</div>
+				<div class="col-md-4">
+					<div class="portlet box green ">
+						<div class="portlet-title">
+							<div class="caption">
+								Phone
+							</div>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<?php echo form_open('auth/store_phone_number');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+											<i class="fa fa-phone"></i>
+											</span>
+											<input type="text" name="store_phone_number" minlength="10" maxlength="13" class="form-control" placeholder="+254700000000" value="<?php echo $store_phone_number?>">
+										</div>
+									</div>
+								</div>
+								<div class="form-actions" >
+									<div class="pull-right">
+										<button type="button" class="btn btn-xs default">Cancel</button>
+										<button type="submit" class="btn btn-xs green">Save Changes</button>
+									</div>
+								</div>
+							<?php echo form_close();?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="portlet box purple ">
+						<div class="portlet-title">
+							<div class="caption">
+								Currency
+							</div>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<?php echo form_open('auth/store_currency');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+											<i class="fa fa-money"></i>
+											</span>
+											<input type="text" name="store_currency" minlength="3" maxlength="3" class="form-control" placeholder="KES, USD..." value="<?php echo $store_currency?>">
+										</div>
+									</div>
+								</div>
+								<div class="form-actions" >
+									<div class="pull-right">
+										<button type="button" class="btn btn-xs default">Cancel</button>
+										<button type="submit" class="btn btn-xs purple">Save Changes</button>
+									</div>
+								</div>
+							<?php echo form_close();?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="portlet box yellow ">
+						<div class="portlet-title">
+							<div class="caption">
+								Store Location
+							</div>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<?php echo form_open('auth/store_location');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group col-md-12">
+											<textarea class="ckeditor form-control" name="store_location" rows="6" value="<?php echo $store_location?>"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="form-actions" >
+									<div class="pull-right">
+										<button type="button" class="btn btn-default">Cancel</button>
+										<button type="submit" class="btn yellow">Save Changes</button>
+									</div>
+								</div>
+							<?php echo form_close();?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="portlet box purple ">
+						<div class="portlet-title">
+							<div class="caption">
+								Add Field
+							</div>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<?php echo form_open('auth/add_field');?>
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon">
+											<i class="fa fa-user"></i>
+											</span>
+											<input type="text" name="field" class="form-control" placeholder="Name">
+										</div>
+									</div>
+								</div>
+								<div class="form-actions" >
+									<div class="pull-right">
+										<button type="button" class="btn btn-default">Cancel</button>
+										<button type="submit" class="btn purple">Submit</button>
+									</div>
+								</div>
+							<?php echo form_close();?>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->

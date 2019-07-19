@@ -178,6 +178,26 @@ $lang['publish_product_validation_wholesale_price_label']	= 'Wholesale Price';
 $lang['publish_product_validation_available_from_label']	= 'Available From';
 $lang['publish_product_validation_available_to_label']		= 'Available To';
 $lang['publish_product_validation_status_to_label'] 		= 'Status';
+$lang['product_added_successfully']							= 'Product added Successfully';
+$lang['error_adding_product']								= 'Error adding product';		
+
+// Edit product
+$lang['edit_product_heading']								= 'Edit';
+$lang['edit_product_name_of_product_validation_label']		= 'Name of Product';
+$lang['edit_product_snippet_validation_label']				= 'Snippet';
+$lang['edit_product_desciption_validation_label']			= 'Description';
+$lang['edit_product_categories_validation_label']			= 'Categories';
+$lang['edit_product_tags_validation_label']					= 'Tags';
+$lang['edit_product_colors_validation_label']				= 'Colors';
+$lang['edit_product_sizes_validation_label']				= 'Sizes';
+$lang['edit_product_regular_price_validation_label']		= 'Regular Price';
+$lang['regular_price_should_differ_sale_price']				= 'Regular Price should differ Sale Price';
+$lang['edit_product_sale_price_validation_label']			= 'Sale Price';
+$lang['sale_price_should_differ_wholesale_price']			= 'Sale Price should differ Wholesale Price';
+$lang['edit_product_wholesale_price_validation_label']		= 'Wholesale Price';
+$lang['edit_product_status_validation_label']				= 'Status';
+$lang['product_updated_successfully']						= 'Product updated Successfully';
+$lang['product_update_failed']								= 'Product update failed';
 
 // List Products
 $lang['list_products_heading']					= 'Products';
@@ -192,6 +212,8 @@ $lang['shipment_successfully_added']			= 'Shipment Successfully Added';
 
 // Register
 $lang['register_account_heading']				= 'Create Account';
+$lang['email_already_registered']				= 'Email address already registered, please use a different email';
+$lang['use_valid_email']						= 'Please use a valid email';
 
 // Orders
 $lang['orders_heading']							= 'Orders';
@@ -216,3 +238,15 @@ $lang['make_admin']					= 'Make Admin';
 $lang['login_as_an_admin']			= 'Login as admin';
 $lang['user_never_logged_in']		= 'Never logged in';
 $lang['make_wholesaler']			= 'Make Wholesaler';
+
+// Products
+$lang['purchased_product']			= 'Product has been purchased';
+$lang['pending_processing']			= 'Pending Processing';
+$lang['processed']					= 'Processed';
+$lang['pending_delivery']			= 'Pending Delivery';
+$lang['order_cancelled']			= 'Order was cancelled';
+$lang['delivery_closed']			= 'Product was delivered';
+
+// User Groups
+$lang['list_user_groups_heading']	= 'User Groups';
+$lang['delete_group']				= 'Delete Group';
