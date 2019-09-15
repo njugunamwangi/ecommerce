@@ -2822,7 +2822,7 @@ class Ion_auth_model extends CI_Model
 	public function get_categories($slug = FALSE) {
 		if ($slug === FALSE) {
             $this->db->order_by('categories.category', 'asc');
-            $query = $this->db->get_where('categories', ['slug' => $slug]);
+            $query = $this->db->get('categories');
             return $query->result();
         }
 
@@ -2835,12 +2835,12 @@ class Ion_auth_model extends CI_Model
 	 */
 	public function get_tags($slug = FALSE) {
 		if ($slug === FALSE) {
-            $this->db->order_by('pd_tags.tag', 'asc');
-            $query = $this->db->get_where('pd_tags', ['slug' => $slug]);
+            $this->db->order_by('tags.tag', 'asc');
+            $query = $this->db->get_where('tags', ['slug' => $slug]);
             return $query->result();
         }
 
-        $query = $this->db->get_where('pd_tags', ['slug' => $slug]);
+        $query = $this->db->get_where('tags', ['slug' => $slug]);
         return $query->row();
 	}
 
@@ -2887,6 +2887,22 @@ class Ion_auth_model extends CI_Model
 		}
 
 		$query = $this->db->get_where('shipment', ['slug' => $slug])->row();
+		return $query;
+	}
+
+	/**
+	 * @return shipments
+	 * 
+	 * @param string
+	 */
+	public function get_counties($slug = FALSE) {
+		if ($slug === FALSE) {
+			$this->db->order_by('counties.county_code', 'asc');
+			$query = $this->db->get('counties')->result();
+			return $query;
+		}
+
+		$query = $this->db->get_where('counties', ['slug' => $slug])->row();
 		return $query;
 	}
 
@@ -2971,6 +2987,205 @@ class Ion_auth_model extends CI_Model
 			return TRUE;
 		} else {
 			$this->set_error('product_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set name of the store
+	 *
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function set_name_of_store() {
+		$this->db->where('id', 2);
+		$data = ['value' => $this->input->post('name_of_store')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('name_of_store_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('name_of_store_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set store phone number
+	 *
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function set_store_phone_number() {
+		$this->db->where('id', 3);
+		$data = ['value' => $this->input->post('store_phone_number')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('store_phone_number_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('store_phone_number_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set store email
+	 *
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function set_store_email() {
+		$this->db->where('id', 4);
+		$data = ['value' => $this->input->post('store_email')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('store_email_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('store_email_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set store location
+	 *
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function set_store_location() {
+		$this->db->where('id', 5);
+		$data = ['value' => $this->input->post('store_location')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('store_location_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('store_location_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set store currency
+	 *
+	 * @param string
+	 *
+	 * @return string
+	 */
+	public function set_store_currency() {
+		$this->db->where('id', 7);
+		$data = ['value' => $this->input->post('store_currency')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('store_currency_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('store_currency_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * get product id
+	 *
+	 * @return int
+	 */
+	public function get($id) {
+
+		$results = $this->db->get_where('products', ['id' => $id])->result();
+
+		$result = $results[0];
+
+		return $result;
+	}
+
+	/**
+	 * get customer info
+	 *
+	 * @return int
+	 */
+	public function get_customerinfo($id) {
+
+		$results = $this->db->get_where('users', ['id' => $id])->result();
+
+		$result = $results[0];
+
+		return $result;
+	}
+
+	/**
+	 * set order
+	 *
+	 * @return int
+	 */
+	public function set_order() {
+		$customer_info = $this->ion_auth_model->get_customerinfo($this->input->post('customer_id'));
+		$cart_items = $this->cart->contents();
+		$first_name = $customer_info->first_name;
+		$last_name = $customer_info->last_name;
+		$email = $customer_info->email;
+		$phone = $customer_info->phone;
+		$method_of_payment = $this->input->post('method_of_payment');
+		$status = 0;
+
+		$data = [
+			'customer_id' => $this->input->post('customer_id'),
+			'order_id' => time(),
+			'orders' => json_encode($cart_items),
+			'total_orders' => $this->cart->total(),
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'email' => $email, 
+			'phone' => $phone,
+			'address' => $this->input->post('address'),
+			'postal_code' => $this->input->post('postal_code'),
+			'subcounty' => $this->input->post('subcounty'),
+			'county' => $this->input->post('county'),
+			'method_of_payment' => $method_of_payment,
+			'status' => $status,
+			'slug' => time()
+		];
+
+		$this->db->insert('orders', $data);
+		$order_id = $this->db->insert_id();
+		$cart = $this->cart->contents();
+		$i = 0;
+		foreach ($cart as $item) {
+			$data = [
+				'order_id' => $order_id,
+				'customer_id' => $this->input->post('customer_id'),
+				'product_id' => $item['id'],
+				'vendor_id' => $item['vendor_id'],
+				'qty' => $item['qty'],
+				'price' => $item['price'],
+				'subtotal' => $item['subtotal']
+			];
+
+			$this->db->insert('orders_summary', $data);
+			$i++;
+		}
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('order_set_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_set');
 			return FALSE;
 		}
 	}

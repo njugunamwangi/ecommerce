@@ -1,4 +1,4 @@
-	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
+	<title><?php echo 'Order #', $title;?> | <?php echo $name_of_store?></title>
 </head>
 <?php $i=0?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">

@@ -1,24 +1,114 @@
 <!-- BEGIN SIDEBAR -->
           <div class="sidebar col-md-3 col-sm-4">
             <ul class="list-group margin-bottom-25 sidebar-menu">
-              <?php foreach ($categories as $category):?>
-                <li class="list-group-item clearfix dropdown">
-                  <a href="<?php echo base_url()?>category/<?php echo $category->slug?>">
-                    <i class="fa fa-angle-right"></i>
-                    <?php echo $category->category?>
-                    
-                  </a>
-                  <ul class="dropdown-menu">
-                    <?php
-                      $this->db->order_by('subcategories.subcategory', 'asc');
-                      $subcategories = $this->db->get_where('subcategories', ['category' => $category->category])->result();
-                      
-                      foreach ($subcategories as $subcategory):?>
-                      <li><a href="<?php echo base_url()?>category/<?php echo $subcategory->slug?>"><i class="fa fa-angle-right"></i> <?php echo $subcategory->subcategory?></a></li>
-                    <?php endforeach;?>
-                  </ul>
-                </li>
-              <?php endforeach;?>
+              <?php foreach ($categories as $category) {
+                if ($category->parent_category == null) {
+                  ?>
+                    <li class="list-group-item clearfix dropdown">
+                      <a href="<?php echo base_url($category->slug)?>">
+                        <i class="fa fa-angle-right"></i>
+                        <?php echo $category->category?>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <?php 
+                          $this->db->order_by('categories.category');
+                          $subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+                          foreach ($subcategories as $subcategory) {
+                            ?>
+                              <li class="list-group-item dropdown clearfix">
+                                <a href="<?php echo base_url(strtolower($category->category).'/'.$subcategory->slug)?>"><i class="fa fa-angle-right"></i> <?php echo $subcategory->category?> </a>
+                                  <ul class="dropdown-menu">
+                                    <?php
+                                      $this->db->order_by('categories.category');
+                                      $minicategories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+                                      foreach ($minicategories as $minicategory) {
+                                        ?>
+                                          <li><a href="<?php echo base_url(strtolower($category->category).'/'.strtolower($subcategory->category).'/'.$minicategory->slug)?>"><i class="fa fa-angle-right"></i> <?php echo $minicategory->category?></a></li>
+                                        <?php
+                                      }
+                                    ?>
+                                  </ul>
+                              </li>
+                            <?php
+                          }
+                        ?>
+                      </ul>
+                    </li>
+                  <?php
+                }
+              }?>
+              
             </ul>
+          </div>
+          <!-- END SIDEBAR -->
+
+          product page
+          
+          <!-- BEGIN SIDEBAR -->
+          <div class="sidebar col-md-3 col-sm-5">
+            <ul class="list-group margin-bottom-25 sidebar-menu">
+              <?php
+                foreach ($categories as $category) {
+                  $product_categories = json_decode($product->categories);
+                  if ($category->parent_category == null && in_array($category->category, $product_categories)) {
+                    ?>
+                    <li class="list-group-item clearfix dropdown active">
+                      <a href="shop-product-list.html" class="collapsed">
+                        <i class="fa fa-angle-right"></i>
+                        <?php echo $category->category?>
+                      </a>
+                      <ul class="dropdown-menu" style="display:block;">
+                        <?php
+                          $this->db->order_by('categories.category');
+                          $subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+                          foreach ($subcategories as $subcategory) {
+                            ?>
+                              <li class="list-group-item dropdown clearfix active">
+                                <a href="shop-product-list.html" class="collapsed"><i class="fa fa-angle-right"></i> <?php echo $subcategory->category?> </a>
+                                  <ul class="dropdown-menu" style="display:block;">
+                                    <?php
+                                      $this->db->order_by('categories.category');
+                                      $minicategories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+                                      foreach ($minicategories as $minicategory) {
+                                        ?>
+                                          <li><a href="shop-product-list.html"><i class="fa fa-angle-right"></i> <?php echo $minicategory->category?></a></li>
+                                        <?php
+                                      }
+                                    ?>
+                                  </ul>
+                              </li>
+                            <?php
+                          }
+                        ?>
+                      </ul>
+                    </li>
+                    <?php
+                  }
+                }
+              ?>
+            </ul>
+
+            <!-- <div class="sidebar-products clearfix">
+              <h2>Bestsellers</h2>
+              <div class="item">
+                <a href="shop-item.html"><img src="../../assets/frontend/pages/img/products/k1.jpg" alt="Some Shoes in Animal with Cut Out"></a>
+                <h3><a href="shop-item.html">Some Shoes in Animal with Cut Out</a></h3>
+                <div class="price">$31.00</div>
+              </div>
+              <div class="item">
+                <a href="shop-item.html"><img src="../../assets/frontend/pages/img/products/k4.jpg" alt="Some Shoes in Animal with Cut Out"></a>
+                <h3><a href="shop-item.html">Some Shoes in Animal with Cut Out</a></h3>
+                <div class="price">$23.00</div>
+              </div>
+              <div class="item">
+                <a href="shop-item.html"><img src="../../assets/frontend/pages/img/products/k3.jpg" alt="Some Shoes in Animal with Cut Out"></a>
+                <h3><a href="shop-item.html">Some Shoes in Animal with Cut Out</a></h3>
+                <div class="price">$86.00</div>
+              </div>
+            </div> -->
           </div>
           <!-- END SIDEBAR -->

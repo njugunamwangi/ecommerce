@@ -474,7 +474,7 @@
 							<i class="fa fa-plus"></i>
 							Create User</a>
 						</li>
-						<li class="active">
+						<li>
 							<a href="<?php echo base_url()?>admin/users">
 							<i class="fa fa-list"></i>
 							List Users</a>
@@ -519,6 +519,25 @@
 									<a href="<?php echo base_url()?>admin/groups">
 									<i class="fa fa-list"></i>
 									List User Group</a>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-user"></i>
+							<span class="title">Vendors</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/vendors/create">
+									<i class="fa fa-cogs"></i>
+									Create Vendor</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/vendors">
+									<i class="fa fa-check-square-o"></i>
+									List Vendors</a>
 								</li>
 							</ul>
 						</li>
@@ -813,135 +832,775 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- BEGIN SAMPLE TABLE PORTLET-->
-                    <div class="portlet box blue">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-user"></i> <?php echo lang('list_users_heading'); ?> 
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="table-scrollable">
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th> # </th>
-                                            <th> Full Name </th>
-                                            <th> Email </th>
-                                            <th> User Groups </th>
-                                            <th> Last Login </th>
-                                            <th> Status </th>
-                                            <th> Actions </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($users as $user):?>
-											<tr>
-												<?php 
-													$baseurl = base_url();
-													$baseurlinfo = explode('//', $baseurl, 2);
-													$base = $baseurlinfo[1];
-												?>
-												<td>
-                                                    <?php
-                                                        echo $i++;
-                                                    ?>                                       
-                                                </td>
-									            <td><?php echo htmlspecialchars($user->first_name,ENT_QUOTES,'UTF-8');?> <?php echo htmlspecialchars($user->last_name,ENT_QUOTES,'UTF-8');?></td>
-									            <td><a href="mailto:<?php echo $user->email?>"><?php echo $user->email?></a></td>
-												<td>
-													<?php foreach ($user->groups as $group):?>
-														<?php echo htmlspecialchars($group->name,ENT_QUOTES,'UTF-8') ;?><br />
-									                <?php endforeach?>
-												</td>
-                                                <td>
-                                                    <?php 
-                                                        if (!empty($user->last_login)) {
-                                                            echo htmlspecialchars(date('jS M, Y H:i:s', $user->last_login), ENT_QUOTES, 'UTF-8');
-                                                        } else {
-                                                            ?>
-                                                               <span class="label label-sm label-warning">
-                                                                    <i class="fa fa-times"></i>
-                                                                    <?= lang('user_never_logged_in'); ?>
-                                                                </span>  
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                </td>
-												<td>
-                                                    <?php
-                                                        if ($user->active) {
-                                                            ?>
-	                                                            <span class="label label-sm label-success">
-	                                                                <i class="fa fa-check"></i>
-	                                                                <?= lang('index_active_link'); ?>
-	                                                            </span> 
-                                                            <?php
-                                                        } else {
-                                                            ?>
-	                                                            <span class="label label-sm label-danger">
-	                                                                <i class="fa fa-times"></i>
-	                                                                <?= lang('index_inactive_link'); ?>
-	                                                            </span>
-                                                            <?php
-                                                        }
-                                                    ?>
-												</td>
-												<td>
-                                                    <span >
-                                                    	<?php
-                                                    		{
-                                                    			?>
-                                                    				<a href="<?php echo base_url('admin/user/edit/'. $user->id)?>" class="label label-sm label-info"><i class="fa fa-edit"></i> <?php echo lang('edit_user')?></a>
-                                                    			<?php
-                                                    		}
-                                                    	?>
-                                                        
-                                                    </span>
-                                                    <?php
-                                                        if ($user->active) {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('admin/user/deactivate/'. $user->id)?>" class="label label-sm label-warning"><i class="fa fa-times"></i> <?php echo lang('deactivate_an_active_user')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        } else {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('admin/user/activate/'. $user->id)?>" class="label label-sm label-success"><i class="fa fa-check"></i> <?php echo lang('activate_a_suspended_user')?></a>
-                                                            </span>
-
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                    <span >
-                                                        <a href="<?php echo base_url('admin/user/delete/'.$user->id)?>" class="label label-sm label-danger"><i class="fa fa-trash-o"></i> Delete</a>
-                                                    </span><br />
-                                                    <span >
-                                                        <a href="<?php echo base_url('admin/user/'.$user->id)?>" class="label label-sm label-primary"><i class="fa fa-search"></i> View User</a>
-                                                    </span>
-                                                    <?php
-                                                        if ($group->name === 'vendor') {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo prep_url($user->created_on.'.'.$base.'./vendor')?>" class="label label-sm label-default" target="_blank" ><i class="fa fa-user-secret"></i> <?php echo lang('login_as_an_admin')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        } elseif ($group->name === 'customer') {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('auth/make_wholesaler/'. $user->id)?>" class="label label-sm label-default"><i class="fa fa-user-secret"></i> <?php echo lang('make_wholesaler')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                </td>
-											</tr>
-										<?php endforeach;?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> 
-                    </div>
+                    <div class="portlet box blue-madison">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-globe"></i>Responsive Table With Expandable details
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="reload">
+								</a>
+								<a href="javascript:;" class="remove">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered table-hover" id="sample_3">
+							<thead>
+							<tr>
+								<th>
+									 Rendering engine
+								</th>
+								<th>
+									 Browser
+								</th>
+								<th>
+									 Platform(s)
+								</th>
+								<th>
+									 Engine version
+								</th>
+								<th>
+									 CSS grade
+								</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 Internet Explorer 4.0
+								</td>
+								<td>
+									 Win 95+
+								</td>
+								<td>
+									 4
+								</td>
+								<td>
+									 X
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 Internet Explorer 5.0
+								</td>
+								<td>
+									 Win 95+
+								</td>
+								<td>
+									 5
+								</td>
+								<td>
+									 C
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 Internet Explorer 5.5
+								</td>
+								<td>
+									 Win 95+
+								</td>
+								<td>
+									 5.5
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 Internet Explorer 6
+								</td>
+								<td>
+									 Win 98+
+								</td>
+								<td>
+									 6
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 Internet Explorer 7
+								</td>
+								<td>
+									 Win XP SP2+
+								</td>
+								<td>
+									 7
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Trident
+								</td>
+								<td>
+									 AOL browser (AOL desktop)
+								</td>
+								<td>
+									 Win XP
+								</td>
+								<td>
+									 6
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Firefox 1.0
+								</td>
+								<td>
+									 Win 98+ / OSX.2+
+								</td>
+								<td>
+									 1.7
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Firefox 1.5
+								</td>
+								<td>
+									 Win 98+ / OSX.2+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Firefox 2.0
+								</td>
+								<td>
+									 Win 98+ / OSX.2+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Firefox 3.0
+								</td>
+								<td>
+									 Win 2k+ / OSX.3+
+								</td>
+								<td>
+									 1.9
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Camino 1.0
+								</td>
+								<td>
+									 OSX.2+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Camino 1.5
+								</td>
+								<td>
+									 OSX.3+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Netscape 7.2
+								</td>
+								<td>
+									 Win 95+ / Mac OS 8.6-9.2
+								</td>
+								<td>
+									 1.7
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Netscape Browser 8
+								</td>
+								<td>
+									 Win 98SE+
+								</td>
+								<td>
+									 1.7
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Netscape Navigator 9
+								</td>
+								<td>
+									 Win 98+ / OSX.2+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.0
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.1
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.1
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.2
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.2
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.3
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.3
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.4
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.4
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.5
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.5
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.6
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 1.6
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.7
+								</td>
+								<td>
+									 Win 98+ / OSX.1+
+								</td>
+								<td>
+									 1.7
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Mozilla 1.8
+								</td>
+								<td>
+									 Win 98+ / OSX.1+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Seamonkey 1.1
+								</td>
+								<td>
+									 Win 98+ / OSX.2+
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Gecko
+								</td>
+								<td>
+									 Epiphany 2.20
+								</td>
+								<td>
+									 Gnome
+								</td>
+								<td>
+									 1.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 Safari 1.2
+								</td>
+								<td>
+									 OSX.3
+								</td>
+								<td>
+									 125.5
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 Safari 1.3
+								</td>
+								<td>
+									 OSX.3
+								</td>
+								<td>
+									 312.8
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 Safari 2.0
+								</td>
+								<td>
+									 OSX.4+
+								</td>
+								<td>
+									 419.3
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 Safari 3.0
+								</td>
+								<td>
+									 OSX.4+
+								</td>
+								<td>
+									 522.1
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 OmniWeb 5.5
+								</td>
+								<td>
+									 OSX.4+
+								</td>
+								<td>
+									 420
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 iPod Touch / iPhone
+								</td>
+								<td>
+									 iPod
+								</td>
+								<td>
+									 420.1
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Webkit
+								</td>
+								<td>
+									 S60
+								</td>
+								<td>
+									 S60
+								</td>
+								<td>
+									 413
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 7.0
+								</td>
+								<td>
+									 Win 95+ / OSX.1+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 7.5
+								</td>
+								<td>
+									 Win 95+ / OSX.2+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 8.0
+								</td>
+								<td>
+									 Win 95+ / OSX.2+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 8.5
+								</td>
+								<td>
+									 Win 95+ / OSX.2+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 9.0
+								</td>
+								<td>
+									 Win 95+ / OSX.3+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 9.2
+								</td>
+								<td>
+									 Win 88+ / OSX.3+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera 9.5
+								</td>
+								<td>
+									 Win 88+ / OSX.3+
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Opera for Wii
+								</td>
+								<td>
+									 Wii
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Nokia N800
+								</td>
+								<td>
+									 N800
+								</td>
+								<td>
+									 -
+								</td>
+								<td>
+									 A
+								</td>
+							</tr>
+							<tr>
+								<td>
+									 Presto
+								</td>
+								<td>
+									 Nintendo DS browser
+								</td>
+								<td>
+									 Nintendo DS
+								</td>
+								<td>
+									 8.5
+								</td>
+								<td>
+									 C/A<sup>1</sup>
+								</td>
+							</tr>
+							</tbody>
+							</table>
+						</div>
+					</div>
                     <!-- END SAMPLE TABLE PORTLET-->
                 </div>
             </div>
@@ -951,3 +1610,4 @@
 	<!-- END CONTENT -->
 </div>
 <!-- END CONTAINER -->
+					

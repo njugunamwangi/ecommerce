@@ -26,8 +26,17 @@ class Pages extends MX_Controller {
 		$data['store_email'] = $this->store_email();
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
+		$data['store_location'] = $this->store_location();
+		$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 		$this->load->view('pages/home', $data);
+	}
+
+	public function cart() {
+		$cart = (array)$this->cart->contents();
+
+		echo '<pre>';
+		print_r($cart);
 	}
 
 	/**
@@ -41,10 +50,12 @@ class Pages extends MX_Controller {
 		$data['title'] = $data['product']->name;
 		$data['user_account'] = $this->ion_auth->user()->row();
 		$data['cart_items'] = $this->cart->contents();
+		$data['categories'] = $this->pages_model->get_categories();
 		$data['name_of_store'] = $this->name_of_store();
 		$data['store_email'] = $this->store_email();
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
+		$data['store_location'] = $this->store_location();
 
 		$this->load->view('pages/product', $data);
 	}
@@ -61,6 +72,7 @@ class Pages extends MX_Controller {
 		$data['store_email'] = $this->store_email();
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
+		$data['store_location'] = $this->store_location();
 		
 		$this->load->view('pages/search', $data);
 	}
@@ -77,6 +89,7 @@ class Pages extends MX_Controller {
 		$data['user_account'] = $this->ion_auth->user()->row();
 		$data['cart_items'] = $this->cart->contents();
 		$data['name_of_store'] = $this->name_of_store();
+		$data['store_location'] = $this->store_location();
 
 		$this->load->view('pages/subcategory', $data);
 	}
@@ -90,6 +103,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 5,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->wholesale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -99,6 +113,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 1,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->sale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -119,6 +134,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 5,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->wholesale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -128,6 +144,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 1,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->sale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -139,6 +156,14 @@ class Pages extends MX_Controller {
 	}
 
 	/**
+	 * clear cart
+	 */
+	public function clearcart() {
+		$this->cart->destroy();
+		redirect('/');
+	}
+
+	/**
 	 * add product to cart from product page
 	 */
 	public function add_product() {
@@ -146,6 +171,7 @@ class Pages extends MX_Controller {
 		$data = [
 			'id' => $this->input->post('id'),
 			'qty' => $this->input->post('qty'),
+			'vendor_id' => $this->input->post('vendor_id'),
 			'price' => $this->input->post('price'),
 			'name' => $this->input->post('name'),
 			'image' => $this->input->post('image'),
@@ -209,21 +235,6 @@ class Pages extends MX_Controller {
 	}
 
 	/**
-	 * clear cart
-	 */
-	public function clearcart() {
-		$this->cart->destroy();
-		redirect('/');
-	}
-
-	public function show() {
-        $cart = $this->cart->contents();
-
-        echo '<pre>';
-        print_r($cart);
-    } 
-
-	/**
 	 * @return shopping cart page
 	 */
 	public function shopping_cart() {
@@ -235,6 +246,7 @@ class Pages extends MX_Controller {
 		$data['store_email'] = $this->store_email();
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
+		$data['store_location'] = $this->store_location();
 
 		$this->load->view('pages/shopping_cart', $data);
 	}
@@ -252,6 +264,7 @@ class Pages extends MX_Controller {
 		$data['store_email'] = $this->store_email();
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
+		$data['store_location'] = $this->store_location();
 
 		$this->_render_page('pages/checkout', $data);
 	}
@@ -267,6 +280,7 @@ class Pages extends MX_Controller {
 		$data['store_currency'] = $this->store_currency();
 		$data['cart_items'] = $this->cart->contents();
 		$data['user_account'] = $this->ion_auth->user()->row();
+		$data['store_location'] = $this->store_location();
 
 		$this->_render_page('pages/my-account', $data);
 	}
@@ -286,6 +300,8 @@ class Pages extends MX_Controller {
 			$data['cart_items'] = $this->cart->contents();
 			$data['user_account'] = $this->ion_auth->user()->row();
 			$data['my_orders'] = $this->pages_model->my_orders();
+			$data['store_location'] = $this->store_location();
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			$this->_render_page('pages/my-orders', $data);
 		}
@@ -311,6 +327,7 @@ class Pages extends MX_Controller {
 			$data['store_currency'] = $this->store_currency();
 			$data['cart_items'] = $this->cart->contents();
 			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['store_location'] = $this->store_location();
 
 			$this->_render_page('pages/view-order', $data);
 		}
@@ -338,7 +355,15 @@ class Pages extends MX_Controller {
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect('/my-account/orders', 'refresh');
 		} else {
-			redirect('checkout');
+			$data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+			$data['name_of_store'] = $this->name_of_store();
+			$data['store_email'] = $this->store_email();
+			$data['store_phone_number'] = $this->store_phone_number();
+			$data['store_currency'] = $this->store_currency();
+			$data['cart_items'] = $this->cart->contents();
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$this->_render_page('checkout', $data);
 		} 
 	}
 
@@ -382,6 +407,7 @@ class Pages extends MX_Controller {
 			$data['cart_items'] = $this->cart->contents();
 			$data['user_account'] = $this->ion_auth->user()->row();
 			$data['wishlists'] = $this->pages_model->my_wishlist();
+			$data['store_location'] = $this->store_location();
 
 			$this->_render_page('pages/my-wishlist', $data);
 		}
@@ -405,6 +431,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 5,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->wholesale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -414,6 +441,7 @@ class Pages extends MX_Controller {
 			$data = [
 				'id' => $this->input->post('id'),
 				'qty' => 1,
+				'vendor_id' => $product->vendor_id,
 				'price' => $product->sale_price,
 				'name' => $product->name,
 				'image' => $product->image,
@@ -491,6 +519,7 @@ class Pages extends MX_Controller {
 				$data['store_currency'] = $this->store_currency();
 				$data['cart_items'] = $this->cart->contents();
 				$data['user_account'] = $this->ion_auth->user()->row();
+				$data['store_location'] = $this->store_location();
 
 				$this->_render_page('pages/edit-account', $data);
 			}
@@ -530,6 +559,7 @@ class Pages extends MX_Controller {
 				$data['store_currency'] = $this->store_currency();
 				$data['cart_items'] = $this->cart->contents();
 				$data['user_account'] = $this->ion_auth->user()->row();
+				$data['store_location'] = $this->store_location();
 
 				$this->_render_page('pages/reset-password', $data);
 			}
@@ -555,6 +585,13 @@ class Pages extends MX_Controller {
 	 */
 	public function store_email() {
 		return $this->db->get_where('info', ['field' => 'email-address'])->row()->value;
+	}
+
+	/**
+	 * @return store location
+	 */
+	public function store_location() {
+		return $this->db->get_where('info', ['field' => 'location'])->row()->value;
 	}
 
 	/**

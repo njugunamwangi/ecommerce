@@ -27,17 +27,50 @@ class Vendors extends MX_Controller {
 	 */
 	public function index() {
 		$data['title'] = $this->lang->line('vendors_dashboard_heading');
+
+		// login check
+		if (!$this->ion_auth->logged_in() && (!$this->ion_auth->is_admin() || !$this->ion_auth->is_vendor())) {
+			// if the user is not logged in
+			// neither are they an admin nor a vendor
+			$baseurl = base_url();
+			$baseurlinfo = explode('.', $_SERVER['HTTP_HOST'], 3);
+			$base_url = $baseurlinfo[1].'.'.$baseurlinfo[2];
+			redirect(prep_url($base_url.'/login'));
+
+		} else {
+			$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2); // creates the various parts
+			$subdomain_name = $subdomain_arr[0]; // assigns the first part
+
+			$this->db->from('users')->where('created_on', $subdomain_name);
+			$data['vendor_info'] = $this->db->get()->row();
+			$data['name_of_store'] = $this->name_of_store();
+			$data['currency'] = $this->store_currency();
+			$data['total_sales_amount'] = $this->total_sales();
+			$data['total_products'] = $this->total_products();
+			
+			$this->_render_page('templates/header');
+			$this->_render_page('vendors/index', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * total sales amount
+	 *
+	 * @return total_sales
+	 *
+	 * @param int
+	 */
+	public function total_sales() {
 		$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2); // creates the various parts
 		$subdomain_name = $subdomain_arr[0]; // assigns the first part
 
 		$this->db->from('users')->where('created_on', $subdomain_name);
-		$data['vendor_info'] = $this->db->get()->row();
-		$data['name_of_store'] = $this->name_of_store();
-		$data['currency'] = $this->store_currency();
-		
-		$this->_render_page('templates/header');
-		$this->_render_page('vendors/index', $data);
-		$this->_render_page('templates/footer');
+		$vendor_id = $this->db->get()->row()->created_on;
+		$this->db->where('vendor_id', $vendor_id);
+		$this->db->select_sum('subtotal');
+		$result =  $this->db->get('orders_summary')->row();
+		return $result->subtotal;
 	}
 
 	/**
@@ -181,6 +214,24 @@ class Vendors extends MX_Controller {
 			$this->_render_page('vendors/view-product', $data);
 			$this->_render_page('templates/footer');
 		}
+	}
+
+	/**
+	 * total products
+	 *
+	 * @return total_products
+	 *
+	 * @param int
+	 */
+	public function total_products() {
+		$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2); // creates the various parts
+		$subdomain_name = $subdomain_arr[0]; // assigns the first part
+
+		$this->db->from('users')->where('created_on', $subdomain_name);
+		$vendor_id = $this->db->get()->row()->created_on;
+		$this->db->where('vendor_id', $vendor_id);
+		$result =  $this->db->get('products')->num_rows();
+		return $result;
 	}
 
 	/**

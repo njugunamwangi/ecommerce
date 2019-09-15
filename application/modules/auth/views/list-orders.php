@@ -634,7 +634,7 @@
 							Add Shipment </a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/payments">
+							<a href="<?php echo base_url()?>admin/shipments">
 							<i class="fa fa-list"></i>
 							List Shipments</a>
 						</li>

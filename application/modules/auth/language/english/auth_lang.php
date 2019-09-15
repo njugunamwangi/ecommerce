@@ -150,12 +150,9 @@ $lang['admin_access_only']				= 'You must be an administrator to view this page'
 // Product Categories
 $lang['publish_category_heading']								= 'Publish Category';
 $lang['publish_category_validation_category_label']				= 'Category';
+$lang['publish_parent_category_validation_subcategory_label']	= 'Parent Category';
 $lang['form_error_message']										= 'Your form appears to have some errors';
 
-// Products Subcategories
-$lang['publish_subcategory_heading'] 							= 'Publish Sub Category';
-$lang['publish_subcategory_validation_subcategory_label']		= 'Sub Category';
-$lang['publish_subcategory_validation_category_label']			= 'Category';
 
 
 // Product Tags
@@ -227,6 +224,16 @@ $lang['add_store_email_validation_label']			= 'Store Email';
 $lang['add_store_phone_number_validation_label']	= 'Store Phone Number';
 $lang['add_store_currency_validation_label']		= 'Store Currency';
 $lang['add_store_location_validation_label']		= 'Store Location';
+$lang['name_of_store_updated_successfully']			= 'Name of store successfully updated';
+$lang['name_of_store_update_failed']				= 'Name of store update failed';
+$lang['store_phone_number_updated_successfully']	= 'Store Phone Number successfully updated';
+$lang['store_phone_number_update_failed']			= 'tore Phone Number update failed';
+$lang['store_email_updated_successfully']			= 'Store Email successfully updated';
+$lang['store_email_update_failed']					= 'Store email update failed';
+$lang['store_location_updated_successfully']		= 'Store location successfully updated';
+$lang['store_location_update_failed']				= 'Store location update failed';
+$lang['store_currency_updated_successfully']		= 'Store currency successfully updated';
+$lang['store_currency_update_failed']				= 'Store currency update failed';
 
 // Users
 $lang['users']						= 'Users';
@@ -250,3 +257,15 @@ $lang['delivery_closed']			= 'Product was delivered';
 // User Groups
 $lang['list_user_groups_heading']	= 'User Groups';
 $lang['delete_group']				= 'Delete Group';
+
+// New order
+$lang['new_order_heading']										= 'New Order';
+$lang['confirm_order_customer_id_validation_label']				= 'Customer';
+$lang['confirm_order_shipping_address_validation_label']		= 'Shipping Address';
+$lang['confirm_order_shipping_postal_code_validation_label']	= 'Shipping Postal Code';
+$lang['confirm_order_shipping_subcounty_validation_label']		= 'Shipping Town';
+$lang['confirm_order_shipping_county_validation_county']		= 'Shipping County';
+$lang['confirm_order_method_of_payment_validation_label']		= 'Method of Payment';
+
+// View user
+$lang['view_user_heading']					= 'View User';

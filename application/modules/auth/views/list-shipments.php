@@ -816,7 +816,7 @@
 								<div class="portlet light">
 									<div class="portlet-title">
 										<div class="caption">
-											<i class="fa fa-gift font-green-sharp"></i>
+											<i class="fa fa-map-marker font-green-sharp"></i>
 											<span class="caption-subject font-green-sharp bold uppercase">Shipments</span>
 											<span class="caption-helper">manage shipments...</span>
 										</div>
@@ -877,6 +877,9 @@
 															 Number of Shipments
 														</th>
 														<th width="10%">
+															Total
+														</th>
+														<th width="10%">
 															 Actions
 														</th>
 													</tr>
@@ -895,6 +898,9 @@
 														</td>
 														<td>
 															<input type="text" class="form-control form-filter input-sm" name="number_of_shipments">
+														</td>
+														<td>
+															<input type="text" class="form-control form-filter input-sm" name="total">
 														</td>
 														<td>
 															<div class="margin-bottom-5">
@@ -923,6 +929,13 @@
                                     								$query = $this->db->get()->num_rows();
 
                                     								echo $query;
+		                                                        ?>
+															</td>
+															<td>
+		                                                        <?php
+		                                                        	$total = $query * $shipment->fee;
+
+                                    								echo $currency, ' ', number_format($total, 2);
 		                                                        ?>
 															</td>
 															<td>

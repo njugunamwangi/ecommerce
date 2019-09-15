@@ -28,12 +28,8 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a data-target="#stack1" data-toggle="modal" href="#stack1">
-						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
-					</li>
-					<li>
 						<a data-target="#stack2" data-toggle="modal" href="#stack2">
-						<i class="fa fa-check-square"></i> <?php echo $this->lang->line('publish_subcategory_heading')?> </a>
+						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
@@ -800,6 +796,16 @@
 			<!-- END PAGE BREADCRUMB -->
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
+			<?php
+                if ($this->session->flashdata('message')) {
+                ?>
+                  	<div class="alert alert-info">
+                      	<button type="button" class="close" data-dismiss="alert"></button>
+                      	<div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
+                  	</div>
+                  <?php
+              	}
+            ?>
 			<div class="row">
 				<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 margin-bottom-10">
 					<div class="dashboard-stat2">
@@ -869,7 +875,7 @@
 									<small class="font-blue-sharp">
 									<?php 
 										if ($total_orders < 1) {
-											echo '0.00';
+											echo $currency, ' ', '0.00';
 										} else {
 											$average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2);
 										}
@@ -992,22 +998,14 @@
 																</td>
 																<td>
 																	<?php
-																		$orders = $this->db->get('orders')->result();
-																		foreach ($orders as $order) {
-																			$cart_items = json_decode($order->orders);
-																			foreach ($cart_items as $cart_item) {
-																				if ($cart_item->id == $product->id) {
-																					$data = [];
-																					$product_sales = $cart_item->qty. ', ';
-																					$sold_items = array_push($data, $product_sales);
-																					echo array_sum($data);
-																				}
-																			}
-																		}
+																		$this->db->where('product_id', $product->id);
+																		$this->db->select_sum('qty');
+																		$result =  $this->db->get('orders_summary')->row();
+																		echo $result->qty;
 																	?>
 																</td>
 																<td>
-																	<a href="<?php echo base_url('admin/product/'.$product->id)?>" class="btn default btn-xs green-stripe">
+																	<a href="<?php echo base_url('admin/product/'.$product->id.'#product_sales')?>" class="btn default btn-xs green-stripe">
 																	View </a>
 																</td>
 															</tr>
@@ -1360,31 +1358,130 @@
 							</div>
 							<div class="well margin-top-10 no-margin no-border">
 								<div class="row">
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
+									<div class="col-md-4 col-sm-3 col-xs-6 text-stat">
 										<span class="label label-success">
 										Revenue: </span>
-										<h3>$111K</h3>
+										<h3><?php echo $currency, ' ', number_format($total_sales_amount, 2)?></h3>
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
-										<span class="label label-info">
-										Tax: </span>
-										<h3>$14K</h3>
-									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
+									<div class="col-md-4 col-sm-3 col-xs-6 text-stat">
 										<span class="label label-danger">
 										Shipment: </span>
-										<h3>$10K</h3>
+										<!-- <h3><?php echo $currency, ' ', number_format($total_shipments, 2)?></h3> -->
 									</div>
-									<div class="col-md-3 col-sm-3 col-xs-6 text-stat">
+									<div class="col-md-4 col-sm-3 col-xs-6 text-stat">
 										<span class="label label-warning">
 										Orders: </span>
-										<h3>2350</h3>
+										<h3><?php echo $total_orders?></h3>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- End: life time stats -->
+				</div>
+				<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Add Category</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+                                        <?php echo form_open('auth/add_category'); ?>
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="pd_category"> Category <span class="required"> *</span></label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-paragraph"></i>
+                                                        </span>
+                                                        <input type="text" name="pd_category" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_category"> 
+                                                    </div>
+                                                    <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_category')?>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+													<label class="control-label" for="pd_parent_category">Parent Category </label>
+	                                                <div class="input-group">
+	                                                    <span class="input-group-addon">
+	                                                        <i class="fa fa-institution"></i>
+	                                                    </span>
+                                                        <select id="pd_parent_category" class="form-control select2me" name="pd_parent_category" >
+                                                        	<option value="" >Select parent category...</option>
+                                                            <?php foreach ($categories as $category ) {
+                                                            	if ($category->parent_category == null) {
+                                                            		?>
+                                                            			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
+
+                                                            			<?php
+                                                            				$this->db->order_by('categories.category', 'asc');
+                                                            				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+                                                            				foreach ($subcategories as $subcategory) {
+                                                            					?>
+                                                            						<option value="<?php echo $subcategory->category?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category?></option>
+                                                            					<?php
+                                                            				}
+                                                            			?>
+                                                            		<?php
+                                                            	}
+                                                            }?>
+                                                        </select>
+	                                                </div>
+	                                                <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_parent_category')?>
+                                                    </div>
+												</div>
+                                            </div>
+                                            <div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn">Close</button>
+												<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_category_heading')?></button>
+											</div>
+										<?php echo form_close();?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="stack3" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Add Tag</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+                                        <?php echo form_open('auth/add_tag'); ?>
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="pd_tag">Tag <span class="required"> *</span></label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-paragraph"></i>
+                                                        </span>
+                                                        <input type="text" name="pd_tag" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_tag"> 
+                                                    </div>
+                                                    <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_tag')?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn">Close</button>
+												<button type="submit" class="btn blue">Add Tag</button>
+											</div>
+										<?php echo form_close();?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->

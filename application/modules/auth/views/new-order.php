@@ -8,8 +8,8 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
-			<img src="<?php echo base_url()?>public/assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
+			<a href="index.html">
+			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -29,12 +29,8 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a data-target="#stack1" data-toggle="modal" href="#stack1">
-						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
-					</li>
-					<li>
 						<a data-target="#stack2" data-toggle="modal" href="#stack2">
-						<i class="fa fa-check-square"></i> <?php echo $this->lang->line('publish_subcategory_heading')?> </a>
+						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
@@ -462,11 +458,11 @@
 					<span class="title">Dashboard</span>
 					</a>
 				</li>
-				<li class="active">
+				<li>
 					<a href="javascript:;">
 					<i class="fa fa-users"></i>
 					<span class="title">Users</span>
-					<span class="arrow open"></span>
+					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
 						<li>
@@ -474,7 +470,7 @@
 							<i class="fa fa-plus"></i>
 							Create User</a>
 						</li>
-						<li class="active">
+						<li>
 							<a href="<?php echo base_url()?>admin/users">
 							<i class="fa fa-list"></i>
 							List Users</a>
@@ -524,7 +520,7 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li >
 					<a href="javascript:;">
 					<i class="fa fa-gift"></i>
 					<span class="title">Products</span>
@@ -541,7 +537,7 @@
 							<i class="fa fa-list"></i>
 							List Products</a>
 						</li>
-						<li>
+						<li >
 							<a href="javascript:;">
 							<i class="fa fa-bookmark-o"></i>
 							<span class="title">Categories</span>
@@ -553,15 +549,10 @@
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
-								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
-									<i class="fa fa-check-square"></i>
-									Publish Sub Category</a>
-								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
-									List Category</a>
+									List Categories</a>
 								</li>
 								
 							</ul>
@@ -576,7 +567,7 @@
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
 									<i class="fa fa-check-square-o"></i>
-									Publish Tag</a>
+									Publish Tags</a>
 								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/tags">
@@ -588,14 +579,14 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li class="active">
 					<a href="javascript:;">
 					<i class="fa fa-shopping-cart"></i>
 					<span class="title">Orders</span>
-					<span class="arrow "></span>
+					<span class="arrow open"></span>
 					</a>
 					<ul class="sub-menu">
-						<li >
+						<li class="active">
 							<a href="<?php echo base_url()?>admin/orders/new">
 							<i class="fa fa-check-square-o"></i>
 							New Order </a>
@@ -639,7 +630,7 @@
 							Add Shipment </a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/shipments">
+							<a href="<?php echo base_url()?>admin/payments">
 							<i class="fa fa-list"></i>
 							List Shipments</a>
 						</li>
@@ -655,7 +646,7 @@
 						<li >
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
-							<?php echo $this->lang->line('general_settings_heading')?>  </a>
+							<?php echo lang('general_settings_heading')?> </a>
 						</li>
 					</ul>
 				</li>
@@ -667,34 +658,11 @@
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title">Modal title</h4>
-						</div>
-						<div class="modal-body">
-							 Widget settings form goes here
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn blue">Save changes</button>
-							<button type="button" class="btn default" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
-			</div>
-			<!-- /.modal -->
-			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- BEGIN PAGE HEADER-->
 			<!-- BEGIN PAGE HEAD -->
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1><?php echo $this->lang->line('users')?> <small><?php echo $this->lang->line('list_users_heading')?></small></h1>
+					<h1> Create New Order </h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -789,163 +757,516 @@
 			</div>
 			<!-- END PAGE HEAD -->
 			<!-- BEGIN PAGE BREADCRUMB -->
-			<ul class="page-breadcrumb breadcrumb">
-				<li>
-					<a href="<?php echo base_url()?>admin">Home</a>
-					<i class="fa fa-circle"></i>
-				</li>
-				<li class="active">
-					<a><?php echo $this->lang->line('users')?></a>
-				</li>
-			</ul>
-			<!-- END PAGE BREADCRUMB -->
-			<!-- END PAGE HEADER-->
-			<!-- BEGIN PAGE CONTENT-->
-			<?php
+            <ul class="page-breadcrumb breadcrumb">
+                <li>
+                    <a href="<?php echo base_url(); ?>admin">Home</a>
+                    <i class="fa fa-circle"></i>
+                </li>
+                <li>
+                    <a href="<?php echo base_url(); ?>admin/orders"><?php echo lang('orders_heading'); ?></a>
+                    <i class="fa fa-circle"></i>
+                </li>
+                <li>
+                    <span class="active"><?php echo $title?></span>
+                </li>
+            </ul>
+            <!-- END PAGE BREADCRUMB -->
+            <!-- BEGIN PAGE BASE CONTENT -->
+            <!-- <?php
                 if ($this->session->flashdata('message')) {
                     ?>
-                    <div class="alert alert-info">
+                    <div class="alert alert-success">
                         <div id="infoMessage"> <?php echo $message;?></div>
                     </div>
                     <?php
                 }
-            ?>
+            ?> -->
             <div class="row">
-                <div class="col-md-12">
-                    <!-- BEGIN SAMPLE TABLE PORTLET-->
-                    <div class="portlet box blue">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="fa fa-user"></i> <?php echo lang('list_users_heading'); ?> 
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="table-scrollable">
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th> # </th>
-                                            <th> Full Name </th>
-                                            <th> Email </th>
-                                            <th> User Groups </th>
-                                            <th> Last Login </th>
-                                            <th> Status </th>
-                                            <th> Actions </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($users as $user):?>
-											<tr>
-												<?php 
-													$baseurl = base_url();
-													$baseurlinfo = explode('//', $baseurl, 2);
-													$base = $baseurlinfo[1];
-												?>
-												<td>
-                                                    <?php
-                                                        echo $i++;
-                                                    ?>                                       
-                                                </td>
-									            <td><?php echo htmlspecialchars($user->first_name,ENT_QUOTES,'UTF-8');?> <?php echo htmlspecialchars($user->last_name,ENT_QUOTES,'UTF-8');?></td>
-									            <td><a href="mailto:<?php echo $user->email?>"><?php echo $user->email?></a></td>
-												<td>
-													<?php foreach ($user->groups as $group):?>
-														<?php echo htmlspecialchars($group->name,ENT_QUOTES,'UTF-8') ;?><br />
-									                <?php endforeach?>
-												</td>
-                                                <td>
-                                                    <?php 
-                                                        if (!empty($user->last_login)) {
-                                                            echo htmlspecialchars(date('jS M, Y H:i:s', $user->last_login), ENT_QUOTES, 'UTF-8');
-                                                        } else {
-                                                            ?>
-                                                               <span class="label label-sm label-warning">
-                                                                    <i class="fa fa-times"></i>
-                                                                    <?= lang('user_never_logged_in'); ?>
-                                                                </span>  
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                </td>
-												<td>
-                                                    <?php
-                                                        if ($user->active) {
-                                                            ?>
-	                                                            <span class="label label-sm label-success">
-	                                                                <i class="fa fa-check"></i>
-	                                                                <?= lang('index_active_link'); ?>
-	                                                            </span> 
-                                                            <?php
-                                                        } else {
-                                                            ?>
-	                                                            <span class="label label-sm label-danger">
-	                                                                <i class="fa fa-times"></i>
-	                                                                <?= lang('index_inactive_link'); ?>
-	                                                            </span>
-                                                            <?php
-                                                        }
-                                                    ?>
-												</td>
-												<td>
-                                                    <span >
-                                                    	<?php
-                                                    		{
-                                                    			?>
-                                                    				<a href="<?php echo base_url('admin/user/edit/'. $user->id)?>" class="label label-sm label-info"><i class="fa fa-edit"></i> <?php echo lang('edit_user')?></a>
-                                                    			<?php
-                                                    		}
-                                                    	?>
-                                                        
-                                                    </span>
-                                                    <?php
-                                                        if ($user->active) {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('admin/user/deactivate/'. $user->id)?>" class="label label-sm label-warning"><i class="fa fa-times"></i> <?php echo lang('deactivate_an_active_user')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        } else {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('admin/user/activate/'. $user->id)?>" class="label label-sm label-success"><i class="fa fa-check"></i> <?php echo lang('activate_a_suspended_user')?></a>
-                                                            </span>
+            	<div class="col-md-6">
+            		<div class="portlet box blue">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-gift"></i>Products
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse">
+								</a>
+								<a href="#portlet-config" data-toggle="modal" class="config">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div class="row">
+								<?php
+									foreach ($products as $product) {
+										?>
+											<div class="col-sm-12 col-md-6">
+												<div class="thumbnail">
+													<?php echo form_open('auth/add_to_cart');?>
+														<img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" alt="<?php echo $product->name?>" class="img-responsive">
+														<div class="caption">
+															<h3><?php echo ucwords($product->name)?></h3>
+															<p>
+																<div class="pi-price">
+																	<?php echo $store_currency?> <?php echo number_format($product->sale_price,2)?>
+																</div>
+																<div class="form-group form-md-line-input">
+																	<input type="text" name="qty" class="form-control" id="form_control_1" placeholder="Enter quantity" value="1">
+																</div>
+															</p>
+															<p>
+																<?php echo form_hidden('id', $product->id); ?>
+																<button type="submit" class="btn btn-info">Add to Cart</button>
+															</p>
+														</div>
+													<?php echo form_close()?>
+												</div>
+											</div>
+										<?php
+									}
+								?>
+							</div>
+						</div>
+					</div>
+            	</div>
+            	<div class="col-md-6">
+            		<div class="portlet box green-jungle">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-shopping-cart"></i>Shopping Cart
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse">
+								</a>
+								<a href="#portlet-config" data-toggle="modal" class="config">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<?php
+								if (empty($cart_items)) {
+									?>
+										<div >
+											<button type="button" class="btn btn-circle blue ">Your cart is empty</button>
+										</div>
+									<?php
+								} else {
+									?>
+										<div class="table-scrollable">
+											<table class="table table-striped table-bordered table-advance table-hover">
+												<thead>
+													<tr>
+														<th>
+														</th>
+														<th>
+															Image
+														</th>
+														<th class="hidden-xs">
+															Description
+														</th>
+														<th>
+															Price
+														</th>
+														<th>
+															Qty
+														</th>
+														<th>
+															</i> Sub Total
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php
+														foreach ($cart_items as $cart_item) {
+															?>
+															<tr>
+																<td>
+																	<?php echo anchor('auth/remove/'.$cart_item['rowid'], 'X')?>
+																</td>
+																<td>
+																	<a href="javascript:;"><img  src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" style="width: 50px; height: 50px;" alt="<?php echo $cart_item['name']?>" ></a>
+																</td>
+																<td class="hidden-xs">
+																	<?php echo $cart_item['name']?>
+																</td>
+																<td class="hidden-xs">
+																	<?php echo $store_currency, ' ', number_format($cart_item['price'] ,2)?>
+																</td>
+																<td>
+																	 <?php echo $cart_item['qty']?>
+																</td>
+																<td>
+																	<?php echo $store_currency, ' ', number_format($cart_item['subtotal'], 2)?>
+																</td>
+															</tr>
+															<?php
+														}
+													?>
+													
+												</tbody>
+											</table>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="pull-right">
+													<h4>
+														TOTAL: <?php echo $store_currency, ' ', number_format($this->cart->total(), 2) ?>
+													</h4>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="pull-right">
+													<a href="<?php echo base_url()?>auth/clearcart" class="btn btn-danger ">Clear Cart</a>
+	                      							<a href="#checkout" data-toggle="modal" class="btn btn-primary">Checkout <i class="fa fa-check"></i></a>
+												</div>
+											</div>
+										</div>
+									<?php
+								}
+							?>		
+						</div>
+					</div>
+            	</div>
+            	<div id="checkout" class="modal fade" tabindex="0" data-width="400">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Checkout</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+										<?php echo form_open('auth/confirm_order'); ?>
+                                            <div class="form-body">
+                                                <div class="form-group">
+													<label class="control-label" for="customer_id"> Customer <span class="require" style="color: red;">*</span> </label>
+	                                                <div class="input-group">
+	                                                    <span class="input-group-addon">
+	                                                        <i class="fa fa-user"></i>
+	                                                    </span>
+                                                        <select id="customer_id" class="form-control select2me" name="customer_id" >
+                                                        	<option value="" >--- Select customer ---</option>
+                                                            <?php foreach ($customers as $customer) {
+                                                            	?>
+                                                            		<option value="<?php echo $customer->id?>" ><?php echo $customer->first_name, ' ', $customer->last_name?></option>
+                                                            	<?php
+                                                            }?>
+                                                        </select>
+	                                                </div>
+	                                                <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('customer_id')?>
+                                                    </div>
+												</div>
+												<hr>
+												<h3>Shipping Address</h3>
+												<div class="form-group">
+													<label class="control-label" for="address"> Address <span class="require" style="color: red;">*</span> </label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-paper-plane"></i>
+														</span>
+														<input type="text" id="address" style="text-transform: capitalize;" name="address" class="form-control" placeholder="200 Thika" value="">
+													</div>
+													<div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('address')?>
+                                                    </div>
+												</div>
+												<div class="form-group">
+													<label class="control-label" for="postal_code"> Postal Code <span class="require" style="color: red;">*</span> </label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-paper-plane-o"></i>
+														</span>
+														<input type="text" id="postal_code" style="text-transform: capitalize;" name="postal_code" class="form-control" placeholder="01020" value="">
+													</div>
+													<div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('postal_code')?>
+                                                    </div>
+												</div>
+												<div class="form-group">
+													<label class="control-label" for="subcounty"> Town <span class="require" style="color: red;">*</span> </label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-map-marker"></i>
+														</span>
+														<select id="subcounty" class="form-control select2me" name="subcounty" >
+                                                        	<option value="" >--- Select Town ---</option>
+                                                            <?php foreach ($subcounties as $subcounty) {
+                                                            	?>
+                                                            		<option value="<?php echo $subcounty->ship_to?>" ><?php echo $subcounty->ship_to?></option>
+                                                            	<?php
+                                                            }?>
+                                                        </select>
+													</div>
+													<div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('subcounty')?>
+                                                    </div>
+												</div>
+												<div class="form-group">
+													<label class="control-label" for="county"> County <span class="require" style="color: red;">*</span> </label>
+													<div class="input-group">
+														<span class="input-group-addon">
+															<i class="fa fa-plane"></i>
+														</span>
+														<select id="county" class="form-control select2me" name="county" >
+                                                        	<option value="" >--- Select County ---</option>
+                                                            <?php foreach ($counties as $county) {
+                                                            	?>
+                                                            		<option value="<?php echo $county->county?>" >County <?php echo $county->county_code?> - <?php echo $county->county?></option>
+                                                            	<?php
+                                                            }?>
+                                                        </select>
+													</div>
+													<div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('county')?>
+                                                    </div>
+												</div>
+												<hr>
+												<div class="form-group">
+													<label class="control-label" for="method_of_payment"> Method of Payment <span class="require" style="color: red;">*</span> </label>
+													<div class="md-radio-list">
+														<div class="md-radio">
+															<input type="radio" id="cash_on_delovery" name="method_of_payment" class="md-radiobtn" value="Cash on Delivery">
+															<label for="cash_on_delovery">
+															<span></span>
+															<span class="check"></span>
+															<span class="box"></span>
+															Cash on Delivery </label>
+														</div>
+														<div class="md-radio">
+															<input type="radio" id="cheque_deposit" name="method_of_payment" class="md-radiobtn" value="Cheque Deposit" checked>
+															<label for="cheque_deposit">
+															<span></span>
+															<span class="check"></span>
+															<span class="box"></span>
+															Cheque Deposit </label>
+														</div>
+													</div>
+													<div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('method_of_payment')?>
+                                                    </div>
+												</div>
+												<h3><i class="fa fa-shopping-cart"></i> Shopping Cart</h3>
+												<div class="row">
+													<div class="col-xs-12">
+														<table class="table table-striped table-hover">
+															<thead>
+																<tr>
+																	<th>
+																		 #
+																	</th>
+																	<th>
+																		 Image
+																	</th>
+																	<th class="hidden-480">
+																		 Description
+																	</th>
+																	<th class="hidden-480">
+																		 Quantity
+																	</th>
+																	<th class="hidden-480">
+																		 Unit Cost
+																	</th>
+																	<th>
+																		 Total
+																	</th>
+																</tr>
+															</thead>
+															<tbody>
+																<?php
+																	foreach ($cart_items as $cart_item) {
+																		?>
+																			<tr>
+																				<td>
+																					<?php echo $i++?>
+																				</td>
+																				<td>
+																					<a href="javascript:;"><img  src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" style="width: 25px; height: 25px;" alt="<?php echo $cart_item['name']?>" ></a>
+																				</td>
+																				<td class="hidden-480">
+																					<?php echo $cart_item['name']?>
+																				</td>
+																				<td class="hidden-480">
+																					<?php echo $cart_item['qty']?>
+																				</td>
+																				<td class="hidden-480">
+																					<?php echo $store_currency, ' ', number_format($cart_item['price'] ,2) ?>
+																				</td>
+																				<td>
+																					<?php echo $store_currency, ' ', number_format($cart_item['subtotal'] ,2) ?>
+																				</td>
+																			</tr>
+																		<?php
+																	}
+																?>			
+															</tbody>
+														</table>
+													</div>
+													<div class="col-md-6">
+														<div class="pull-left">
+															<strong style="color: red;">NOTE!</strong> Fields marked with <span class="required" style="color: red;">*</span> are mandatory
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="pull-right">
+															<h4>Total: <?php echo $store_currency, ' ', number_format($this->cart->total(), 2)?></h4> 
+														</div>
+													</div>
+												</div>
+                                            </div>
+											<div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn">Close</button>
+												<button type="submit" class="btn blue"><i class="fa fa-check"></i> Confirm Order</button>
+											</div>
+										<?php echo form_close();?>
+									</div>
+								</div>
+								<a class="btn green" data-toggle="modal" href="#register">
+								Launch modal </a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="register" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Register New Customer</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+										<h4>Some Input</h4>
+										<p>
+											<input type="text" class="col-md-12 form-control">
+										</p>
+										<p>
+											<input type="text" class="col-md-12 form-control">
+										</p>
+										<p>
+											<input type="text" class="col-md-12 form-control">
+										</p>
+										<p>
+											<input type="text" class="col-md-12 form-control">
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" data-dismiss="modal" class="btn">Close</button>
+								<button type="button" class="btn yellow">Ok</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Add Category</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+                                        <?php echo form_open('auth/add_category'); ?>
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="pd_category"> Category <span class="required"> *</span></label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-paragraph"></i>
+                                                        </span>
+                                                        <input type="text" name="pd_category" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_category"> 
+                                                    </div>
+                                                    <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_category')?>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+													<label class="control-label" for="pd_parent_category">Parent Category </label>
+	                                                <div class="input-group">
+	                                                    <span class="input-group-addon">
+	                                                        <i class="fa fa-institution"></i>
+	                                                    </span>
+                                                        <select id="pd_parent_category" class="form-control select2me" name="pd_parent_category" >
+                                                        	<option value="" >Select parent category...</option>
+                                                            <?php foreach ($categories as $category ) {
+                                                            	if ($category->parent_category == null) {
+                                                            		?>
+                                                            			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
 
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                    <span >
-                                                        <a href="<?php echo base_url('admin/user/delete/'.$user->id)?>" class="label label-sm label-danger"><i class="fa fa-trash-o"></i> Delete</a>
-                                                    </span><br />
-                                                    <span >
-                                                        <a href="<?php echo base_url('admin/user/'.$user->id)?>" class="label label-sm label-primary"><i class="fa fa-search"></i> View User</a>
-                                                    </span>
-                                                    <?php
-                                                        if ($group->name === 'vendor') {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo prep_url($user->created_on.'.'.$base.'./vendor')?>" class="label label-sm label-default" target="_blank" ><i class="fa fa-user-secret"></i> <?php echo lang('login_as_an_admin')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        } elseif ($group->name === 'customer') {
-                                                            ?>
-                                                            <span >
-                                                                <a href="<?php echo base_url('auth/make_wholesaler/'. $user->id)?>" class="label label-sm label-default"><i class="fa fa-user-secret"></i> <?php echo lang('make_wholesaler')?></a>
-                                                            </span> 
-                                                            <?php
-                                                        }
-                                                    ?>
-                                                </td>
-											</tr>
-										<?php endforeach;?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> 
-                    </div>
-                    <!-- END SAMPLE TABLE PORTLET-->
-                </div>
+                                                            			<?php
+                                                            				$this->db->order_by('categories.category', 'asc');
+                                                            				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+                                                            				foreach ($subcategories as $subcategory) {
+                                                            					?>
+                                                            						<option value="<?php echo $subcategory->category?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category?></option>
+                                                            					<?php
+                                                            				}
+                                                            			?>
+                                                            		<?php
+                                                            	}
+                                                            }?>
+                                                        </select>
+	                                                </div>
+	                                                <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_parent_category')?>
+                                                    </div>
+												</div>
+                                            </div>
+                                            <div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn">Close</button>
+												<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_category_heading')?></button>
+											</div>
+										<?php echo form_close();?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="stack3" class="modal fade" tabindex="-1">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Add Tag</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-12">
+                                        <?php echo form_open('auth/add_tag'); ?>
+                                            <div class="form-body">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="pd_tag">Tag <span class="required"> *</span></label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="fa fa-paragraph"></i>
+                                                        </span>
+                                                        <input type="text" name="pd_tag" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_tag"> 
+                                                    </div>
+                                                    <div class="caption-subject" style="color: red;">
+                                                    	<?php echo form_error('pd_tag')?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+												<button type="button" data-dismiss="modal" class="btn">Close</button>
+												<button type="submit" class="btn blue">Add Tag</button>
+											</div>
+										<?php echo form_close();?>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
             </div>
-			<!-- END PAGE CONTENT-->
+            <!-- END PAGE BASE CONTENT -->
 		</div>
 	</div>
 	<!-- END CONTENT -->

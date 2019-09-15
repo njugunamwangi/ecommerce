@@ -29,12 +29,8 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a data-target="#stack1" data-toggle="modal" href="#stack1">
-						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
-					</li>
-					<li>
 						<a data-target="#stack2" data-toggle="modal" href="#stack2">
-						<i class="fa fa-check-square"></i> <?php echo $this->lang->line('publish_subcategory_heading')?> </a>
+						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
@@ -910,20 +906,34 @@
 														<td>
 															<select name="product_category" class="form-control form-filter input-sm">
 																<option value="">Select...</option>
-																<?php foreach ($categories as $category):?>
-																	<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-
-																	<?php
-																		$this->db->order_by('subcategories.subcategory');
-																		$subcategories = $this->db->get_where('subcategories', ['category' => $category->category])->result();
-
-																		foreach ($subcategories as $subcategory) {
-																			?>
-																				<option value="<?php echo $subcategory->subcategory;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->subcategory;?></option>
+																<?php foreach ($categories as $category) {
+																	if ($category->parent_category == null) {
+																		?>
+																			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
 																			<?php
-																		}
-																	?>
-																<?php endforeach;?>
+																				$this->db->order_by('categories.category');
+																				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+																				foreach ($subcategories as $subcategory) {
+																					?>
+																						<option value="<?php echo $subcategory->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category;?></option>
+																						<?php
+																							$this->db->order_by('categories.category');
+																							$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+																							foreach ($mini_categories as $mini_category) {
+																								?>
+																									<option value="<?php echo $mini_category->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $mini_category->category;?></option>
+																								<?php
+																							}
+																						?>
+																					<?php
+																				}
+																			?>
+																		<?php
+																	}?>
+																	<?php
+																}?>	
 															</select>
 														</td>
 														<td>
@@ -974,11 +984,10 @@
 												            <td><?php echo htmlspecialchars(ucwords($product->name),ENT_QUOTES,'UTF-8');?> </td>
 												            <td>
 												            	<?php 
-													            	$arr = json_decode($product->categories);
+													            	$arr = (array)json_decode($product->categories);
 
 													            	foreach ($arr as $category) {
-													            		echo $category;
-													            		echo ', ';
+													            		echo $category, ' ';
 													            	}
 												            	?>
 												            </td>
@@ -986,14 +995,14 @@
 		                                                        <?php echo $currency, ' ', number_format($product->sale_price, 2);?>
 		                                                    </td>
 															<td>
-		                                                        <?php echo htmlspecialchars(date('jS M, Y', $product->date_created),ENT_QUOTES,'UTF-8');?> at <?php echo htmlspecialchars(date('H:i:s', $product->date_created),ENT_QUOTES,'UTF-8');?>
+		                                                        <?php echo date('jS M, Y', $product->date_created);?> at <?php echo date('H:i:s', $product->date_created);?>
 															</td>
 															<td>
 																<?php
 																	if ($product->status == 1) {
 																		?>
 																			<span >
-					                                                            <a href="<?php echo base_url('admin/product/unpublish/'. $product->id)?>" class="label label-sm label-success"> Published</a>
+																				<a data-target="#unpublish" data-toggle="modal" href="#unpublish" class="label label-sm label-success"> Published</a>
 					                                                        </span>
 																		<?php
 																	} else {
@@ -1028,34 +1037,22 @@
 								</div>
 								<!-- End: life time stats -->
 							</div>
-							<div id="stack1" class="modal fade" tabindex="-1" data-width="400">
+							<div id="unpublish" class="modal fade" tabindex="-1" data-width="400">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-											<h4 class="modal-title">Add Category</h4>
+											<h4 class="modal-title">Unpublish Product</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">
 												<div class="col-md-12">
-		                                            <?php echo form_open('auth/add_category'); ?>
-			                                            <div class="form-body">
-			                                                <div class="form-group">
-			                                                    <label class="control-label" for="pd_category">Category <span class="required"> *</span></label>
-			                                                    <div class="input-group">
-			                                                        <span class="input-group-addon">
-			                                                            <i class="fa fa-paragraph"></i>
-			                                                        </span>
-			                                                        <input type="text" name="pd_category" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_category"> 
-			                                                    </div>
-			                                                    <div class="caption-subject" style="color: red;">
-			                                                    	<?php echo form_error('pd_category')?>
-			                                                    </div>
-			                                                </div>
-			                                            </div>
+		                                            <?php echo form_open('auth/unpublish_product'); ?>
+		                                            Unpublish product <?php echo $product->name?>?
+			                                            <?php echo form_hidden('product_id', $product->id)?>
 			                                            <div class="modal-footer">
 															<button type="button" data-dismiss="modal" class="btn">Close</button>
-															<button type="submit" class="btn blue">Add Category</button>
+															<button type="submit" class="btn blue">Unpublish Product</button>
 														</div>
 													<?php echo form_close();?>
 												</div>
@@ -1069,46 +1066,61 @@
 									<div class="modal-content">
 										<div class="modal-header">
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-											<h4 class="modal-title">Add Sub Category</h4>
+											<h4 class="modal-title">Add Category</h4>
 										</div>
 										<div class="modal-body">
 											<div class="row">
 												<div class="col-md-12">
-		                                            <?php echo form_open('auth/add_subcategory'); ?>
+		                                            <?php echo form_open('auth/add_category'); ?>
 			                                            <div class="form-body">
 			                                                <div class="form-group">
-			                                                    <label class="control-label" for="pd_subcategory">Sub Category <span class="required"> *</span></label>
+			                                                    <label class="control-label" for="pd_category"> Category <span class="required"> *</span></label>
 			                                                    <div class="input-group">
 			                                                        <span class="input-group-addon">
 			                                                            <i class="fa fa-paragraph"></i>
 			                                                        </span>
-			                                                        <input type="text" name="pd_subcategory" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_subcategory"> 
+			                                                        <input type="text" name="pd_category" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_category"> 
 			                                                    </div>
 			                                                    <div class="caption-subject" style="color: red;">
-			                                                    	<?php echo form_error('pd_subcategory')?>
+			                                                    	<?php echo form_error('pd_category')?>
 			                                                    </div>
 			                                                </div>
 			                                                <div class="form-group">
-																<label class="control-label" for="pd_category">Category <span class="required"> *</span></label>
+																<label class="control-label" for="pd_parent_category">Parent Category </label>
 				                                                <div class="input-group">
 				                                                    <span class="input-group-addon">
 				                                                        <i class="fa fa-institution"></i>
 				                                                    </span>
-			                                                        <select id="pd_category" class="form-control select2me" name="pd_category" >
+			                                                        <select id="pd_parent_category" class="form-control select2me" name="pd_parent_category" >
 			                                                        	<option value="" >Select parent category...</option>
-			                                                            <?php foreach ($categories as $category ):  ?>
-			                                                                <option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-			                                                            <?php endforeach; ?>
+			                                                            <?php foreach ($categories as $category ) {
+			                                                            	if ($category->parent_category == null) {
+			                                                            		?>
+			                                                            			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
+
+			                                                            			<?php
+			                                                            				$this->db->order_by('categories.category', 'asc');
+			                                                            				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+			                                                            				foreach ($subcategories as $subcategory) {
+			                                                            					?>
+			                                                            						<option value="<?php echo $subcategory->category?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category?></option>
+			                                                            					<?php
+			                                                            				}
+			                                                            			?>
+			                                                            		<?php
+			                                                            	}
+			                                                            }?>
 			                                                        </select>
 				                                                </div>
 				                                                <div class="caption-subject" style="color: red;">
-			                                                    	<?php echo form_error('pd_category')?>
+			                                                    	<?php echo form_error('pd_parent_category')?>
 			                                                    </div>
 															</div>
 			                                            </div>
 			                                            <div class="modal-footer">
 															<button type="button" data-dismiss="modal" class="btn">Close</button>
-															<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_subcategory_heading')?></button>
+															<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_category_heading')?></button>
 														</div>
 													<?php echo form_close();?>
 												</div>

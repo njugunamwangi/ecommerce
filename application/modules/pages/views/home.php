@@ -115,7 +115,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <?php
                         } else {
                           ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
+                            <?php
+                              $this->db->where('customer_id', $user_account->id);
+                              $query = $this->db->get('wishlist')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -229,57 +233,68 @@ License: You must have a valid license purchased only from themeforest (the abov
       </div>
     </div>
     <!-- Header END -->
-
     <div class="main">
       <div class="container">
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40 ">
           <!-- BEGIN CONTENT -->
-          <div class="row product-list">
-            <?php foreach($products as $product):?>
-            <!-- PRODUCT ITEM START -->
-              <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="product-item">
-                  <?php echo form_open('pages/add');?>
-                    <div class="pi-img-wrapper">
-                      <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="img-responsive" alt="<?php echo $product->name?>">
-                      <div>
-                        <a href="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="btn btn-default fancybox-button">Zoom</a>
-                        <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a><br><br>
-                      </div>
-                    </div>
-                    <h3><a href="<?php echo base_url($product->slug)?>"><?php echo ucwords($product->name)?></a></h3>
-                    <?php
-                      if ($this->ion_auth->is_wholesaler()) {
-                        ?>
-                          <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->wholesale_price)?></div>
-                        <?php
-                      } else {
-                        ?>
-                          <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->sale_price)?></div>
-                        <?php
-                      }
+            <div class="row product-list">
+              <div class="col-md-12">
+                <?php
+                  if ($this->session->flashdata('message')) {
                     ?>
-                    <?php echo form_hidden('id', $product->id); ?>
-                    <button type="submit" class="btn btn-default add2cart">Add to Cart</button>
-                  <?php echo form_close();?>
-                  <?php 
-                    if ($this->ion_auth->logged_in()) {
-                      ?>
-                        <?php echo form_open('pages/add_to_wishlist');?>
-                          <?php echo form_hidden('product_id', $product->id);?>
-                          <?php echo form_hidden('customer_id', $this->ion_auth->user()->row()->id);?>
-                          <?php echo form_hidden('wishlist_code', $this->ion_auth->user()->row()->id.$product->id)?>
-                          <button type="submit" class="btn btn-default add2cart" title="Add to Wishlist"><i class="fa fa-heart"></i></button>
-                        <?php echo form_close();?>
-                      <?php
-                    }
-                  ?>
-                </div>
+                      <div class="alert alert-info">
+                        <button type="button" class="close" data-dismiss="alert"></button>
+                        <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', ucfirst($message);?></div>
+                      </div>
+                    <?php
+                  }
+                ?>
               </div>
-            <!-- PRODUCT ITEM END -->
-            <?php endforeach?>
-          </div>
+              <?php foreach($products as $product) {
+                ?>
+                  <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="product-item">
+                      <?php echo form_open('pages/add')?>
+                        <div class="pi-img-wrapper">
+                          <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="img-responsive" alt="<?php echo $product->name?>">
+                          <div>
+                            <a href="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="btn btn-default fancybox-button">Zoom</a>
+                            <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                          </div>
+                        </div>
+                        <h3><a href="<?php echo base_url($product->slug)?>"><?php echo ucwords($product->name)?></a></h3>
+                        <?php
+                          if ($this->ion_auth->is_wholesaler()) {
+                            ?>
+                              <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->wholesale_price)?></div>
+                            <?php
+                          } else {
+                            ?>
+                              <div class="pi-price"><?php echo $store_currency?> <?php echo number_format($product->sale_price)?></div>
+                            <?php
+                          }
+                        ?>
+                        <?php echo form_hidden('id', $product->id); ?>
+                        <button type="submit" class="btn btn-default add2cart">Add to Cart</button>
+                      <?php echo form_close()?>
+                      <?php 
+                        if ($this->ion_auth->logged_in()) {
+                          ?>
+                            <?php echo form_open('pages/add_to_wishlist');?>
+                              <?php echo form_hidden('product_id', $product->id);?>
+                              <?php echo form_hidden('customer_id', $this->ion_auth->user()->row()->id);?>
+                              <?php echo form_hidden('wishlist_code', $this->ion_auth->user()->row()->id.$product->id)?>
+                              <button type="submit" class="btn btn-default add2cart" title="Add to Wishlist"><i class="fa fa-heart"></i></button>
+                            <?php echo form_close();?>
+                          <?php
+                        }
+                      ?>
+                    </div> 
+                  </div>
+                <?php
+              }?>
+            </div>
           <!-- END CONTENT -->
         </div>
         <!-- END SIDEBAR & CONTENT -->
@@ -336,9 +351,8 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-4 col-sm-6 pre-footer-col">
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
-              35, Lorem Lis Street, Park Ave<br>
-              Kiambu, Kenya<br>
-              Phone: <?php echo $store_phone_number?><br>
+              <?php echo $store_location?>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>

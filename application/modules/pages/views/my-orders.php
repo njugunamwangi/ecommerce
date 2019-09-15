@@ -111,7 +111,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <?php
                         } else {
                           ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
+                            <?php
+                              $this->db->where('customer_id', $user_account->id);
+                              $query = $this->db->get('wishlist')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -255,6 +259,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                   if ($this->session->flashdata('message')) {
                   ?>
                       <div class="alert alert-info">
+                          <button type="button" class="close" data-dismiss="alert"></button>
                           <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
                       </div>
                       <?php
@@ -316,7 +321,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                                 <?php foreach($my_orders as $my_order) {
                                   ?>
                                     <tr>
-                                      <?php $orderid = $my_order->order_id?>
+                                      <?php echo form_hidden('order_id', $my_order->order_id);?>
                                       <td>
                                         <?php echo $i++;?>
                                       </td>
@@ -369,7 +374,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                                           if ($my_order->status == 0) {
                                             ?>
                                               <span>
-                                                <a data-target="#basic" data-toggle="modal" class="label label-sm label-danger"><i class="fa fa-times"></i> Cancel </a>
+                                                <a href="<?php echo base_url('my-account/orders#cancel')?>" data-toggle="modal" class="label label-sm label-danger"><i class="fa fa-times"></i> Cancel </a>
                                               </span>
                                             <?php
                                           }
@@ -380,7 +385,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                                 }?>
                               </tbody>
                             </table>
-                            <div class="modal fade" id="basic" tabindex="-1" role="basic" aria-hidden="true">
+                            <div class="modal fade" id="cancel" tabindex="-1" role="cancel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
@@ -388,7 +393,8 @@ License: You must have a valid license purchased only from themeforest (the abov
                                     <h4 class="modal-title">Cancel Order</h4>
                                   </div>
                                   <div class="modal-body">
-                                     Are you sure you want to cancel order #<?php echo $orderid?>?
+                                    <?php $orderid = $this->input->post('order_id');?>
+                                    Are you sure you want to cancel order #<?php echo $orderid?>?
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn default" data-dismiss="modal">No</button>
@@ -456,9 +462,8 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-4 col-sm-6 pre-footer-col">
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
-              35, Lorem Lis Street, Park Ave<br>
-              Kiambu, Kenya<br>
-              Phone: <?php echo $store_phone_number?><br>
+              <?php echo $store_location?>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>

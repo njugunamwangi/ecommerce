@@ -691,6 +691,16 @@
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->
 			<!-- BEGIN PAGE HEAD -->
+			<?php
+				if ($this->session->flashdata('message')) {
+					?>
+						<div class="alert alert-info">
+							<button type="button" class="close" data-dismiss="alert"></button>
+							<div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
+						</div>
+					<?php
+				}
+			?>
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
@@ -950,7 +960,7 @@
 								<div class="form-body">
 									<div class="form-group">
 										<div class="input-group col-md-12">
-											<textarea class="ckeditor form-control" name="store_location" rows="6" value="<?php echo $store_location?>"></textarea>
+											<textarea class="ckeditor form-control" name="store_location" placeholder="99-01020 Ruiru, Kiambu" rows="6" value="<?php echo $store_location?>"></textarea>
 										</div>
 									</div>
 								</div>
@@ -964,7 +974,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-12">
+				<!-- <div class="col-md-12">
 					<div class="portlet box purple ">
 						<div class="portlet-title">
 							<div class="caption">
@@ -996,7 +1006,7 @@
 							<?php echo form_close();?>
 						</div>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<!-- END PAGE CONTENT-->
 		</div>

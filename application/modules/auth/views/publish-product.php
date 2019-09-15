@@ -28,12 +28,8 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a data-target="#stack1" data-toggle="modal" href="#stack1">
-						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
-					</li>
-					<li>
 						<a data-target="#stack2" data-toggle="modal" href="#stack2">
-						<i class="fa fa-check-square"></i> <?php echo $this->lang->line('publish_subcategory_heading')?> </a>
+						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
@@ -866,25 +862,49 @@
                                         <div class="form-control height-auto">
 											<div class="scroller" style="height:275px;" data-always-visible="1">
 												<ul class="list-unstyled">
-													<?php foreach ($categories as $category):?>
-														<li>
-															<label><input type="checkbox" name="categories[]" value="<?php echo $category->category?>"><?php echo $category->category?></label>
-															<ul class="list-unstyled">
-																<?php
-																	$this->db->order_by('subcategories.subcategory');
-																	$subcategories = $this->db->get_where('subcategories', ['category' => $category->category])->result();
-
-																	foreach ($subcategories as $subcategory) {
-																		?>
-																			<li>
-																				<label><input type="checkbox" name="categories[]" value="<?php echo $subcategory->subcategory?>"><?php echo $subcategory->subcategory?></label>
-																			</li>
+													<?php foreach ($categories as $category) {
+														if ($category->parent_category == NULL) {
+															?>
+																<li>
+																	<label><input type="checkbox" name="categories[]" value="<?php echo $category->category?>"><?php echo $category->category?></label>
+																	<ul class="list-unstyled">
 																		<?php
-																	}
-																?>
-															</ul>
-														</li>
-													<?php endforeach;?>
+																			$this->db->order_by('categories.category');
+																			$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+																			foreach ($subcategories as $subcategory) {
+																				?>
+																					<li>
+																						<label>
+																							<input type="checkbox" name="categories[]" value="<?php echo $subcategory->category?>"><?php echo $subcategory->category?>
+																						</label>
+																						<ul class="list-unstyled">
+																							<?php
+																								$this->db->order_by('categories.category');
+																								$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+																								foreach ($mini_categories as $mini_category) {
+																									?>
+																										<li>
+																											<label>
+																												<input type="checkbox" name="categories[]" value="<?php echo $mini_category->category?>">
+																												<?php echo $mini_category->category?>
+																											</label>
+																										</li>
+																									<?php
+																								}
+																							?>
+																						</ul>
+																					</li>
+																				<?php
+																			}
+																		?>
+																	</ul>
+																</li>
+															<?php
+														}?>		
+														<?php
+													}?>
 												</ul>
 											</div>
 										</div>
@@ -990,7 +1010,7 @@
                                     </div>
                                 </div>
                             </form>
-							<div id="stack1" class="modal fade" tabindex="-1" data-width="400">
+							<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -1003,7 +1023,7 @@
 		                                            <?php echo form_open('auth/add_category'); ?>
 			                                            <div class="form-body">
 			                                                <div class="form-group">
-			                                                    <label class="control-label" for="pd_category">Category <span class="required"> *</span></label>
+			                                                    <label class="control-label" for="pd_category"> Category <span class="required"> *</span></label>
 			                                                    <div class="input-group">
 			                                                        <span class="input-group-addon">
 			                                                            <i class="fa fa-paragraph"></i>
@@ -1014,63 +1034,42 @@
 			                                                    	<?php echo form_error('pd_category')?>
 			                                                    </div>
 			                                                </div>
-			                                            </div>
-			                                            <div class="modal-footer">
-															<button type="button" data-dismiss="modal" class="btn">Close</button>
-															<button type="submit" class="btn blue">Add Category</button>
-														</div>
-													<?php echo form_close();?>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-											<h4 class="modal-title">Add Sub Category</h4>
-										</div>
-										<div class="modal-body">
-											<div class="row">
-												<div class="col-md-12">
-		                                            <?php echo form_open('auth/add_subcategory'); ?>
-			                                            <div class="form-body">
 			                                                <div class="form-group">
-			                                                    <label class="control-label" for="pd_subcategory">Sub Category <span class="required"> *</span></label>
-			                                                    <div class="input-group">
-			                                                        <span class="input-group-addon">
-			                                                            <i class="fa fa-paragraph"></i>
-			                                                        </span>
-			                                                        <input type="text" name="pd_subcategory" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_subcategory"> 
-			                                                    </div>
-			                                                    <div class="caption-subject" style="color: red;">
-			                                                    	<?php echo form_error('pd_subcategory')?>
-			                                                    </div>
-			                                                </div>
-			                                                <div class="form-group">
-																<label class="control-label" for="pd_category">Category <span class="required"> *</span></label>
+																<label class="control-label" for="pd_parent_category">Parent Category </label>
 				                                                <div class="input-group">
 				                                                    <span class="input-group-addon">
 				                                                        <i class="fa fa-institution"></i>
 				                                                    </span>
-			                                                        <select id="pd_category" class="form-control select2me" name="pd_category" >
+			                                                        <select id="pd_parent_category" class="form-control select2me" name="pd_parent_category" >
 			                                                        	<option value="" >Select parent category...</option>
-			                                                            <?php foreach ($categories as $category ):  ?>
-			                                                                <option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-			                                                            <?php endforeach; ?>
+			                                                            <?php foreach ($categories as $category ) {
+			                                                            	if ($category->parent_category == null) {
+			                                                            		?>
+			                                                            			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
+
+			                                                            			<?php
+			                                                            				$this->db->order_by('categories.category', 'asc');
+			                                                            				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+			                                                            				foreach ($subcategories as $subcategory) {
+			                                                            					?>
+			                                                            						<option value="<?php echo $subcategory->category?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category?></option>
+			                                                            					<?php
+			                                                            				}
+			                                                            			?>
+			                                                            		<?php
+			                                                            	}
+			                                                            }?>
 			                                                        </select>
 				                                                </div>
 				                                                <div class="caption-subject" style="color: red;">
-			                                                    	<?php echo form_error('pd_category')?>
+			                                                    	<?php echo form_error('pd_parent_category')?>
 			                                                    </div>
 															</div>
 			                                            </div>
 			                                            <div class="modal-footer">
 															<button type="button" data-dismiss="modal" class="btn">Close</button>
-															<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_subcategory_heading')?></button>
+															<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_category_heading')?></button>
 														</div>
 													<?php echo form_close();?>
 												</div>

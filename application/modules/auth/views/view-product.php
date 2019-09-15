@@ -821,11 +821,11 @@
 								<div class="tabbable">
 									<ul class="nav nav-tabs">
 										<li class="active">
-											<a href="#tab_general" data-toggle="tab">
+											<a href="#general" data-toggle="tab">
 											General </a>
 										</li>
 										<li>
-											<a href="#tab_reviews" data-toggle="tab">
+											<a href="#reviews" data-toggle="tab">
 											Reviews <span class="badge badge-success">
 											<?php 
 												$this->db->where('product_id', $product->id);
@@ -835,12 +835,12 @@
 											</a>
 										</li>
 										<li>
-											<a href="#tab_history" data-toggle="tab">
-											History </a>
+											<a href="#product_sales" data-toggle="tab">
+											Product Sales </a>
 										</li>
 									</ul>
 									<div class="tab-content no-space">
-										<div class="tab-pane active" id="tab_general">
+										<div class="tab-pane active" id="general">
 											<div class="row">
 												<div class="col-md-6 col-sm-12">
 													<div class="portlet yellow-crusta box">
@@ -964,7 +964,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="tab-pane" id="tab_reviews">
+										<div class="tab-pane" id="reviews">
 											<?php
 												if ($reviews < 1) {
 													?>
@@ -1122,145 +1122,175 @@
 												}
 											?>			
 										</div>
-										<div class="tab-pane" id="tab_history">
+										<div class="tab-pane" id="product_sales">
 											<div class="table-container">
 												<table class="table table-striped table-bordered table-hover" id="datatable_history">
-												<thead>
-												<tr role="row" class="heading">
-													<th width="15%">
-														 Datetime
-													</th>
-													<th width="10%">
-														Customer Name
-													</th>
-													<th width="5%">
-														Amount of Products
-													</th>
-													<th width="10%">
-														Price
-													</th>
-													<th width="20%">
-														 Description
-													</th>
-													<th width="10%">
-														 Notification
-													</th>
-												</tr>
-												<tr role="row" class="filter">
-													<td>
-														<div class="input-group date datetime-picker margin-bottom-5" data-date-format="dd/mm/yyyy hh:ii">
-															<input type="text" class="form-control form-filter input-sm" readonly name="product_history_date_from" placeholder="From">
-															<span class="input-group-btn">
-															<button class="btn btn-sm default date-set" type="button"><i class="fa fa-calendar"></i></button>
-															</span>
-														</div>
-														<div class="input-group date datetime-picker" data-date-format="dd/mm/yyyy hh:ii">
-															<input type="text" class="form-control form-filter input-sm" readonly name="product_history_date_to" placeholder="To">
-															<span class="input-group-btn">
-															<button class="btn btn-sm default date-set" type="button"><i class="fa fa-calendar"></i></button>
-															</span>
-														</div>
-													</td>
-													<td>
-														<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
-													</td>
-													<td>
-														<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
-													</td>
-													<td>
-														<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
-													</td>
-													<td>
-														<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
-													</td>
-													<td>
-														<select name="product_history_notification" class="form-control form-filter input-sm">
-															<option value="">Select...</option>
-															<option value="pending">Pending</option>
-															<option value="notified">Notified</option>
-															<option value="failed">Failed</option>
-														</select>
-													</td>
-												</tr>
-												</thead>
-												<tbody>
-													<?php
-														$orders = $this->db->get('orders')->result();
-														foreach ($orders as $order) {
-															$cart_items = json_decode($order->orders);
-															foreach ($cart_items as $cart_item) {
-																if ($cart_item->id == $product->id) {
-																	?>
-																		<tr>
-																			<td>
-																				<?php echo date('jS M, Y', $order->order_id)?> at <?php echo date('H:i:s', $order->order_id)?>
-																			</td>
-																			<td>
-																				<?php
-																					$this->db->where('id', $order->customer_id);
-																					$customer_info = $this->db->get('users')->row();
-																					echo $customer_info->first_name, ' ', $customer_info->last_name;
-																				?>
-																			</td>
-																			<td>
-																				<?php 
-																					if ($cart_item->qty == 1) {
-																						echo number_format($cart_item->qty), ' item';
-																					} else {
-																						echo number_format($cart_item->qty), ' items';
-																					}
-																				?>
-																			</td>
-																			<td>
-																				<?php echo $currency, ' ', number_format($cart_item->subtotal, 2)?>
-																			</td>
-																			<td>
-																				<?php
-										                                          if ($order->status == 0) {
-										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_processing');
-										                                          } elseif ($order->status == 1) {
-										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('processed');
-										                                          } elseif ($order->status == 2) {
-										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_delivery');
-										                                          } elseif ($order->status == 3) {
-										                                            echo $this->lang->line('order_cancelled');
-										                                          } else {
-										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('delivery_closed');
-										                                          }
-										                                        ?>
-																			</td>
-																			<td>
-																				<?php
-										                                          if ($order->status == 0) {
-										                                            ?>
-										                                              <span class="label label-sm label-danger">Pending</span>
-										                                            <?php
-										                                          } elseif ($order->status == 1) {
-										                                            ?>
-										                                              <span class="label label-sm label-info">Processed</span>
-										                                            <?php
-										                                          } elseif ($order->status == 2) {
-										                                            ?>
-										                                              <span class="label label-sm label-warning">In Transit</span>
-										                                            <?php
-										                                          } elseif ($order->status == 3) {
-										                                            ?>
-										                                              <span class="label label-sm label-default">Cancelled</span>
-										                                            <?php
-										                                          } else {
-										                                            ?>
-										                                              <span class="label label-sm label-success">Delivered & Closed</span>
-										                                            <?php
-										                                          }
-										                                        ?>
-																			</td>
-																		</tr>
-																	<?php
+													<thead>
+														<tr role="row" class="heading">
+															<th width="15%">
+																 Datetime
+															</th>
+															<th width="10%">
+																Customer Name
+															</th>
+															<th width="5%">
+																Amount of Products
+															</th>
+															<th width="10%">
+																Price
+															</th>
+															<th width="20%">
+																 Description
+															</th>
+															<th width="10%">
+																 Notification
+															</th>
+														</tr>
+														<tr role="row" class="filter">
+															<td>
+																<div class="input-group date datetime-picker margin-bottom-5" data-date-format="dd/mm/yyyy hh:ii">
+																	<input type="text" class="form-control form-filter input-sm" readonly name="product_history_date_from" placeholder="From">
+																	<span class="input-group-btn">
+																	<button class="btn btn-sm default date-set" type="button"><i class="fa fa-calendar"></i></button>
+																	</span>
+																</div>
+																<div class="input-group date datetime-picker" data-date-format="dd/mm/yyyy hh:ii">
+																	<input type="text" class="form-control form-filter input-sm" readonly name="product_history_date_to" placeholder="To">
+																	<span class="input-group-btn">
+																	<button class="btn btn-sm default date-set" type="button"><i class="fa fa-calendar"></i></button>
+																	</span>
+																</div>
+															</td>
+															<td>
+																<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
+															</td>
+															<td>
+																<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
+															</td>
+															<td>
+																<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
+															</td>
+															<td>
+																<input type="text" class="form-control form-filter input-sm" name="product_history_desc" placeholder="To"/>
+															</td>
+															<td>
+																<select name="product_history_notification" class="form-control form-filter input-sm">
+																	<option value="">Select...</option>
+																	<option value="pending">Pending</option>
+																	<option value="notified">Notified</option>
+																	<option value="failed">Failed</option>
+																</select>
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+															$orders = $this->db->get('orders')->result();
+															foreach ($orders as $order) {
+																$cart_items = json_decode($order->orders);
+																foreach ($cart_items as $cart_item) {
+																	if ($cart_item->id == $product->id) {
+																		?>
+																			<tr>
+																				<td>
+																					<?php echo date('jS M, Y', $order->order_id)?> at <?php echo date('H:i:s', $order->order_id)?>
+																				</td>
+																				<td>
+																					<?php
+																						$this->db->where('id', $order->customer_id);
+																						$customer_info = $this->db->get('users')->row();
+																						echo $customer_info->first_name, ' ', $customer_info->last_name;
+																					?>
+																				</td>
+																				<td>
+																					<?php 
+																						if ($cart_item->qty == 1) {
+																							echo number_format($cart_item->qty), ' item';
+																						} else {
+																							echo number_format($cart_item->qty), ' items';
+																						}
+																					?>
+																				</td>
+																				<td>
+																					<?php echo $currency, ' ', number_format($cart_item->subtotal, 2)?>
+																				</td>
+																				<td>
+																					<?php
+											                                          if ($order->status == 0) {
+											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_processing');
+											                                          } elseif ($order->status == 1) {
+											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('processed');
+											                                          } elseif ($order->status == 2) {
+											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_delivery');
+											                                          } elseif ($order->status == 3) {
+											                                            echo $this->lang->line('order_cancelled');
+											                                          } else {
+											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('delivery_closed');
+											                                          }
+											                                        ?>
+																				</td>
+																				<td>
+																					<?php
+											                                          if ($order->status == 0) {
+											                                            ?>
+											                                              <span class="label label-sm label-danger">Pending</span>
+											                                            <?php
+											                                          } elseif ($order->status == 1) {
+											                                            ?>
+											                                              <span class="label label-sm label-info">Processed</span>
+											                                            <?php
+											                                          } elseif ($order->status == 2) {
+											                                            ?>
+											                                              <span class="label label-sm label-warning">In Transit</span>
+											                                            <?php
+											                                          } elseif ($order->status == 3) {
+											                                            ?>
+											                                              <span class="label label-sm label-default">Cancelled</span>
+											                                            <?php
+											                                          } else {
+											                                            ?>
+											                                              <span class="label label-sm label-success">Delivered & Closed</span>
+											                                            <?php
+											                                          }
+											                                        ?>
+																				</td>
+																			</tr>
+																		<?php
+																	}
 																}
 															}
-														}
-													?>
-												</tbody>
+														?>
+														<tr>
+															<td></td>
+															<td>
+																<strong>TOTAL</strong>
+															</td>
+															<td>
+																<?php
+																	$this->db->where('product_id', $product->id);
+																	$this->db->select_sum('qty');
+																	$result =  $this->db->get('orders_summary')->row()->qty;
+																	if ($result == 1) {
+																		echo $result, ' item';
+																	} else {
+																		echo $result, ' items';
+																	}
+																	
+																?>
+															</td>
+															<td>
+																<?php
+																	$this->db->where('product_id', $product->id);
+																	$this->db->select_sum('subtotal');
+																	$result =  $this->db->get('orders_summary')->row()->subtotal;
+																	echo $currency, ' ', number_format($result, 2);
+																	
+																?>
+															</td>
+															<td></td>
+															<td></td>
+														</tr>
+													</tbody>
 												</table>
 											</div>
 										</div>

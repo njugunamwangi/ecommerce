@@ -14,6 +14,7 @@ class Pages_model extends CI_Model {
 	 */
 	public function get_products($slug = FALSE) {
 		if ($slug === FALSE) {
+			$this->db->order_by('products.name');
             $query = $this->db->get_where('products', ['status' => 1]);
             return $query->result();
         }

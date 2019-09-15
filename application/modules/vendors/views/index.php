@@ -724,8 +724,8 @@
 					<div class="dashboard-stat2">
 						<div class="display">
 							<div class="number">
-								<h3 class="font-red-haze"><?php echo $total_orders?></h3>
-								<small>TOTAL ORDERS</small>
+								<h3 class="font-red-haze"><?php echo $total_products?></h3>
+								<small>TOTAL PRODUCTS</small>
 							</div>
 							<div class="icon">
 								<i class="icon-like"></i>
@@ -756,8 +756,8 @@
 					<div class="dashboard-stat2">
 						<div class="display">
 							<div class="number">
-								<h3 class="font-blue-sharp"><small class="font-blue-sharp"><?php $average = $total_sales_amount/$total_orders; echo $currency, ' ', number_format($average, 2) ?></small></h3>
-								<small>AVERAGE ORDER</small>
+								<h3 class="font-blue-sharp"><small class="font-blue-sharp"><?php $average = $total_sales_amount/$total_products; echo $currency, ' ', number_format($average, 2) ?></small></h3>
+								<small>AVERAGE ORDER PER PRODUCT</small>
 							</div>
 							<div class="icon">
 								<i class="icon-basket"></i>

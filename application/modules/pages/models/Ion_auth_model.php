@@ -2867,6 +2867,24 @@ class Ion_auth_model extends CI_Model
 
 		$this->db->insert('orders', $data);
 
+		$cart = $this->cart->contents();
+		$order_id = $this->db->insert_id();
+		$i = 0;
+		foreach ($cart as $item) {
+			$data = [
+				'order_id' => $order_id,
+				'customer_id' => $this->ion_auth->user()->row()->id,
+				'product_id' => $item['id'],
+				'vendor_id' => $item['vendor_id'],
+				'qty' => $item['qty'],
+				'price' => $item['price'],
+				'subtotal' => $item['subtotal']
+			];
+
+			$this->db->insert('orders_summary', $data);
+			$i++;
+		}
+
 		if ($this->db->affected_rows() === 1) {
 			$this->set_message('order_set_successfully');
 			return TRUE;

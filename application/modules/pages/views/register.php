@@ -294,9 +294,8 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-4 col-sm-6 pre-footer-col">
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
-              35, Lorem Lis Street, Park Ave<br>
-              Kiambu, Kenya<br>
-              Phone: <?php echo $store_phone_number?><br>
+              <?php echo $store_location?>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>

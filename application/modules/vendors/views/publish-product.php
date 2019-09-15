@@ -766,25 +766,49 @@
                                         <div class="form-control height-auto">
 											<div class="scroller" style="height:275px;" data-always-visible="1">
 												<ul class="list-unstyled">
-													<?php foreach ($categories as $category):?>
-														<li>
-															<label><input type="checkbox" name="categories[]" value="<?php echo $category->category?>"><?php echo $category->category?></label>
-															<ul class="list-unstyled">
-																<?php
-																	$this->db->order_by('subcategories.subcategory');
-																	$subcategories = $this->db->get_where('subcategories', ['category' => $category->category])->result();
-
-																	foreach ($subcategories as $subcategory) {
-																		?>
-																			<li>
-																				<label><input type="checkbox" name="categories[]" value="<?php echo $subcategory->subcategory?>"><?php echo $subcategory->subcategory?></label>
-																			</li>
+													<?php foreach ($categories as $category) {
+														if ($category->parent_category == NULL) {
+															?>
+																<li>
+																	<label><input type="checkbox" name="categories[]" value="<?php echo $category->category?>"><?php echo $category->category?></label>
+																	<ul class="list-unstyled">
 																		<?php
-																	}
-																?>
-															</ul>
-														</li>
-													<?php endforeach;?>
+																			$this->db->order_by('categories.category');
+																			$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+																			foreach ($subcategories as $subcategory) {
+																				?>
+																					<li>
+																						<label>
+																							<input type="checkbox" name="categories[]" value="<?php echo $subcategory->category?>"><?php echo $subcategory->category?>
+																						</label>
+																						<ul class="list-unstyled">
+																							<?php
+																								$this->db->order_by('categories.category');
+																								$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+																								foreach ($mini_categories as $mini_category) {
+																									?>
+																										<li>
+																											<label>
+																												<input type="checkbox" name="categories[]" value="<?php echo $mini_category->category?>">
+																												<?php echo $mini_category->category?>
+																											</label>
+																										</li>
+																									<?php
+																								}
+																							?>
+																						</ul>
+																					</li>
+																				<?php
+																			}
+																		?>
+																	</ul>
+																</li>
+															<?php
+														}?>		
+														<?php
+													}?>
 												</ul>
 											</div>
 										</div>

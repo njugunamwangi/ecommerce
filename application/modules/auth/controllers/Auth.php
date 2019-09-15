@@ -52,6 +52,8 @@ class Auth extends MX_Controller
 			$data['total_sales_amount'] = $this->total_sales();
 
 			$data['last_ten_orders'] = $this->last_ten_orders();
+
+			// $data['total_shipments'] = $this->total_shipments();
 			
 			//USAGE NOTE - you can do more complicated queries like this
 			//$data['users'] = $this->ion_auth->where('field', 'value')->users()->result();
@@ -66,6 +68,8 @@ class Auth extends MX_Controller
 			$data['currency'] = $this->storecurrency();
 
 			$data['products'] = $this->ion_auth_model->get_products();
+
+			$data['categories'] = $this->ion_auth_model->get_categories();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/index', $data);
@@ -294,6 +298,12 @@ class Auth extends MX_Controller
 				'type' => 'password',
 				'value' => $this->form_validation->set_value('password_confirm'),
 			];
+
+			$data['name_of_store'] = $this->nameofstore();
+			$data['store_phone_number'] = $this->storephonenumber();
+			$data['store_email'] = $this->storeemailaddress();
+
+			$this->_render_page('pages/checkout', $data);
 		}
 	}
 
@@ -867,7 +877,7 @@ class Auth extends MX_Controller
 	*/
 	public function redirectUser(){
 		if ($this->ion_auth->is_admin()){
-			redirect('auth', 'refresh');
+			redirect('admin', 'refresh');
 		}
 		redirect('/', 'refresh');
 	}
@@ -1044,6 +1054,38 @@ class Auth extends MX_Controller
 			$this->_render_page('auth/list-users', $data);
 			$this->_render_page('templates/footer');
 		}
+	}
+
+	public function list_vendors() {
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/list-vendors');
+			$this->_render_page('templates/footer');
+	}
+
+	/**
+	 * view user
+	 */
+	public function view_user($id) {
+		// login check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login');
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in
+			// but not an admin
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['user'] = $this->ion_auth->user($id)->row();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['name_of_store'] = $this->nameofstore();
+			$data['user_groups'] = $this->ion_auth->get_users_groups($id)->result();
+			$data['currency'] = $this->storecurrency();
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/view-user', $data);
+			$this->_render_page('templates/footer');
+		}
+			
 	}
 
 	/**
@@ -1259,109 +1301,25 @@ class Auth extends MX_Controller
 	}
 
 	/**
-	 * @return publish product subcategory
-	 */
-	public function publish_subcategory() {
-		$data['title'] = $this->lang->line('publish_subcategory_heading');
-
-		// login and user access level check
-		if (!$this->ion_auth->logged_in()) {
-			
-			redirect('login');
-		} elseif (!$this->ion_auth->is_admin()) {
-			
-			show_error($this->lang->line('admin_access_only'));
-		} else {
-			// validate form input
-			$this->form_validation->set_rules('subcategory', $this->lang->line('publish_subcategory_validation_subcategory_label'), 'trim|required|is_unique[subcategories.subcategory]');
-			$this->form_validation->set_rules('category', $this->lang->line('publish_subcategory_validation_category_label'), 'trim|required');
-
-			if ($this->form_validation->run() === TRUE) {
-				$slug = url_title($this->input->post('subcategory'), 'dash', TRUE);
-
-				$data = [
-					'subcategory' => $this->input->post('subcategory'),
-					'category' => $this->input->post('category'),
-					'slug' => $slug
-				];
-			}
-
-			if ($this->form_validation->run() === TRUE && $this->db->insert('subcategories', $data)) {
-				
-				redirect('admin/products/categories');
-			} else {
-				$data['error_message'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
-
-				$data['category'] = [
-					'name' => 'category',
-					'type' => 'text',
-					'id' => 'category',
-					'value' => $this->form_validation->set_value('category')
-				];
-
-				$data['subcategory'] = [
-					'name' => 'subcategory',
-					'type' => 'text',
-					'id' => 'subcategory',
-					'value' => $this->form_validation->set_value('subcategory')
-				];
-
-				$data['user_account'] = $this->ion_auth->user()->row();
-
-				$data['categories'] = $this->ion_auth_model->get_categories();
-
-				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
-
-				$this->_render_page('templates/header');
-				$this->_render_page('auth/publish-subcategory', $data);
-				$this->_render_page('templates/footer');
-			}
-		}
-	}
-
-	/**
 	 * @return publish product category from modal
 	 */
 	public function add_category() {
+		$data['categories'] = $this->ion_auth_model->get_categories();
+
 		// form validation 
-		$this->form_validation->set_rules('pd_category', $this->lang->line('publish_category_validation_category_label'), 'trim|required|is_unique[categories.category]');
+		$this->form_validation->set_rules('pd_category', $this->lang->line('publish_category_validation_category_label'), 'trim|required');
+		$this->form_validation->set_rules('pd_parent_category', $this->lang->line('publish_parent_category_validation_subcategory_label'), 'trim');
 
 		if ($this->form_validation->run() === TRUE) {
 			$slug = url_title($this->input->post('pd_category'), 'dash', TRUE);
 
-			$category = [
+			$data = [
 				'category' => $this->input->post('pd_category'),
+				'parent_category' => $this->input->post('pd_parent_category'),
 				'slug' => $slug
 			];
 
-			$this->db->insert('categories', $category);
-			redirect('admin/products/publish');
-		} else {
-			// echo $this->lang->line('form_error_message');
-			redirect(base_url().'/admin/products/publish#stack1');
-		}
-	}
-
-	/**
-	 * @return publish product subcategory from modal
-	 */
-	public function add_subcategory() {
-		$data['categories'] = $this->ion_auth_model->get_categories();
-
-		// form validation 
-		$this->form_validation->set_rules('pd_category', $this->lang->line('publish_subcategory_validation_category_label'), 'trim|required');
-		$this->form_validation->set_rules('pd_subcategory', $this->lang->line('publish_subcategory_validation_subcategory_label'), 'trim|required');
-
-		if ($this->form_validation->run() === TRUE) {
-			$slug = url_title($this->input->post('pd_subcategory'), 'dash', TRUE);
-
-			$subcategory = [
-				'category' => $this->input->post('pd_category'),
-				'subcategory' => $this->input->post('pd_subcategory'),
-				'slug' => $slug
-			];
-
-			$this->db->insert('subcategories', $subcategory);
+			$this->db->insert('categories', $data);
 			redirect('admin/products/publish');
 		} else {
 			// echo $this->lang->line('form_error_message');
@@ -1767,7 +1725,6 @@ class Auth extends MX_Controller
 				$data['message'] = $this->session->set_flashdata('message', $this->lang->line('shipment_successfully_added'));
 				redirect('admin/shipments');
 			} else {
-				$data['form_error_message'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
 
 				$data['ship_to[]'] = [
 					'name' => 'ship_to',
@@ -1910,10 +1867,107 @@ class Auth extends MX_Controller
 		return $this->db->get('orders')->result();
 	}
 
-	// public function users() {
-	// 	$this->db->limit(10);
-	// 	$this->db->order_by('')
-	// }
+	/**
+	 * set new order
+	 *
+	 * @return string
+	 */
+	public function new_order() {
+		$data['title'] = $this->lang->line('new_order_heading');
+
+		// login check
+		if (!$this->ion_auth->logged_in()) {
+
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// if the user is logged in but not an admin
+			// show error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['categories'] = $this->ion_auth->get_categories();
+			$data['store_currency'] = $this->storecurrency();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['name_of_store'] = $this->nameofstore();
+			$data['cart_items'] = $this->cart->contents();
+			$data['products'] = $this->ion_auth_model->get_products();
+			$data['customers'] = $this->ion_auth->users()->result();
+			$data['subcounties'] = $this->ion_auth_model->get_shipments();
+			$data['counties'] = $this->ion_auth_model->get_counties();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/new-order', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * add product to cart
+	 *
+	 * @return string
+	 */
+	public function add_to_cart() {
+		$product = $this->ion_auth_model->get($this->input->post('id'));
+
+		$data = [
+			'id' => $this->input->post('id'),
+			'qty' => $this->input->post('qty'),
+			'vendor_id' => $product->vendor_id,
+			'price' => $product->sale_price,
+			'name' => $product->name,
+			'image' => $product->image,
+			'slug' => $product->slug
+		];
+
+		$this->cart->insert($data);
+		redirect('admin/orders/new');
+	}
+
+	/**
+	 * clear cart
+	 */
+	public function clearcart() {
+		$this->cart->destroy();
+		redirect('admin/orders/new');
+	}
+
+	/**
+	 * remove product from cart
+	 */
+	public function remove($rowid) {
+    	$this->cart->update([
+    		'rowid' => $rowid,
+    		'qty' => 0
+    	]);
+
+    	redirect('admin/orders/new');
+    }
+
+    /**
+     * confirm order
+     *
+     * @param int|string
+     */
+    public function confirm_order() {
+    	// form validation
+    	$this->form_validation->set_rules('customer_id', $this->lang->line('confirm_order_customer_id_validation_label'), 'required');
+    	$this->form_validation->set_rules('address', $this->lang->line('confirm_order_shipping_address_validation_label'), 'required|trim');
+    	$this->form_validation->set_rules('postal_code', $this->lang->line('confirm_order_shipping_postal_code_validation_label'), 'required|numeric');
+    	$this->form_validation->set_rules('subcounty', $this->lang->line('confirm_order_shipping_subcounty_validation_label'), 'required');
+    	$this->form_validation->set_rules('county', $this->lang->line('confirm_order_shipping_county_validation_county'), 'required');
+    	$this->form_validation->set_rules('method_of_payment', $this->lang->line('confirm_order_method_of_payment_validation_label'), 'required');
+
+    	if ($this->form_validation->run() === TRUE) {
+    		$this->ion_auth_model->set_order();
+    		$this->cart->destroy();
+    		$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/orders', 'refresh');
+    	} else {
+    		redirect(base_url().'admin/orders/new#checkout');
+    	}
+    }
 	
 	public function orders() {
 		$orders = $this->db->get('orders')->result();
@@ -1921,8 +1975,10 @@ class Auth extends MX_Controller
 			$cart_items = json_decode($order->orders);
 			foreach ($cart_items as $cart_item) {
 				echo '<pre>';
+				$cart_item_array = (array) $cart_item;
 				
-				print_r($cart_item);
+				print_r($cart_item_array);
+				// echo $cart_item->qty;
 			}
 		}
 	}
@@ -1944,6 +2000,7 @@ class Auth extends MX_Controller
 			// show admin access only message
 			show_error($this->lang->line('admin_access_only'));
 		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			$data['user_account'] = $this->ion_auth->user()->row();
 
@@ -1955,7 +2012,7 @@ class Auth extends MX_Controller
 
 			$data['store_currency'] = $this->storecurrency();
 
-			$data['store_location'] = $this->db->get_where('info', ['field' => 'location'])->row()->value;
+			$data['store_location'] = $this->storelocation();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/general-settings', $data);
@@ -1972,6 +2029,23 @@ class Auth extends MX_Controller
 		$this->db->select_sum('total_orders');
 		$result =  $this->db->get('orders')->row();
 		return $result->total_orders;
+	}
+
+	/**
+	 * @param int
+	 *
+	 * @return total shipments
+	 */
+	public function total_shipments() {
+		$shipments = $this->db->get('orders')->result();
+		foreach ($shipments as $shipment) {
+			$this->db->where('ship_to', $shipment->subcounty);
+			$shippings = $this->db->get('shipment')->result();
+			foreach ($shippings as $shipping) {
+				echo '<pre>';
+				echo $shipping->fee;
+			}
+		}
 	}
 
 	/**
@@ -2022,6 +2096,13 @@ class Auth extends MX_Controller
 	}
 
 	/**
+	 * @return store location
+	 */
+	public function storelocation() {
+		return $this->db->get_where('info', ['field' => 'location'])->row()->value;
+	}
+
+	/**
 	 * add name of store
 	 */
 	public function name_of_store() {
@@ -2029,12 +2110,9 @@ class Auth extends MX_Controller
 		$this->form_validation->set_rules('name_of_store', $this->lang->line('add_name_of_store_validation_label'), 'required');
 
 		if ($this->form_validation->run() === TRUE) {
-			$this->db->where('id', 2);
-			$data = ['value' => $this->input->post('name_of_store')];
-		}
-
-		if ($this->form_validation->run() === TRUE && $this->db->update('info', $data)) {
-			redirect('admin/settings/general');
+			$this->ion_auth_model->set_name_of_store();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/general', 'refresh');
 		} else {
 			echo 'error';
 		}
@@ -2048,11 +2126,9 @@ class Auth extends MX_Controller
 		$this->form_validation->set_rules('store_email', $this->lang->line('add_store_email_validation_label'), 'required|valid_email');
 
 		if ($this->form_validation->run() === TRUE) {
-			$this->db->where('id', 4);
-			$data = ['value' => $this->input->post('store_email')];
-		} 
-		if ($this->form_validation->run() === TRUE && $this->db->update('info', $data)) {
-			redirect('admin/settings/general');
+			$this->ion_auth_model->set_store_email();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/general', 'refresh');
 		} else {
 			echo 'error';
 		}
@@ -2066,14 +2142,9 @@ class Auth extends MX_Controller
 		$this->form_validation->set_rules('store_phone_number', $this->lang->line('add_store_phone_number_validation_label'), 'required|numeric');
 
 		if ($this->form_validation->run() === TRUE) {
-			$this->db->where('id', 3);
-			$data = ['value' => $this->input->post('store_phone_number')];
-		} 
-
-		if ($this->form_validation->run() === TRUE && $this->db->update('info', $data)) {
-			redirect('admin/settings/general');
-		} else {
-			echo 'error';
+			$this->ion_auth_model->set_store_phone_number();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/general', 'refresh');
 		}
 	}
 
@@ -2085,12 +2156,9 @@ class Auth extends MX_Controller
 		$this->form_validation->set_rules('store_currency', $this->lang->line('add_store_currency_validation_label'), 'required|alpha_numeric');
 
 		if ($this->form_validation->run() === TRUE) {
-			$this->db->where('id', 7);
-			$data = ['value' => $this->input->post('store_currency')];
-		}
-
-		if ($this->form_validation->run() === TRUE && $this->db->update('info', $data)) {
-			redirect('admin/settings/general');
+			$this->ion_auth_model->set_store_currency();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/general', 'refresh');
 		} else {
 			echo 'error';
 		}
@@ -2101,17 +2169,14 @@ class Auth extends MX_Controller
 	 */
 	public function store_location() {
 		// form validation
-		$this->form_validation->set_rules('store_location', $this->lang->line('add_store_location_validation_label'), 'required|alpha_numeric');
+		$this->form_validation->set_rules('store_location', $this->lang->line('add_store_location_validation_label'), 'required');
 
 		if ($this->form_validation->run() === TRUE) {
-			$this->db->where('id', 5);
-			$data = ['value' => $this->input->post('store_location')];
-		}
-
-		if ($this->form_validation->run() === TRUE && $this->db->update('info', $data)) {
-			redirect('admin/settings/general');
+			$this->ion_auth_model->set_store_location();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/general', 'refresh');
 		} else {
-			echo $this->input->post('store_location');
+			echo 'error';
 		}
 	}
 

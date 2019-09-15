@@ -92,8 +92,10 @@ $route['admin/order/(:any)']				= 'auth/view_order/$1';
 $route['admin/products']					= 'auth/list_products';
 $route['admin/settings/general']			= 'auth/general_settings';
 $route['admin/users']						= 'auth/users';
+$route['admin/user/(:any)']					= 'auth/view_user/$1';
 $route['admin/user/edit/(:any)']			= 'auth/edit_user/$1';
 $route['admin/users/create']				= 'auth/create_user';
 $route['admin/groups']						= 'auth/list_groups';
 $route['admin/group/edit/(:any)']			= 'auth/edit_group/$1';
-
+$route['admin/orders/new']					= 'auth/new_order';
+$route['admin/vendors']						= 'auth/list_vendors';

@@ -111,7 +111,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <?php
                         } else {
                           ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
+                            <?php
+                              $this->db->where('customer_id', $user_account->id);
+                              $query = $this->db->get('wishlist')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -385,9 +389,8 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-4 col-sm-6 pre-footer-col">
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
-              35, Lorem Lis Street, Park Ave<br>
-              Kiambu, Kenya<br>
-              Phone: <?php echo $store_phone_number?><br>
+              <?php echo $store_location?>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>

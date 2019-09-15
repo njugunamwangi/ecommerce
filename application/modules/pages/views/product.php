@@ -114,7 +114,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <?php
                         } else {
                           ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist</a></li>
+                            <?php
+                              $this->db->where('customer_id', $user_account->id);
+                              $query = $this->db->get('wishlist')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -253,6 +257,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                     <?php echo form_hidden('name', $product->name);?>
                     <?php echo form_hidden('slug', $product->slug);?>
                     <?php echo form_hidden('image', $product->image);?>
+                    <?php echo form_hidden('vendor_id', $product->vendor_id);?>
                     <div class="price-availability-block clearfix">
                       <div class="price">
                         <strong>
@@ -280,7 +285,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                     </div>
                     <div class="description">
                       <h4><strong><em>Description</em></strong></h4>
-                      <p><?php echo $product->description?></p>
+                      <p><?php echo $product->snippet?></p> <a href="#description">More Details</a>
                     </div><hr>
                     <div class="product-page-cart">
                       <div class="product-quantity">
@@ -290,14 +295,25 @@ License: You must have a valid license purchased only from themeforest (the abov
                     <button class="btn btn-primary" type="submit">Add to cart</button>
                   <?php echo form_close()?>
                   <div class="review">
-                    <input type="range" value="4" step="0.25" id="backing4">
+                    <?php
+                      $this->db->where('product_id', $product->id);
+                      $this->db->select_sum('ratings');
+                      $result =  $this->db->get('reviews')->row()->ratings;
+                      $num_of_reviews = $this->db->get('reviews')->num_rows();
+                      if ($num_of_reviews < 1) {
+                        $average = 0;
+                      } else {
+                        $average = $result/$num_of_reviews;
+                      }
+                    ?>
+                    <input type="range" value="<?php echo $average;?>" step="0.25" id="backing4">
                     <div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
                     </div>
                     <a href="javascript:;"><?php
                         $this->db->where('product_id', $product->id);
                         $num_of_reviews = $this->db->get('reviews')->num_rows();
                         echo $num_of_reviews
-                      ?> review(s)</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;">Write a review</a>
+                      ?> review(s)</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#write-a-review">Write a review</a>
                   </div>
                   <!-- <ul class="social-icons">
                     <li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
@@ -310,43 +326,68 @@ License: You must have a valid license purchased only from themeforest (the abov
 
                 <div class="product-page-content">
                   <ul id="myTab" class="nav nav-tabs">
-                    <li><a href="#Description" data-toggle="tab">Description</a></li>
-                    <!-- <li><a href="#Information" data-toggle="tab">Information</a></li> -->
-                    <li class="active"><a href="#Reviews" data-toggle="tab">Reviews (<?php echo $num_of_reviews;?>)
+                    <li><a href="#description" data-toggle="tab">Description</a></li>
+                    <li><a href="#Information" data-toggle="tab">Information</a></li>
+                    <li class="active"><a href="#write-a-review" data-toggle="tab">Reviews (<?php echo $num_of_reviews;?>)
                     </a></li>
                   </ul>
                   <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade" id="Description">
+                    <div class="tab-pane fade" id="description">
                       <p><?php echo $product->description?></p>
                     </div>
-                    <!-- <div class="tab-pane fade" id="Information">
+                    <div class="tab-pane fade" id="Information">
                       <table class="datasheet">
                         <tr>
                           <th colspan="2">Additional features</th>
                         </tr>
                         <tr>
-                          <td class="datasheet-features-type">Value 1</td>
-                          <td>21 cm</td>
+                          <?php
+                            if (!empty($product->colors)) {
+                              ?>
+                                <td class="datasheet-features-type">Colors</td>
+                                <td>
+                                  <?php 
+                                    $product_colors = json_decode($product->colors);
+                                    foreach ($product_colors as $product_color) {
+                                     echo $product_color;
+                                    }
+                                  ?>
+                                </td>
+                              <?php
+                            }
+                          ?>
                         </tr>
                         <tr>
-                          <td class="datasheet-features-type">Value 2</td>
-                          <td>700 gr.</td>
+                          <?php
+                            if (!empty($product->sizes)) {
+                              ?>
+                                <td class="datasheet-features-type">Sizes</td>
+                                <td>
+                                  <?php 
+                                    $product_sizes = json_decode($product->sizes);
+                                    foreach ($product_sizes as $product_size) {
+                                     echo $product_size;
+                                    }
+                                  ?>
+                                </td>
+                              <?php
+                            }
+                          ?>
                         </tr>
                         <tr>
-                          <td class="datasheet-features-type">Value 3</td>
-                          <td>10 person</td>
-                        </tr>
-                        <tr>
-                          <td class="datasheet-features-type">Value 4</td>
-                          <td>14 cm</td>
-                        </tr>
-                        <tr>
-                          <td class="datasheet-features-type">Value 5</td>
-                          <td>plastic</td>
+                          <td class="datasheet-features-type">Tags</td>
+                          <td>
+                            <?php
+                              $product_tags = json_decode($product->tags);
+                              foreach ($product_tags as $product_tag) {
+                                echo $product_tag;
+                              }
+                            ?>
+                          </td>
                         </tr>
                       </table>
-                    </div> -->
-                    <div class="tab-pane fade in active" id="Reviews">
+                    </div>
+                    <div class="tab-pane fade in active" id="write-a-review">
                       <!--<p>There are no reviews for this product.</p>-->
                       <?php
                         $this->db->order_by('reviews.date_created', 'asc');
@@ -461,9 +502,8 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-4 col-sm-6 pre-footer-col">
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
-              35, Lorem Lis Street, Park Ave<br>
-              Kiambu, Kenya<br>
-              Phone: <?php echo $store_phone_number?><br>
+              <?php echo $store_location?>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>
