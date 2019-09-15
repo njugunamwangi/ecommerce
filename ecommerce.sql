@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2019 at 07:26 PM
+-- Generation Time: Sep 15, 2019 at 10:14 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -31,6 +31,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `categories` (
   `id` int(11) UNSIGNED NOT NULL,
   `category` varchar(128) NOT NULL,
+  `parent_category` varchar(128) DEFAULT NULL,
   `slug` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -38,9 +39,42 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `category`, `slug`) VALUES
-(1, 'Electronics', 'electronics'),
-(2, 'Household', 'household');
+INSERT INTO `categories` (`id`, `category`, `parent_category`, `slug`) VALUES
+(1, 'Shoes', '', 'shoes'),
+(2, 'Adidas', 'Shoes', 'adidas'),
+(3, 'Adidas Shark', 'Adidas', 'adidas-shark'),
+(4, 'Nike', 'Shoes', 'nike'),
+(5, 'Air Max 97', 'Nike', 'air-max-97'),
+(6, 'Air Max 90', 'Nike', 'air-max-90'),
+(7, 'Air Force TM', 'Nike', 'air-force-tm'),
+(8, 'Air Force Utility', 'Nike', 'air-force-utility'),
+(9, 'Household', '', 'household'),
+(10, 'Chairs', 'Household', 'chairs'),
+(11, 'Buckets', 'Household', 'buckets'),
+(12, 'Smartphones', '', 'smartphones'),
+(13, 'Android', 'Smartphones', 'android'),
+(14, 'iOS', 'Smartphones', 'ios'),
+(15, 'Samsung', 'Android', 'samsung'),
+(16, 'Tecno', 'Android', 'tecno'),
+(17, 'Nokia', 'Android', 'nokia'),
+(18, 'iPhones', 'iOS', 'iphones'),
+(19, 'Fila', 'Shoes', 'fila'),
+(20, 'Disruptor II', 'Fila', 'disruptor-ii'),
+(21, 'Pharrel William NMD Human Race', 'Adidas', 'pharrel-william-nmd-human-race'),
+(22, 'Gender', '', 'gender'),
+(23, 'Male', 'Gender', 'male'),
+(24, 'Female', 'Gender', 'female'),
+(25, 'Unisex', 'Gender', 'unisex'),
+(26, 'Age', '', 'age'),
+(27, 'Kids', 'Age', 'kids'),
+(28, 'Youths', 'Age', 'youths'),
+(29, 'Adults', 'Age', 'adults'),
+(30, 'Huarache', 'Nike', 'huarache'),
+(31, 'Vans', 'Shoes', 'vans'),
+(32, 'Fear of God', 'Vans', 'fear-of-god'),
+(33, 'Off the Wall', 'Vans', 'off-the-wall'),
+(34, 'VaporMax', 'Nike', 'vapormax'),
+(35, 'Just Do It', 'Nike', 'just-do-it');
 
 -- --------------------------------------------------------
 
@@ -148,10 +182,10 @@ CREATE TABLE `info` (
 
 INSERT INTO `info` (`id`, `field`, `value`) VALUES
 (1, 'site-logo', NULL),
-(2, 'name-of-store', 'e-Commerce'),
-(3, 'phone-number', '+254700000009'),
+(2, 'name-of-store', 'eCommerce'),
+(3, 'phone-number', '+254700000019'),
 (4, 'email-address', 'info@ecommerce.com'),
-(5, 'location', NULL),
+(5, 'location', '<p><em><strong>Emma Daniel Plot No 20201,</strong></em></p>\r\n\r\n<p><em><strong>Thika Road.</strong></em></p>\r\n\r\n<p><em><strong>P.O. Box 455-00232, </strong></em></p>\r\n\r\n<p><em><strong>Ruiru.</strong></em></p>\r\n'),
 (6, 'site-icon', NULL),
 (7, 'currency', 'KES');
 
@@ -176,7 +210,59 @@ INSERT INTO `logins` (`id`, `customer_id`, `ip_address`, `time`) VALUES
 (1, 7, '127.0.0.1', 1563556667),
 (2, 7, '127.0.0.1', 1563556778),
 (3, 8, '127.0.0.1', 1563556892),
-(4, 9, '127.0.0.1', 1563557057);
+(4, 9, '127.0.0.1', 1563557057),
+(5, 7, '127.0.0.1', 1563559234),
+(6, 7, '127.0.0.1', 1563559312),
+(7, 7, '127.0.0.1', 1563566832),
+(8, 7, '127.0.0.1', 1563609866),
+(9, 7, '127.0.0.1', 1563711529),
+(10, 7, '127.0.0.1', 1563723200),
+(11, 7, '127.0.0.1', 1564073389),
+(12, 7, '127.0.0.1', 1564396142),
+(13, 7, '127.0.0.1', 1564474878),
+(14, 7, '127.0.0.1', 1564559550),
+(15, 7, '127.0.0.1', 1564570715),
+(16, 7, '127.0.0.1', 1564600398),
+(17, 8, '127.0.0.1', 1564601154),
+(18, 8, '127.0.0.1', 1564601357),
+(19, 8, '127.0.0.1', 1564601493),
+(20, 8, '127.0.0.1', 1564603247),
+(21, 7, '127.0.0.1', 1564606484),
+(22, 7, '127.0.0.1', 1564606620),
+(23, 8, '127.0.0.1', 1564645501),
+(24, 8, '127.0.0.1', 1564660155),
+(25, 7, '127.0.0.1', 1564660218),
+(26, 7, '127.0.0.1', 1564696540),
+(27, 7, '127.0.0.1', 1564728374),
+(28, 7, '127.0.0.1', 1564759032),
+(29, 7, '127.0.0.1', 1564820225),
+(30, 7, '127.0.0.1', 1564872336),
+(31, 7, '127.0.0.1', 1564872368),
+(32, 7, '127.0.0.1', 1564990334),
+(33, 7, '127.0.0.1', 1565021454),
+(34, 7, '127.0.0.1', 1565078905),
+(35, 7, '127.0.0.1', 1565292202),
+(36, 7, '127.0.0.1', 1565928457),
+(37, 7, '127.0.0.1', 1565984914),
+(38, 7, '127.0.0.1', 1565985152),
+(39, 7, '127.0.0.1', 1566167887),
+(40, 7, '127.0.0.1', 1566214878),
+(41, 7, '127.0.0.1', 1566281564),
+(42, 7, '127.0.0.1', 1566308180),
+(43, 9, '127.0.0.1', 1566308978),
+(44, 7, '127.0.0.1', 1566309493),
+(45, 7, '127.0.0.1', 1566366786),
+(46, 7, '127.0.0.1', 1566396409),
+(47, 7, '127.0.0.1', 1566457154),
+(48, 7, '127.0.0.1', 1566539103),
+(49, 7, '127.0.0.1', 1566730883),
+(50, 7, '127.0.0.1', 1566744611),
+(51, 10, '127.0.0.1', 1566745742),
+(52, 7, '127.0.0.1', 1566745826),
+(53, 7, '127.0.0.1', 1566825703),
+(54, 7, '127.0.0.1', 1567163181),
+(55, 9, '127.0.0.1', 1567362240),
+(56, 7, '127.0.0.1', 1567408351);
 
 -- --------------------------------------------------------
 
@@ -227,17 +313,73 @@ CREATE TABLE `orders` (
   `slug` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer_id`, `order_id`, `orders`, `total_orders`, `first_name`, `last_name`, `email`, `phone`, `address`, `postal_code`, `subcounty`, `county`, `method_of_payment`, `status`, `slug`) VALUES
+(1, 7, 1566284078, '{\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":37500},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":4,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":30000},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":3,\"vendor_id\":\"1563556647\",\"price\":5500,\"name\":\"Nike Just Do It\",\"image\":\"IMG_20190525_100403.jpg\",\"slug\":\"nike-just-do-it\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":16500},\"eccbc87e4b5ce2fe28308fd9f2a7baf3\":{\"id\":\"3\",\"qty\":2,\"vendor_id\":\"1563556647\",\"price\":8000,\"name\":\"Nike VaporMax\",\"image\":\"IMG_20190525_094252.jpg\",\"slug\":\"nike-vapormax\",\"rowid\":\"eccbc87e4b5ce2fe28308fd9f2a7baf3\",\"subtotal\":16000},\"a87ff679a2f3e71d9181a67b7542122c\":{\"id\":\"4\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":3000,\"name\":\"Vans Fear of God\",\"image\":\"IMG_20190525_105717.jpg\",\"slug\":\"vans-fear-of-god\",\"rowid\":\"a87ff679a2f3e71d9181a67b7542122c\",\"subtotal\":3000}}', '103000', 'Test', 'Account 1', 'testaccount1@gmail.com', '0700010203', '77 Kenol', '01020', 'Kiambu', 'Kiambu', 'Cash on Delivery', 1, '1566284078'),
+(2, 7, 1566284175, '{\"a87ff679a2f3e71d9181a67b7542122c\":{\"id\":\"4\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":3000,\"name\":\"Vans Fear of God\",\"image\":\"IMG_20190525_105717.jpg\",\"slug\":\"vans-fear-of-god\",\"rowid\":\"a87ff679a2f3e71d9181a67b7542122c\",\"subtotal\":15000},\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":7500},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":2,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":15000},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":3,\"vendor_id\":\"1563556647\",\"price\":5500,\"name\":\"Nike Just Do It\",\"image\":\"IMG_20190525_100403.jpg\",\"slug\":\"nike-just-do-it\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":16500},\"eccbc87e4b5ce2fe28308fd9f2a7baf3\":{\"id\":\"3\",\"qty\":4,\"vendor_id\":\"1563556647\",\"price\":8000,\"name\":\"Nike VaporMax\",\"image\":\"IMG_20190525_094252.jpg\",\"slug\":\"nike-vapormax\",\"rowid\":\"eccbc87e4b5ce2fe28308fd9f2a7baf3\",\"subtotal\":32000}}', '86000', 'Test', 'Account 1', 'testaccount1@gmail.com', '0700010203', '455', '00232', 'Nairobi', 'Nairobi', 'Cheque Deposit', 2, '1566284175'),
+(3, 9, 1566309387, '{\"1679091c5a880faf6fb5e6087eb1b2dc\":{\"id\":\"6\",\"qty\":3,\"vendor_id\":\"1563557036\",\"price\":8500,\"name\":\"Nike Utility\",\"image\":\"IMG_20190525_093441.jpg\",\"slug\":\"nike-utility\",\"rowid\":\"1679091c5a880faf6fb5e6087eb1b2dc\",\"subtotal\":25500},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":5500,\"name\":\"Nike Just Do It\",\"image\":\"IMG_20190525_100403.jpg\",\"slug\":\"nike-just-do-it\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":5500},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":7500},\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":7500},\"eccbc87e4b5ce2fe28308fd9f2a7baf3\":{\"id\":\"3\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":8000,\"name\":\"Nike VaporMax\",\"image\":\"IMG_20190525_094252.jpg\",\"slug\":\"nike-vapormax\",\"rowid\":\"eccbc87e4b5ce2fe28308fd9f2a7baf3\",\"subtotal\":8000}}', '54000', 'Test', 'Account 3', 'testaccount3@gmail.com', '0703030303', '77 Kenol', '00232', 'Nairobi', 'Nairobi', 'Cheque Deposit', 3, '1566309387'),
+(5, 10, 1566310513, '{\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":13,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":97500},\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":15,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":112500},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":10,\"vendor_id\":\"1563556647\",\"price\":5500,\"name\":\"Nike Just Do It\",\"image\":\"IMG_20190525_100403.jpg\",\"slug\":\"nike-just-do-it\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":55000}}', '265000', 'Test', 'Account 4', 'testaccount4@gmail.com', '0704040404', '455', '00232', 'Nairobi', 'Nairobi', 'Cheque Deposit', 4, '1566310513'),
+(6, 10, 1566480552, '{\"eccbc87e4b5ce2fe28308fd9f2a7baf3\":{\"id\":\"3\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":8000,\"name\":\"Nike VaporMax\",\"image\":\"IMG_20190525_094252.jpg\",\"slug\":\"nike-vapormax\",\"rowid\":\"eccbc87e4b5ce2fe28308fd9f2a7baf3\",\"subtotal\":8000},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":1,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":7500},\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":7,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":52500}}', '68000', 'Test', 'Account 4', 'testaccount4@gmail.com', '0704040404', '455', '00232', 'Nairobi', 'Nairobi', 'Cheque Deposit', 0, '1566480552'),
+(7, 10, 1566745801, '{\"eccbc87e4b5ce2fe28308fd9f2a7baf3\":{\"id\":\"3\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":6500,\"name\":\"Nike VaporMax\",\"image\":\"IMG_20190525_094252.jpg\",\"slug\":\"nike-vapormax\",\"rowid\":\"eccbc87e4b5ce2fe28308fd9f2a7baf3\",\"subtotal\":32500},\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":6500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":32500},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":6500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":32500},\"e4da3b7fbbce2345d7772b0674a318d5\":{\"id\":\"5\",\"qty\":5,\"vendor_id\":\"1563556647\",\"price\":4500,\"name\":\"Nike Just Do It\",\"image\":\"IMG_20190525_100403.jpg\",\"slug\":\"nike-just-do-it\",\"rowid\":\"e4da3b7fbbce2345d7772b0674a318d5\",\"subtotal\":22500},\"1679091c5a880faf6fb5e6087eb1b2dc\":{\"id\":\"6\",\"qty\":5,\"vendor_id\":\"1563557036\",\"price\":7500,\"name\":\"Nike Utility\",\"image\":\"IMG_20190525_093441.jpg\",\"slug\":\"nike-utility\",\"rowid\":\"1679091c5a880faf6fb5e6087eb1b2dc\",\"subtotal\":37500}}', '157500', 'Test', 'Account 4', 'testaccount4@gmail.com', '0704040404', '455', '00232', 'Nairobi', 'Nairobi', 'Cheque Deposit', 0, '1566745801'),
+(8, 7, 1566826005, '{\"c81e728d9d4c2f636f067f89cc14862c\":{\"id\":\"2\",\"qty\":9,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Pharrel William\",\"image\":\"IMG_20190525_103358.jpg\",\"slug\":\"adidas-pharrel-william\",\"rowid\":\"c81e728d9d4c2f636f067f89cc14862c\",\"subtotal\":67500},\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":6,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":45000},\"1679091c5a880faf6fb5e6087eb1b2dc\":{\"id\":\"6\",\"qty\":8,\"vendor_id\":\"1563557036\",\"price\":8500,\"name\":\"Nike Utility\",\"image\":\"IMG_20190525_093441.jpg\",\"slug\":\"nike-utility\",\"rowid\":\"1679091c5a880faf6fb5e6087eb1b2dc\",\"subtotal\":68000}}', '180500', 'Test', 'Account 1', 'testaccount1@gmail.com', '0700010203', '455', '00232', 'Kiambu', 'Kiambu', 'Cash on Delivery', 0, '1566826005'),
+(9, 8, 1566826429, '{\"c4ca4238a0b923820dcc509a6f75849b\":{\"id\":\"1\",\"qty\":10,\"vendor_id\":\"1563556647\",\"price\":7500,\"name\":\"Adidas Shark\",\"image\":\"IMG_20190525_094149.jpg\",\"slug\":\"adidas-shark\",\"rowid\":\"c4ca4238a0b923820dcc509a6f75849b\",\"subtotal\":75000},\"a87ff679a2f3e71d9181a67b7542122c\":{\"id\":\"4\",\"qty\":14,\"vendor_id\":\"1563556647\",\"price\":3000,\"name\":\"Vans Fear of God\",\"image\":\"IMG_20190525_105717.jpg\",\"slug\":\"vans-fear-of-god\",\"rowid\":\"a87ff679a2f3e71d9181a67b7542122c\",\"subtotal\":42000}}', '117000', 'Test', 'Account 2', 'testaccount2@gmail.com', '0700020202', '455', '01020', 'Kiambu', 'Kiambu', 'Cheque Deposit', 0, '1566826429');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pd_tags`
+-- Table structure for table `orders_summary`
 --
 
-CREATE TABLE `pd_tags` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `tag` varchar(100) NOT NULL,
-  `slug` varchar(100) NOT NULL
+CREATE TABLE `orders_summary` (
+  `id` int(20) UNSIGNED NOT NULL,
+  `order_id` int(11) UNSIGNED NOT NULL,
+  `customer_id` int(4) UNSIGNED NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `vendor_id` int(11) UNSIGNED NOT NULL,
+  `qty` int(20) UNSIGNED NOT NULL,
+  `price` int(11) UNSIGNED NOT NULL,
+  `subtotal` int(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders_summary`
+--
+
+INSERT INTO `orders_summary` (`id`, `order_id`, `customer_id`, `product_id`, `vendor_id`, `qty`, `price`, `subtotal`) VALUES
+(1, 0, 7, 2, 1563556647, 5, 7500, 37500),
+(2, 0, 7, 1, 1563556647, 4, 7500, 30000),
+(3, 0, 7, 5, 1563556647, 3, 5500, 16500),
+(4, 0, 7, 3, 1563556647, 2, 8000, 16000),
+(5, 0, 7, 4, 1563556647, 1, 3000, 3000),
+(6, 0, 7, 4, 1563556647, 5, 3000, 15000),
+(7, 0, 7, 2, 1563556647, 1, 7500, 7500),
+(8, 0, 7, 1, 1563556647, 2, 7500, 15000),
+(9, 0, 7, 5, 1563556647, 3, 5500, 16500),
+(10, 0, 7, 3, 1563556647, 4, 8000, 32000),
+(11, 0, 9, 6, 1563557036, 3, 8500, 25500),
+(12, 0, 9, 5, 1563556647, 1, 5500, 5500),
+(13, 0, 9, 1, 1563556647, 1, 7500, 7500),
+(14, 0, 9, 2, 1563556647, 1, 7500, 7500),
+(15, 0, 9, 3, 1563556647, 1, 8000, 8000),
+(16, 0, 10, 1, 1563556647, 13, 7500, 97500),
+(17, 0, 10, 2, 1563556647, 15, 7500, 112500),
+(18, 0, 10, 5, 1563556647, 10, 5500, 55000),
+(19, 0, 10, 3, 1563556647, 1, 8000, 8000),
+(20, 0, 10, 1, 1563556647, 1, 7500, 7500),
+(21, 0, 10, 2, 1563556647, 7, 7500, 52500),
+(22, 0, 10, 3, 1563556647, 5, 6500, 32500),
+(23, 0, 10, 2, 1563556647, 5, 6500, 32500),
+(24, 0, 10, 1, 1563556647, 5, 6500, 32500),
+(25, 0, 10, 5, 1563556647, 5, 4500, 22500),
+(26, 0, 10, 6, 1563557036, 5, 7500, 37500),
+(27, 8, 7, 2, 1563556647, 9, 7500, 67500),
+(28, 8, 7, 1, 1563556647, 6, 7500, 45000),
+(29, 8, 7, 6, 1563557036, 8, 8500, 68000),
+(30, 9, 8, 1, 1563556647, 10, 7500, 75000),
+(31, 9, 8, 4, 1563556647, 14, 3000, 42000);
 
 -- --------------------------------------------------------
 
@@ -272,15 +414,12 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `vendor_id`, `image`, `name`, `description`, `snippet`, `categories`, `tags`, `colors`, `sizes`, `regular_price`, `sale_price`, `wholesale_price`, `date_created`, `date_updated`, `slug`, `available_from`, `available_to`, `status`) VALUES
-(1, 1556364105, 'fridge_1.jpg', 'Fridge', '<p>2 door</p>', 'Fridge', '[\"Electronics\",\"Fridges\"]', '[\"electronics, Fridges, Samsung Fridges\"]', '[\"\"]', '[\"\"]', '67000', '65000', '63000', 1559400289, 1563193054, 'fridge', NULL, NULL, 1),
-(2, 1556364105, 'c12_phone.jpg', 'Ukitel', '<p>6.0\" display</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phones\"]', '[\"\"]', '[\"\"]', '12000', '10000', '8500', 1559400519, NULL, 'ukitel', NULL, NULL, 1),
-(4, 1556364105, 'infinix_smart_2.jpg', 'Infinix Smart 2', '<p>5.5\"</p>', 'Phone', '[\"Electronics\",\"Phones\"]', '[\"Phone\"]', '[\"\"]', '[\"\"]', '15000', '13000', '10000', 1559400769, NULL, 'infinix-smart-2', NULL, NULL, 1),
-(5, 1556364105, 'hisense_431.jpg', 'Hisense', '<p>43\"</p>', 'Television', '[\"Electronics\",\"Televisions\"]', '[\"Television\"]', '[\"\"]', '[\"\"]', '43000', '40000', '38000', 1559400872, NULL, 'hisense', NULL, NULL, 1),
-(6, 1556364105, 'Ezee-Trolley1.gif', 'Kenpoly Ezee Trolley', '<p>4 stack trolley</p>\r\n\r\n<p>4 stands </p>', 'trolley', '[\"Household\",\"Trolley\"]', '[\"Household, Kenpoly, Trolley, Ezee trolley\"]', '[\"Blue, brown, orange, pink\"]', '[\"\"]', '650', '550', '450', 1562928262, NULL, 'kenpoly-ezee-trolley', NULL, NULL, 1),
-(7, 1560858486, 'Round-Trolley.gif', 'Kenpoly Round Trolley', '<p>3-4 stack</p>\r\n\r\n<p>4 stands</p>', 'Round Trolley', '[\"Household\",\"Trolley\"]', '[\"Household, Kenpoly, Trolley, Round Trolley\"]', '[\"Blue. Brown, Pink\"]', '[\"\"]', '600', '550', '450', 1563120049, NULL, 'kenpoly-round-trolley', NULL, NULL, 1),
-(8, 1556364105, 'Chair-2014.gif', 'Kenpoly Chair 2014', '<p>Chair with arms</p>', 'Chair', '[\"Household\",\"Chairs\"]', '[\"Kenpoly, Chair, Household\"]', '[\"Blue, Green, Yellow, Brown\"]', '[\"\"]', '700', '650', '550', 1563543201, NULL, 'kenpoly-chair-2014', NULL, NULL, 1),
-(9, 1556364105, 'Chair-2032-without-arms1.gif', 'Kenpoly Chair 2032', '<p>Armless Chair</p>', 'Armless Chair', '[\"Household\",\"Chairs\"]', '[\"Household, Kenpoly, Chairs, Armless Chair\"]', '[\"Blue, Brown\"]', '[\"\"]', '750', '700', '600', 1563543585, NULL, 'kenpoly-chair-2032', NULL, NULL, 1),
-(10, 1556364105, 'Frosty-No-5.gif', 'Kenpoly Frosty Bucket', '<p>Bucket with lid</p>', 'Frosty Bucket', '[\"Household\",\"Buckets\"]', '[\"Household, Kenpoly, buckets, Frosty Bucket\"]', '[\"Purple\"]', '[\"\"]', '500', '400', '350', 1563555365, NULL, 'kenpoly-frosty-bucket', NULL, NULL, 1);
+(1, 1563556647, 'IMG_20190525_094149.jpg', 'Adidas Shark', '<p>Shark</p>', 'Adidas', '[\"Shoes\",\"Adidas\",\"Adidas Shark\"]', '[\"Adidas\"]', '[\"Red\"]', '[\"40, 41, 42, 43, 44, 45\"]', '8000', '7500', '6500', 1563568500, NULL, 'adidas-shark', NULL, NULL, 1),
+(2, 1563556647, 'IMG_20190525_103358.jpg', 'Adidas Pharrel William', '<p>Pharrel William NMD Human Race</p>', 'Adidas Pharrel William NMD Human Race', '[\"Age\",\"Adults\",\"Youths\",\"Gender\",\"Unisex\",\"Shoes\",\"Adidas\",\"Pharrel William NMD Human Race\"]', '[\"Adidas, NMD, Human Race, Pharrel Williams\"]', '[\"Yellow, Black, Purple\"]', '[\"36, 37, 38, 39, 40, 41, 42, 43, 44, 45\"]', '9000', '7500', '6500', 1563570987, NULL, 'adidas-pharrel-william', NULL, NULL, 1),
+(3, 1563556647, 'IMG_20190525_094252.jpg', 'Nike VaporMax', '<p>VaporMax</p>', 'VaporMax', '[\"Age\",\"Adults\",\"Youths\",\"Gender\",\"Unisex\",\"Shoes\",\"Nike\",\"VaporMax\"]', '[\"Nike, VaporMax\"]', '[\"Black, Yellow, Luminous Green\"]', '[\"36, 37, 38, 39, 40, 41, 42, 43, 44, 45\"]', '9000', '8000', '6500', 1563610642, NULL, 'nike-vapormax', NULL, NULL, 1),
+(4, 1563556647, 'IMG_20190525_105717.jpg', 'Vans Fear of God', '<p>Vans</p>', 'Fear of God', '[\"Age\",\"Adults\",\"Youths\",\"Gender\",\"Unisex\",\"Shoes\",\"Vans\",\"Fear of God\"]', '[\"Vans, Fear of God\"]', '[\"Black and White\"]', '[\"36, 37, 38, 39, 40, 41, 42, 43, 44, 45\"]', '4500', '3000', '2000', 1563612405, NULL, 'vans-fear-of-god', NULL, NULL, 1),
+(5, 1563556647, 'IMG_20190525_100403.jpg', 'Nike Just Do It', '<p>Airforce</p>', 'Airforce Just Do It', '[\"Age\",\"Adults\",\"Youths\",\"Gender\",\"Unisex\",\"Shoes\",\"Nike\",\"Just Do It\"]', '[\"Nike, Just Do It, Air Force\"]', '[\"White, Orange, Luminous Green\"]', '[\"36, 37, 38, 39, 40, 41, 42, 43, 44, 45\"]', '6000', '5500', '4500', 1563613026, NULL, 'nike-just-do-it', NULL, NULL, 1),
+(6, 1563557036, 'IMG_20190525_093441.jpg', 'Nike Utility', '<p>Nike</p>', 'Nike Air Force', '[\"Shoes\",\"Nike\",\"Air Force Utility\"]', '[\"Nike, Nike Utility, Utility\"]', '[\"Jungle Green, Matte Black, Sky Blue\"]', '[\"36,37,38,39,40,41,42,43,44,45\"]', '9000', '8500', '7500', 1566309307, NULL, 'nike-utility', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -298,6 +437,14 @@ CREATE TABLE `reviews` (
   `ratings` float(10,2) NOT NULL,
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `product_id`, `name`, `email`, `review`, `date_created`, `ratings`, `status`) VALUES
+(1, 2, 'Test', 'testaccount1@gmail.com', 'delivered as ordered', 1566378443, 5.00, 1),
+(2, 2, 'Test', 'testaccount1@gmail.com', 'got a different shoe', 1566378463, 0.50, 0);
 
 -- --------------------------------------------------------
 
@@ -317,33 +464,20 @@ CREATE TABLE `shipment` (
 --
 
 INSERT INTO `shipment` (`id`, `ship_to`, `fee`, `slug`) VALUES
-(1, 'Kiambu', 200, 'kiambu');
+(1, 'Kiambu', 200, 'kiambu'),
+(2, 'Nairobi', 100, 'nairobi');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subcategories`
+-- Table structure for table `tags`
 --
 
-CREATE TABLE `subcategories` (
+CREATE TABLE `tags` (
   `id` int(11) UNSIGNED NOT NULL,
-  `subcategory` varchar(128) NOT NULL,
-  `category` varchar(128) NOT NULL,
+  `tag` varchar(128) NOT NULL,
   `slug` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `subcategories`
---
-
-INSERT INTO `subcategories` (`id`, `subcategory`, `category`, `slug`) VALUES
-(1, 'Fridges', 'Electronics', 'fridges'),
-(2, 'Televisions', 'Electronics', 'televisions'),
-(3, 'Phones', 'Electronics', 'phones'),
-(4, 'Laptop', 'Electronics', 'laptop'),
-(5, 'Trolley', 'Household', 'trolley'),
-(6, 'Chairs', 'Household', 'chairs'),
-(7, 'Buckets', 'Household', 'buckets');
 
 -- --------------------------------------------------------
 
@@ -378,10 +512,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(7, '127.0.0.1', 'testaccount1@gmail.com', '$2y$12$a6sETxL3wsaFN3ThdalIwOmE6ml9S7Dznz0oPHLBbqRj0iixWihhu', 'testaccount1@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556647, 1563556778, 1, 'Test', 'Account 1', NULL, '0700010203'),
-(8, '127.0.0.1', 'testaccount2@gmail.com', '$2y$10$cWKnrV1lhSSJFQKV02G5Re9IgaKo7EIu7q7BBpQWjKJnS512g6vk.', 'testaccount2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556838, 1563556892, 1, 'Test', 'Account 2', NULL, '0700020202'),
-(9, '127.0.0.1', 'testaccount3@gmail.com', '$2y$10$2axejRFIvN2PsFZZ.M8LxesZLcoK9GWk4495CMPgBmGMckI0LEKO6', 'testaccount3@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557036, 1563557057, 1, 'Test', 'Account 3', NULL, '0703030303'),
-(10, '127.0.0.1', 'testaccount4@gmail.com', '$2y$10$EvTTrf91Mx6KCF6OE96GYezAdLLVpsRnYOr0ZYmTcClowu99IRjgu', 'testaccount4@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557142, NULL, 1, 'Test', 'Account 4', NULL, '0704040404');
+(7, '127.0.0.1', 'testaccount1@gmail.com', '$2y$12$a6sETxL3wsaFN3ThdalIwOmE6ml9S7Dznz0oPHLBbqRj0iixWihhu', 'testaccount1@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556647, 1567408351, 1, 'Test', 'Account 1', NULL, '0700010203'),
+(8, '127.0.0.1', 'testaccount2@gmail.com', '$2y$10$cWKnrV1lhSSJFQKV02G5Re9IgaKo7EIu7q7BBpQWjKJnS512g6vk.', 'testaccount2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556838, 1564660155, 1, 'Test', 'Account 2', NULL, '0700020202'),
+(9, '127.0.0.1', 'testaccount3@gmail.com', '$2y$10$2axejRFIvN2PsFZZ.M8LxesZLcoK9GWk4495CMPgBmGMckI0LEKO6', 'testaccount3@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557036, 1567362240, 1, 'Test', 'Account 3', NULL, '0703030303'),
+(10, '127.0.0.1', 'testaccount4@gmail.com', '$2y$10$EvTTrf91Mx6KCF6OE96GYezAdLLVpsRnYOr0ZYmTcClowu99IRjgu', 'testaccount4@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557142, 1566745742, 1, 'Test', 'Account 4', NULL, '0704040404');
 
 -- --------------------------------------------------------
 
@@ -424,15 +558,9 @@ CREATE TABLE `wishlist` (
 --
 
 INSERT INTO `wishlist` (`id`, `customer_id`, `product_id`, `wishlist_code`, `time`) VALUES
-(15, 6, 1, 61, 1562748994),
-(17, 2, 6, 26, 1562928296),
-(18, 3, 1, 31, 1563004819),
-(19, 4, 1, 41, 1563095242),
-(20, 4, 6, 46, 1563095246),
-(21, 2, 7, 27, 1563121269),
-(22, 2, 4, 24, 1563193439),
-(23, 3, 4, 34, 1563434054),
-(24, 3, 2, 32, 1563542916);
+(11, 7, 6, 76, 1566457311),
+(12, 7, 2, 72, 1566457315),
+(13, 7, 5, 75, 1566831881);
 
 --
 -- Indexes for dumped tables
@@ -491,11 +619,10 @@ ALTER TABLE `orders`
   ADD UNIQUE KEY `slug` (`slug`) USING BTREE;
 
 --
--- Indexes for table `pd_tags`
+-- Indexes for table `orders_summary`
 --
-ALTER TABLE `pd_tags`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `slug` (`slug`);
+ALTER TABLE `orders_summary`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `products`
@@ -518,9 +645,9 @@ ALTER TABLE `shipment`
   ADD KEY `slug` (`slug`);
 
 --
--- Indexes for table `subcategories`
+-- Indexes for table `tags`
 --
-ALTER TABLE `subcategories`
+ALTER TABLE `tags`
   ADD PRIMARY KEY (`id`),
   ADD KEY `slug` (`slug`);
 
@@ -557,7 +684,7 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `counties`
@@ -581,7 +708,7 @@ ALTER TABLE `info`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
@@ -599,37 +726,37 @@ ALTER TABLE `newsletter`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `pd_tags`
+-- AUTO_INCREMENT for table `orders_summary`
 --
-ALTER TABLE `pd_tags`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orders_summary`
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `shipment`
 --
 ALTER TABLE `shipment`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `subcategories`
+-- AUTO_INCREMENT for table `tags`
 --
-ALTER TABLE `subcategories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `tags`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -647,7 +774,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
