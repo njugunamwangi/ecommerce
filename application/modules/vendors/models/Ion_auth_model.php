@@ -2792,30 +2792,20 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * @return product categories as a string
+	 * get categories
+	 *
+	 * @return categories
+	 *
+	 * @param string
 	 */
 	public function get_categories($slug = FALSE) {
 		if ($slug === FALSE) {
             $this->db->order_by('categories.category', 'asc');
-            $query = $this->db->get_where('categories', ['slug' => $slug]);
+            $query = $this->db->get('categories');
             return $query->result();
         }
 
         $query = $this->db->get_where('categories', ['slug' => $slug]);
-        return $query->row();
-	}
-
-	/**
-	 * @return product tags as a string
-	 */
-	public function get_tags($slug = FALSE) {
-		if ($slug === FALSE) {
-            $this->db->order_by('pd_tags.tag', 'asc');
-            $query = $this->db->get_where('pd_tags', ['slug' => $slug]);
-            return $query->result();
-        }
-
-        $query = $this->db->get_where('pd_tags', ['slug' => $slug]);
         return $query->row();
 	}
 
@@ -2850,12 +2840,27 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * vendor's id
+	 *
+	 * @return vendor's id 
+	 */
+	public function _vendor_id() {
+		$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2); // creates the various parts
+
+		$subdomain_name = $subdomain_arr[0]; // assigns the first part
+
+		$this->db->from('users')->where('created_on', $subdomain_name);
+
+		return $this->db->get()->row()->created_on;
+	}
+
+	/**
 	 * publish product
 	 */
 	public function publish_product($filename = '') {
 		$slug = url_title($this->input->post('name'), 'dash', TRUE);
 
-		$vendor_id = $this->ion_auth->user()->row()->created_on;
+		$vendor_id = $this->_vendor_id;
 
 		$data = [
 			'vendor_id' => $vendor_id,
@@ -2873,7 +2878,7 @@ class Ion_auth_model extends CI_Model
 			'date_created' => time(),
 			'available_from' => $this->input->post('available_from'),
 			'available_to' => $this->input->post('available_to'),
-			'status' => $this->input->post('status'),
+			'status' => 0,
 			'slug' => $slug
 		];
 
@@ -2894,19 +2899,188 @@ class Ion_auth_model extends CI_Model
 	 * @param string
 	 */
 	public function get_products($slug = FALSE) {
-		$subdomain_arr = explode('.', $_SERVER['HTTP_HOST'], 2);
-		$subdomain_name = $subdomain_arr[0];
-
-		$this->db->from('users')->where('created_on', $subdomain_name);
-		$vendor_id = $this->db->get()->row()->created_on;
+		$vendor_id = $this->_vendor_id();
 
         if ($slug === FALSE) {
-            $this->db->order_by('products.date_created', 'asc');
+            $this->db->order_by('products.name', 'asc');
             $query = $this->db->get_where('products', ['vendor_id' => $vendor_id])->result();
             return $query;
         }
 
         $query = $this->db->get_where('products', ['slug' => $slug]);
         return $query->row();
+	}
+
+	/**
+	 * vendor's orders
+	 *
+	 * @return vendor's orders 
+	 *
+	 * @param string
+	 */
+	public function vendor_orders($id = FALSE) {
+		$vendor_id = $this->_vendor_id();
+
+		if ($id === FALSE) {
+			$this->db->where('vendor_id', $vendor_id);
+			return $this->db->get('orders_summary')->result();
+		}
+		
+		$query = $this->db->get_where('orders_summary', ['id' => $id])->row();
+		return $query;
+	} 
+
+	/**
+	 * make product order available
+	 *
+	 * @return bool 
+	 *
+	 * @param int
+	 */
+	public function _make_available($id) {
+		$data = ['status' => 2];
+
+		$this->db->where('id', $id);
+		$this->db->update('orders_summary', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_order_made_available');
+			return TRUE;
+		} else {
+			$this->set_error('product_order_not_made_available');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * make product order unavailable
+	 *
+	 * @return bool 
+	 *
+	 * @param int
+	 */
+	public function _make_unavailable($id) {
+		$data = ['status' => 1];
+
+		$this->db->where('id', $id);
+		$this->db->update('orders_summary', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_order_made_unavailable');
+			return TRUE;
+		} else {
+			$this->set_error('product_order_not_made_unavailable');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * search vendor orders
+	 *
+	 * @return orders 
+	 *
+	 * @param string
+	 */
+	public function _search_orders($product, $customer, $status) {
+		$vendor_id = $this->_vendor_id();
+		$array = ['product_id' => $product, 'customer_id' => $customer, 'status' => $status];
+		$this->db->where('vendor_id', $vendor_id);
+		$this->db->like($array);
+		return $this->db->get('orders_summary')->result();
+	}
+
+	/**
+	 * add category
+	 *
+	 * @return bool 
+	 *
+	 * @param string
+	 */
+	public function _add_category() {
+		$slug = url_title($this->input->post('pd_category'), 'dash', TRUE);
+
+		$data = [
+			'category' => $this->input->post('pd_category'),
+			'parent_category' => $this->input->post('pd_parent_category'),
+			'slug' => $slug
+		];
+
+		$this->db->insert('categories', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_category_successfully_set');
+			return TRUE;
+		} else {
+			$this->set_error('product_category_not_set');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * add tag
+	 *
+	 * @return bool 
+	 *
+	 * @param string
+	 */
+	public function _add_tag() {
+		$slug = url_title($this->input->post('pd_tag'), 'dash', TRUE);
+
+		$data = [
+			'tag' => $this->input->post('pd_tag'),
+			'slug' => $slug
+		];
+
+		$this->db->insert('tags', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('tag_successfully_added');
+			return TRUE;
+		} else {
+			$this->set_error('tag_not_added');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * get tags
+	 *
+	 * @return tags 
+	 *
+	 * @param string
+	 */
+	public function get_tags($slug = FALSE) {
+		if ($slug === FALSE) {
+			$this->db->order_by('tags.tag', 'asc');
+			$query = $this->db->get('tags')->result();
+			return $query;
+		}
+
+		$query = $this->db->get_where('tags', ['slug' => $slug])->row();
+		return $query;
+	}
+
+	/**
+	 * upload profile picture
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function upload_profile_picture($filename = '') {
+		$id = $this->_vendor_id();
+
+		$this->db->where('created_on', $id);
+		$data = ['image' => $filename];
+
+		$this->db->update('users', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('profile_picture_successfully_updated');
+			return TRUE;
+		} else {
+			$this->set_message('profile_picture_not_updated');
+			return FALSE;
+		}
 	}
 }

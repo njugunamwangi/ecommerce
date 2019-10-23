@@ -245,7 +245,17 @@ License: You must have a valid license purchased only from themeforest (the abov
                     ?>
                       <div class="alert alert-info">
                         <button type="button" class="close" data-dismiss="alert"></button>
-                        <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', ucfirst($message);?></div>
+                        <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
+                      </div>
+                    <?php
+                  }
+                ?>
+                <?php
+                  if ($this->session->flashdata('error')) {
+                    ?>
+                      <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert"></button>
+                        <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $error;?></div>
                       </div>
                     <?php
                   }
@@ -405,9 +415,9 @@ License: You must have a valid license purchased only from themeforest (the abov
           <div class="col-md-6 col-sm-6 padding-top-10">
             <?php echo date('Y')?> © <?php echo $name_of_store?> ALL Rights Reserved. 
           </div>
-          <div class="scroll-to-top">
+          <!-- <div class="scroll-to-top">
               <i class="icon-arrow-up"></i>
-          </div>
+          </div> -->
           <!-- END COPYRIGHT -->
           <!-- BEGIN PAYMENTS -->
           <div class="col-md-6 col-sm-6">

@@ -1,4 +1,4 @@
-	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
+	<title><?php echo $title, ' | ', $name_of_store?></title>
 </head>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
@@ -7,11 +7,10 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
+			<!-- <a href="<?php echo base_url()?>admin">
 			<img src="<?php echo base_url()?>public/assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
-			</a>
+			</a> -->
 			<div class="menu-toggler sidebar-toggler">
-				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
 		</div>
 		<!-- END LOGO -->
@@ -33,11 +32,7 @@
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
-						<i class="fa fa-bookmark"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
-					</li>
-					<li>
-						<a href="javascript:;">
-						<i class="icon-share"></i> Share </a>
+						<i class="fa fa-tag"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
 					</li>
 					<li class="divider">
 					</li>
@@ -59,14 +54,14 @@
 		<div class="page-top">
 			<!-- BEGIN HEADER SEARCH BOX -->
 			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form" action="extra_search.html" method="GET">
+			<!-- <form class="search-form" action="extra_search.html" method="GET">
 				<div class="input-group">
 					<input type="text" class="form-control input-sm" placeholder="Search..." name="query">
 					<span class="input-group-btn">
 					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
 					</span>
 				</div>
-			</form>
+			</form> -->
 			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
@@ -81,307 +76,6 @@
 					</li>
 					<li class="separator hide">
 					</li>
-					<!-- BEGIN NOTIFICATION DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-bell"></i>
-						<span class="badge badge-success">
-						7 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3><span class="bold">12 pending</span> notifications</h3>
-								<a href="extra_profile.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="time">just now</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-success">
-										<i class="fa fa-plus"></i>
-										</span>
-										New user registered. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Server #12 overloaded. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">10 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Server #2 not responding. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">14 hrs</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										Application error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">2 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Database overloaded 68%. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										A user IP blocked. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">4 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Storage Server #4 not responding dfdfdfd. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">5 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										System Error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">9 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Storage server failed. </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END NOTIFICATION DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN INBOX DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-inbox dropdown-dark" id="header_inbox_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-envelope-open"></i>
-						<span class="badge badge-danger">
-						4 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3>You have <span class="bold">7 New</span> Messages</h3>
-								<a href="inbox.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">Just Now </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">16 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar1.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Bob Nilson </span>
-										<span class="time">2 hrs </span>
-										</span>
-										<span class="message">
-										Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">40 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor 40% nibh congue nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">46 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END INBOX DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN TODO DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-tasks dropdown-dark" id="header_task_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-calendar"></i>
-						<span class="badge badge-primary">
-						3 </span>
-						</a>
-						<ul class="dropdown-menu extended tasks">
-							<li class="external">
-								<h3>You have <span class="bold">12 pending</span> tasks</h3>
-								<a href="page_todo.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New release v1.2 </span>
-										<span class="percent">30%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">40% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Application deployment</span>
-										<span class="percent">65%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">65% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile app release</span>
-										<span class="percent">98%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 98%;" class="progress-bar progress-bar-success" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">98% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Database migration</span>
-										<span class="percent">10%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 10%;" class="progress-bar progress-bar-warning" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">10% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Web server upgrade</span>
-										<span class="percent">58%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 58%;" class="progress-bar progress-bar-info" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">58% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile development</span>
-										<span class="percent">85%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 85%;" class="progress-bar progress-bar-success" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">85% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New UI release</span>
-										<span class="percent">38%</span>
-										</span>
-										<span class="progress progress-striped">
-										<span style="width: 38%;" class="progress-bar progress-bar-important" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">38% Complete</span></span>
-										</span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
@@ -389,7 +83,15 @@
 						<span class="username username-hide-on-mobile">
 						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
-						<img alt="" class="img-circle" src="<?php echo base_url()?>public/assets/admin/layout4/img/avatar9.jpg"/>
+						<?php
+							$query = $user_account->image;
+							if (empty($query)) {
+								$user_icon = 'avatar.png';
+							} else {
+								$user_icon = 'users/'.$user_account->image;
+							}
+						?>
+						<img alt="" class="img-circle" src="<?php echo base_url()?>public/attachments/<?php echo $user_icon?>"/>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
@@ -548,11 +250,6 @@
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
-								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
-									<i class="fa fa-check-square"></i>
-									Publish Sub Category</a>
-								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
@@ -563,14 +260,14 @@
 						</li>
 						<li>
 							<a href="javascript:;">
-							<i class="fa fa-bookmark"></i>
+							<i class="fa fa-tags"></i>
 							<span class="title">Tags</span>
 							<span class="arrow "></span>
 							</a>
 							<ul class="sub-menu">
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
-									<i class="fa fa-check-square-o"></i>
+									<i class="fa fa-tag"></i>
 									Publish Tag</a>
 								</li>
 								<li>
@@ -651,6 +348,25 @@
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
 							<?php echo $this->lang->line('general_settings_heading')?>  </a>
+						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-file-code-o"></i>
+							<span class="title">Pages</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li >
+									<a href="<?php echo base_url()?>admin/settings/pages/add">
+									<i class="fa fa-check-square-o"></i>
+									Add Page </a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/settings/pages">
+									<i class="fa fa-list"></i>
+									List Pages</a>
+								</li>
+							</ul>
 						</li>
 					</ul>
 				</li>
@@ -952,15 +668,15 @@
 												Latest 10 Orders </a>
 											</li>
 											<li>
-												<a href="#overview_5" tabindex="-1" data-toggle="tab">
+												<a href="#pending_orders" tabindex="-1" data-toggle="tab">
 												Pending Orders </a>
 											</li>
 											<li>
-												<a href="#overview_6" tabindex="-1" data-toggle="tab">
+												<a href="#completed_orders" tabindex="-1" data-toggle="tab">
 												Completed Orders </a>
 											</li>
 											<li>
-												<a href="#overview_7" tabindex="-1" data-toggle="tab">
+												<a href="#rejected_orders" tabindex="-1" data-toggle="tab">
 												Rejected Orders </a>
 											</li>
 										</ul>
@@ -1181,7 +897,7 @@
 											</table>
 										</div>
 									</div>
-									<div class="tab-pane" id="overview_5">
+									<div class="tab-pane" id="pending_orders">
 										<div class="table-responsive">
 											<table class="table table-striped table-hover table-bordered">
 												<thead>
@@ -1203,31 +919,40 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
+													<?php
+														foreach ($pending_orders as $order) {
+															?>
+																<tr>
+																	<td>
+																		<?php
+																			$customer = $this->db->from('users')->where('id', $order->customer_id)->get()->row();
+
+																			echo $customer->first_name, ' ', $customer->last_name;
+																		?>
+																	</td>
+																	<td>
+																		<?php echo date('jS M, Y', $order->order_id), ' at ', date('H:i:s', $order->order_id);?> 
+																	</td>
+																	<td>
+																		 <?php echo $currency, ' ', number_format($order->total_orders, 2) ?>
+																	</td>
+																	<td>
+																		<span class="label label-sm label-warning">
+																		Pending </span>
+																	</td>
+																	<td>
+																		<a href="<?php echo base_url()?>admin/order/<?php echo $order->order_id?>" class="btn default btn-xs green-stripe">
+																		View </a>
+																	</td>
+																</tr>
+															<?php
+														}
+													?>	
 												</tbody>
 											</table>
 										</div>
 									</div>
-									<div class="tab-pane" id="overview_6">
+									<div class="tab-pane" id="completed_orders">
 										<div class="table-responsive">
 											<table class="table table-striped table-hover table-bordered">
 												<thead>
@@ -1249,31 +974,40 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
+													<?php
+														foreach ($completed_orders as $order) {
+															?>
+																<tr>
+																	<td>
+																		<?php
+																			$customer = $this->db->from('users')->where('id', $order->customer_id)->get()->row();
+
+																			echo $customer->first_name, ' ', $customer->last_name;
+																		?>
+																	</td>
+																	<td>
+																		<?php echo date('jS M, Y', $order->order_id), ' at ', date('H:i:s', $order->order_id);?> 
+																	</td>
+																	<td>
+																		 <?php echo $currency, ' ', number_format($order->total_orders, 2) ?>
+																	</td>
+																	<td>
+																		<span class="label label-sm label-success">
+																		Delivered & Closed </span>
+																	</td>
+																	<td>
+																		<a href="<?php echo base_url()?>admin/order/<?php echo $order->order_id?>" class="btn default btn-xs green-stripe">
+																		View </a>
+																	</td>
+																</tr>
+															<?php
+														}
+													?>	
 												</tbody>
 											</table>
 										</div>
 									</div>
-									<div class="tab-pane" id="overview_7">
+									<div class="tab-pane" id="rejected_orders">
 										<div class="table-responsive">
 											<table class="table table-striped table-hover table-bordered">
 												<thead>
@@ -1295,26 +1029,35 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>
-															<a href="javascript:;">
-															David Wilson </a>
-														</td>
-														<td>
-															 3 Jan, 2013
-														</td>
-														<td>
-															 $625.50
-														</td>
-														<td>
-															<span class="label label-sm label-warning">
-															Pending </span>
-														</td>
-														<td>
-															<a href="javascript:;" class="btn default btn-xs green-stripe">
-															View </a>
-														</td>
-													</tr>
+													<?php
+														foreach ($rejected_orders as $order) {
+															?>
+																<tr>
+																	<td>
+																		<?php
+																			$customer = $this->db->from('users')->where('id', $order->customer_id)->get()->row();
+
+																			echo $customer->first_name, ' ', $customer->last_name;
+																		?>
+																	</td>
+																	<td>
+																		<?php echo date('jS M, Y', $order->order_id), ' at ', date('H:i:s', $order->order_id);?> 
+																	</td>
+																	<td>
+																		 <?php echo $currency, ' ', number_format($order->total_orders, 2) ?>
+																	</td>
+																	<td>
+																		<span class="label label-sm label-default">
+																		Rejected </span>
+																	</td>
+																	<td>
+																		<a href="<?php echo base_url()?>admin/order/<?php echo $order->order_id?>" class="btn default btn-xs green-stripe">
+																		View </a>
+																	</td>
+																</tr>
+															<?php
+														}
+													?>	
 												</tbody>
 											</table>
 										</div>

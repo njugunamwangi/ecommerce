@@ -28,6 +28,7 @@ class Pages extends MX_Controller {
 		$data['store_currency'] = $this->store_currency();
 		$data['store_location'] = $this->store_location();
 		$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+		$data['error'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('error')));
 
 		$this->load->view('pages/home', $data);
 	}
@@ -56,6 +57,7 @@ class Pages extends MX_Controller {
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
 		$data['store_location'] = $this->store_location();
+		$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 		$this->load->view('pages/product', $data);
 	}
@@ -186,30 +188,18 @@ class Pages extends MX_Controller {
 	 */
 	public function add_review() {
 		// validate form input
-		$this->form_validation->set_rules('name', $this->lang->line('add_review_validation_name_label'), 'required|trim');
-		$this->form_validation->set_rules('email', $this->lang->line('add_review_validation_email_label'), 'required|valid_email');
 		$this->form_validation->set_rules('review', $this->lang->line('add_review_validation_review_label'), 'required');
 		$this->form_validation->set_rules('ratings', $this->lang->line('add_review_validation_ratings_label'), 'required');
 
-		if ($this->form_validation->run() === TRUE) {
-			
-			$data = [
-				'product_id' => $this->input->post('product_id'),
-				'name' => $this->input->post('name'),
-				'email' => $this->input->post('email'),
-				'review' => $this->input->post('review'),
-				'date_created' => time(),
-				'ratings' => $this->input->post('ratings')
-			];
-		}
-
 		$slug = $this->input->post('slug');
 
-		if ($this->form_validation->run() === TRUE && $this->db->insert('reviews', $data)) {
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->add_review();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect($slug);
 		} else {
-			
-			echo 'error';
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect($slug);
 		}
 	}
 
@@ -265,6 +255,7 @@ class Pages extends MX_Controller {
 		$data['store_phone_number'] = $this->store_phone_number();
 		$data['store_currency'] = $this->store_currency();
 		$data['store_location'] = $this->store_location();
+		$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 		$this->_render_page('pages/checkout', $data);
 	}
@@ -373,21 +364,13 @@ class Pages extends MX_Controller {
 	public function add_to_wishlist() {
 		// form validaton
 		$this->form_validation->set_rules('wishlist_code', $this->lang->line('wishlist_code_validation_label'), 'required|is_unique[wishlist.wishlist_code]');
-
-		if ($this->form_validation->run() === TRUE) {
-			$data = [
-				'customer_id' => $this->input->post('customer_id'),
-				'product_id' => $this->input->post('product_id'),
-				'wishlist_code' => $this->input->post('wishlist_code'),
-				'time' => time()
-			];
-		}
 		
-		if ($this->form_validation->run() === TRUE && $this->db->insert('wishlist', $data)) {
-			$data['success_message'] = $this->lang->line('product_added_to_wishlist');
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->add_to_wishlist();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect('/');
 		} else {
-			$data['error_message'] = $this->lang->line('product_in_wishlist');
+			$this->session->set_flashdata('error', $this->ion_auth->errors());
 			redirect('/');
 		}	
 	}

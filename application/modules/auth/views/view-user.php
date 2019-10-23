@@ -1,4 +1,4 @@
-	<title><?php echo $user->first_name;?> <?php echo $user->last_name?> | <?php echo $name_of_store?></title>
+	<title><?php echo $user->first_name, ' ', $user->last_name. ' | ', $name_of_store?></title>
 </head>
 <!-- <?php $i=1?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo"> -->
@@ -9,7 +9,7 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="index.html">
+			<a href="<?php echo base_url()?>admin">
 			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
 			</a>
 			<div class="menu-toggler sidebar-toggler">
@@ -30,16 +30,12 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a href="javascript:;">
-						<i class="icon-docs"></i> New Post </a>
+						<a data-target="#stack1" data-toggle="modal" href="#stack1">
+						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
-						<a href="javascript:;">
-						<i class="icon-tag"></i> New Comment </a>
-					</li>
-					<li>
-						<a href="javascript:;">
-						<i class="icon-share"></i> Share </a>
+						<a data-target="#stack3" data-toggle="modal" href="#stack3">
+						<i class="fa fa-tag"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
 					</li>
 					<li class="divider">
 					</li>
@@ -61,14 +57,14 @@
 		<div class="page-top">
 			<!-- BEGIN HEADER SEARCH BOX -->
 			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form" action="extra_search.html" method="GET">
+			<!-- <form class="search-form" action="extra_search.html" method="GET">
 				<div class="input-group">
 					<input type="text" class="form-control input-sm" placeholder="Search..." name="query">
 					<span class="input-group-btn">
 					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
 					</span>
 				</div>
-			</form>
+			</form> -->
 			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
@@ -83,307 +79,6 @@
 					</li>
 					<li class="separator hide">
 					</li>
-					<!-- BEGIN NOTIFICATION DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-bell"></i>
-						<span class="badge badge-success">
-						7 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3><span class="bold">12 pending</span> notifications</h3>
-								<a href="extra_profile.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="time">just now</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-success">
-										<i class="fa fa-plus"></i>
-										</span>
-										New user registered. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Server #12 overloaded. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">10 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Server #2 not responding. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">14 hrs</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										Application error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">2 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Database overloaded 68%. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										A user IP blocked. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">4 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Storage Server #4 not responding dfdfdfd. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">5 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										System Error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">9 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Storage server failed. </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END NOTIFICATION DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN INBOX DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-inbox dropdown-dark" id="header_inbox_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-envelope-open"></i>
-						<span class="badge badge-danger">
-						4 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3>You have <span class="bold">7 New</span> Messages</h3>
-								<a href="inbox.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="../../assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">Just Now </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="../../assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">16 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="../../assets/admin/layout3/img/avatar1.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Bob Nilson </span>
-										<span class="time">2 hrs </span>
-										</span>
-										<span class="message">
-										Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="../../assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">40 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor 40% nibh congue nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="../../assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">46 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END INBOX DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN TODO DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-tasks dropdown-dark" id="header_task_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-calendar"></i>
-						<span class="badge badge-primary">
-						3 </span>
-						</a>
-						<ul class="dropdown-menu extended tasks">
-							<li class="external">
-								<h3>You have <span class="bold">12 pending</span> tasks</h3>
-								<a href="page_todo.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New release v1.2 </span>
-										<span class="percent">30%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">40% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Application deployment</span>
-										<span class="percent">65%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">65% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile app release</span>
-										<span class="percent">98%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 98%;" class="progress-bar progress-bar-success" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">98% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Database migration</span>
-										<span class="percent">10%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 10%;" class="progress-bar progress-bar-warning" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">10% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Web server upgrade</span>
-										<span class="percent">58%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 58%;" class="progress-bar progress-bar-info" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">58% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile development</span>
-										<span class="percent">85%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 85%;" class="progress-bar progress-bar-success" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">85% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New UI release</span>
-										<span class="percent">38%</span>
-										</span>
-										<span class="progress progress-striped">
-										<span style="width: 38%;" class="progress-bar progress-bar-important" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">38% Complete</span></span>
-										</span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
@@ -391,7 +86,15 @@
 						<span class="username username-hide-on-mobile">
 						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?></span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
-						<img alt="" class="img-circle" src="../../assets/admin/layout4/img/avatar9.jpg"/>
+						<?php
+							$query = $user_account->image;
+							if (empty($query)) {
+								$user_icon = 'avatar.png';
+							} else {
+								$user_icon = 'attachments/users/'.$user_account->image;
+							}
+						?>
+						<img alt="" class="img-circle" src="<?php echo base_url()?>public/<?php echo $user_icon?>"/>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
@@ -550,11 +253,6 @@
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
-								<li >
-									<a href="<?php echo base_url()?>admin/products/subcategories/add">
-									<i class="fa fa-check-square"></i>
-									Publish Sub Category</a>
-								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
@@ -565,14 +263,14 @@
 						</li>
 						<li>
 							<a href="javascript:;">
-							<i class="fa fa-bookmark"></i>
+							<i class="fa fa-tags"></i>
 							<span class="title">Tags</span>
 							<span class="arrow "></span>
 							</a>
 							<ul class="sub-menu">
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
-									<i class="fa fa-check-square-o"></i>
+									<i class="fa fa-tag"></i>
 									Publish Tag</a>
 								</li>
 								<li>
@@ -810,7 +508,15 @@
 						<div class="portlet light profile-sidebar-portlet">
 							<!-- SIDEBAR USERPIC -->
 							<div class="profile-userpic">
-								<img src="<?php echo base_url()?>public/assets/admin/pages/media/profile/avatar.png" class="img-responsive" alt="">
+								<?php
+									$query = $user->image;
+									if (empty($query)) {
+										$icon = 'avatar.png';
+									} else {
+										$icon = 'users/'.$user->image;
+									}
+								?>
+								<img src="<?php echo base_url()?>public/attachments/<?php echo $icon?>" class="img-responsive" alt="">
 							</div>
 							<!-- END SIDEBAR USERPIC -->
 							<!-- SIDEBAR USER TITLE -->
@@ -995,79 +701,86 @@
 											</div>
 										</div>
 										<div class="scroller" style="height: 252px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
-											<div class="table-scrollable table-scrollable-borderless">
-												<table class="table table-hover table-light">
-													<thead>
-														<tr class="uppercase">
-															<th>
-																 Order ID
-															</th>
-															<th>
-																Order Date
-															</th>
-															<th>
-																Ship to
-															</th>
-															<th>
-																Order Status
-															</th>
-															<th>
-																Actions
-															</th>
-														</tr>
-													</thead>
-													<?php
-														$this->db->where('customer_id', $user->id);
-														$orders = $this->db->get('orders')->result();
-
-														foreach ($orders as $order) {
-															?>
-																<tr>
-																	<td>
-																		<?php echo $order->order_id ?> 
-																	</td>
-																	<td>
-																		<?php echo date('jS M, Y', $order->order_id) ?>
-																	</td>
-																	<td>
-																		<?php echo $order->subcounty ?>
-																	</td>
-																	<td>
-																		<?php
-								                                          if ($order->status == 0) {
-								                                            ?>
-								                                              <span class="label label-sm label-danger">Not Processed</span>
-								                                            <?php
-								                                          } elseif ($order->status == 1) {
-								                                            ?>
-								                                              <span class="label label-sm label-info">Processed</span>
-								                                            <?php
-								                                          } elseif ($order->status == 2) {
-								                                            ?>
-								                                              <span class="label label-sm label-warning">In Transit</span>
-								                                            <?php
-								                                          } elseif ($order->status == 3) {
-								                                            ?>
-								                                              <span class="label label-sm label-default">Cancelled</span>
-								                                            <?php
-								                                          } else {
-								                                            ?>
-								                                              <span class="label label-sm label-success">Delivered & Closed</span>
-								                                            <?php
-								                                          }
-								                                        ?>
-																	</td>
-																	<td>
-																		<a href="<?php echo base_url('admin/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
-																		View </a>
-																	</td>
-																</tr>
-															<?php
-														}
+											<?php
+												$orders = $this->db->get_where('orders', ['customer_id' => $user->id])->result();
+												if (empty($orders)) {
+													echo 'no orders';
+												} else {
 													?>
-													
-												</table>
-											</div>
+														<div class="table-scrollable table-scrollable-borderless">
+															<table class="table table-hover table-light">
+																<thead>
+																	<tr class="uppercase">
+																		<th>
+																			 Order ID
+																		</th>
+																		<th>
+																			Order Date
+																		</th>
+																		<th>
+																			Ship to
+																		</th>
+																		<th>
+																			Order Status
+																		</th>
+																		<th>
+																			Actions
+																		</th>
+																	</tr>
+																</thead>
+																<?php
+																	foreach ($orders as $order) {
+																		?>
+																			<tr>
+																				<td>
+																					<?php echo $order->order_id ?> 
+																				</td>
+																				<td>
+																					<?php echo date('jS M, Y', $order->order_id) ?>
+																				</td>
+																				<td>
+																					<?php echo $order->subcounty ?>
+																				</td>
+																				<td>
+																					<?php
+											                                          if ($order->status == 0) {
+											                                            ?>
+											                                              <span class="label label-sm label-danger">Not Processed</span>
+											                                            <?php
+											                                          } elseif ($order->status == 1) {
+											                                            ?>
+											                                              <span class="label label-sm label-info">Processed</span>
+											                                            <?php
+											                                          } elseif ($order->status == 2) {
+											                                            ?>
+											                                              <span class="label label-sm label-warning">In Transit</span>
+											                                            <?php
+											                                          } elseif ($order->status == 3) {
+											                                            ?>
+											                                              <span class="label label-sm label-default">Cancelled</span>
+											                                            <?php
+											                                          } else {
+											                                            ?>
+											                                              <span class="label label-sm label-success">Delivered & Closed</span>
+											                                            <?php
+											                                          }
+											                                        ?>
+																				</td>
+																				<td>
+																					<a href="<?php echo base_url('admin/order/'.$order->order_id)?>" class="btn default btn-xs green-stripe">
+																					View </a>
+																				</td>
+																			</tr>
+																		<?php
+																	}
+																?>
+																
+															</table>
+														</div>
+													<?php
+												}
+											?>
+											
 										</div>
 									</div>
 								</div>
@@ -1191,7 +904,7 @@
 												<div class="scroller" style="height: 337px;" data-always-visible="1" data-rail-visible1="0" data-handle-color="#D7DCE2">
 													<div class="general-item-list">
 														<?php
-															$this->db->where('email', $user->email);
+															$this->db->where('customer_id', $user->id);
 															$this->db->order_by('reviews.date_created', 'desc');
 															$reviews = $this->db->get('reviews')->result();
 															if (empty($reviews)) {

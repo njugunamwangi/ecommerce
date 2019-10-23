@@ -239,7 +239,8 @@ License: You must have a valid license purchased only from themeforest (the abov
         <?php
           if ($this->session->flashdata('message')) {
             ?>
-              <div class="alert alert-danger">
+              <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert"></button>
                 <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
               </div>
             <?php
@@ -304,15 +305,6 @@ License: You must have a valid license purchased only from themeforest (the abov
                                   <h3>Returning Customer</h3>
                                   <p>I am a returning customer.</p>
                                   <?php echo form_open('auth/checkout_login');?>
-                                    <?php
-                                        if ($this->session->flashdata('message')) {
-                                        ?>
-                                            <div class="alert alert-info">
-                                                <div id="infoMessage"> <strong>Info!</strong><?php echo $this->lang->line('account_creation_successful');?></div>
-                                            </div>
-                                            <?php
-                                        }
-                                    ?>
                                     <div class="form-group">
                                       <label for="identity">E-Mail</label>
                                       <input type="text" id="identity" name="identity" value="<?php echo set_value('identity')?>" class="form-control">

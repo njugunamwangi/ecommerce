@@ -54,6 +54,8 @@ $lang['wishlist_page_heading']	= 'Wishlist';
 $lang['wishlist_code_validation_label']		= 'Wishlist Code';
 $lang['my_wishlist_heading']				= 'My Wishlist';
 $lang['empty_wishlist']						= 'You have no products on your wishlist';
+$lang['product_added_to_wishlist']			= 'Product added to wishlist';
+$lang['product_not_added_to_wishlist']		= 'Product not added to wishlist';
 
 // Edit Account Information
 $lang['edit_account_infomation_heading']					= 'Edit My Account';
@@ -71,3 +73,7 @@ $lang['reset_password_validation_password_confirm_label']	= 'Password Confirm';
 // Set order
 $lang['order_set_successfully']				= 'Your Order has been received. Thank you for shoping with us';
 $lang['order_not_set']						= 'Please check your form';
+
+// Product Review
+$lang['product_review_added']  			= 'Product review added successfully, wait for approval and then the review will appear';
+$lang['product_review_not_added']  		= 'Product review not added';

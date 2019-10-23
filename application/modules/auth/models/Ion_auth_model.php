@@ -2817,7 +2817,9 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
-	 * @return product categories as a string
+	 * @return categories
+	 *
+	 * @param string
 	 */
 	public function get_categories($slug = FALSE) {
 		if ($slug === FALSE) {
@@ -2828,6 +2830,17 @@ class Ion_auth_model extends CI_Model
 
         $query = $this->db->get_where('categories', ['slug' => $slug]);
         return $query->row();
+	}
+
+	/**
+	 * update category
+	 *
+	 * @return categories
+	 *
+	 * @param string
+	 */
+	public function update_category($id) {
+		
 	}
 
 	/**
@@ -2873,6 +2886,63 @@ class Ion_auth_model extends CI_Model
         $query = $this->db->get_where('orders', ['slug' => $slug])->row();
         return $query;
 	}
+
+	/**
+	 * get orders summary
+	 *
+	 * @return orders summary
+	 *
+	 * @param int
+	 */
+	public function get_orders_summary($id) {
+		$query = $this->db->get_where('orders_summary', ['id' => $id])->row();
+		return $query;
+	}
+
+	/**
+	 * make product order available
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function _make_available($id) {
+		$data = ['status' => 2];
+
+		$this->db->where('id', $id);
+		$this->db->update('orders_summary', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_order_made_available');
+			return TRUE;
+		} else {
+			$this->set_error('product_order_not_available');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * make product order unavailable
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function _make_unavailable($id) {
+		$data = ['status' => 1];
+
+		$this->db->where('id', $id);
+		$this->db->update('orders_summary', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_order_not_available');
+			return TRUE;
+		} else {
+			$this->set_error('product_order_not_made_available');
+			return FALSE;
+		}
+	}
+
 
 	/**
 	 * @return shipments
@@ -3188,5 +3258,274 @@ class Ion_auth_model extends CI_Model
 			$this->set_error('order_not_set');
 			return FALSE;
 		}
+	}
+
+	/**
+	 * unpublish product
+	 *
+	 * @param int | id
+	 *
+	 * @return bool
+	 */
+	public function _unpublish_product($id) {
+		$data = [
+			'status' => 2,
+			'date_updated' => time()
+		];
+
+		$this->db->where('id', $id);
+		$this->db->update('products', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_successfully_saved_as_draft');
+			return TRUE;
+		} else {
+			$this->set_error('product_not_updated');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * unpublish product
+	 *
+	 * @param int => id
+	 *
+	 * @return bool
+	 */
+	public function _publish_product($id) {
+		$data = [
+			'status' => 1,
+			'date_updated' => time()
+		];
+
+		$this->db->where('id', $id);
+		$this->db->update('products', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_successfully_saved_as_published');
+			return TRUE;
+		} else {
+			$this->set_error('product_not_updated');
+			return FALSE;
+		}
+	}
+
+
+	/**
+	 * reviews
+	 *
+	 * @param int | string
+	 *
+	 * @return reviews
+	 */
+	public function get_reviews($id = FALSE) {
+		if ($id === FALSE) {
+			$query = $this->db->get('reviews')->result();
+			return $query;
+		} else {
+			$query = $this->db->get_where('reviews', ['id' => $id])->row();
+			return $query;
+		}
+	}
+
+	/**
+	 * approve review
+	 *
+	 * @param int => id
+	 *
+	 * @return bool
+	 */
+	public function _approve_review($id) {
+		$data = ['status' => 1];
+
+		$this->db->where('id', $id);
+		$this->db->update('reviews', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('review_approved');
+			return TRUE;
+		} else {
+			$this->set_error('review_not_approved');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * reject review
+	 *
+	 * @param int => id
+	 *
+	 * @return bool
+	 */
+	public function _reject_review($id) {
+		$data = ['status' => 2];
+
+		$this->db->where('id', $id);
+		$this->db->update('reviews', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('review_rejected');
+			return TRUE;
+		} else {
+			$this->set_error('review_not_rejected');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * upload profile picture
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function upload_profile_picture($filename = '') {
+		$id = $this->ion_auth->user()->row()->id;
+
+		$this->db->where('id', $id);
+		$data = ['image' => $filename];
+
+		$this->db->update('users', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('profile_picture_successfully_updated');
+			return TRUE;
+		} else {
+			$this->set_message('profile_picture_not_updated');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * cancel order
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function _cancel_order($id) {
+		$data = ['status' => 3];
+		$this->db->where('id', $id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_successfully_cancelled');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_cancelled');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * process order
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function _process_order($id) {
+		$data = ['status' => 1];
+		$this->db->where('id', $id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_successfully_processed');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_processed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * order in transit
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function _in_transit($id) {
+		$data = ['status' => 2];
+		$this->db->where('id', $id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_successfully_in_transit');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_in_transit');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * order pending
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function _order_pending($id) {
+		$data = ['status' => 0];
+		$this->db->where('id', $id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_successfully_pending');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_pending');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * order pending
+	 *
+	 * @param int
+	 *
+	 * @return bool
+	 */
+	public function _deliver_order($id) {
+		$data = ['status' => 4];
+		$this->db->where('id', $id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_successfully_delivered');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_delivered');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * search orders
+	 *
+	 * @param string
+	 *
+	 * @return orders as per criteria
+	 */
+	public function search_orders($order_id, $customer_id, $ship_to, $status) {
+		$order = ['order_id' => $order_id, 'customer_id' => $customer_id, 'subcounty' => $ship_to, 'status' => $status];
+		$this->db->like($order);
+		$query = $this->db->get('orders')->result();
+		return $query;
+	}
+
+	/**
+	 * search products
+	 *
+	 * @param string
+	 *
+	 * @return products as per search criteria
+	 */
+	public function search_products($name, $category, $status) {
+		$product = ['name' => $name, 'categories' => $category, 'status' => $status];
+		$this->db->like($product);
+		$query = $this->db->get('products')->result();
+		return $query;
 	}
 }

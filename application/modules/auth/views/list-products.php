@@ -1,6 +1,6 @@
-	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
+	<title><?php echo $title, ' | ', $name_of_store?></title>
 </head>
-<?php $i=0;?>
+<?php $i=1;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
@@ -8,9 +8,9 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="index.html">
+			<!-- <a href="<?php echo base_url()?>admin">
 			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
-			</a>
+			</a> -->
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
@@ -34,11 +34,7 @@
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
-						<i class="fa fa-bookmark"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
-					</li>
-					<li>
-						<a href="javascript:;">
-						<i class="icon-share"></i> Share </a>
+						<i class="fa fa-tag"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
 					</li>
 					<li class="divider">
 					</li>
@@ -60,14 +56,14 @@
 		<div class="page-top">
 			<!-- BEGIN HEADER SEARCH BOX -->
 			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form" action="extra_search.html" method="GET">
+			<!-- <form class="search-form" action="extra_search.html" method="GET">
 				<div class="input-group">
 					<input type="text" class="form-control input-sm" placeholder="Search..." name="query">
 					<span class="input-group-btn">
 					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
 					</span>
 				</div>
-			</form>
+			</form> -->
 			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
@@ -82,307 +78,6 @@
 					</li>
 					<li class="separator hide">
 					</li>
-					<!-- BEGIN NOTIFICATION DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-notification dropdown-dark" id="header_notification_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-bell"></i>
-						<span class="badge badge-success">
-						7 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3><span class="bold">12 pending</span> notifications</h3>
-								<a href="extra_profile.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 250px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="time">just now</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-success">
-										<i class="fa fa-plus"></i>
-										</span>
-										New user registered. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Server #12 overloaded. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">10 mins</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Server #2 not responding. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">14 hrs</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										Application error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">2 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Database overloaded 68%. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">3 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										A user IP blocked. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">4 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-warning">
-										<i class="fa fa-bell-o"></i>
-										</span>
-										Storage Server #4 not responding dfdfdfd. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">5 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-info">
-										<i class="fa fa-bullhorn"></i>
-										</span>
-										System Error. </span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="time">9 days</span>
-										<span class="details">
-										<span class="label label-sm label-icon label-danger">
-										<i class="fa fa-bolt"></i>
-										</span>
-										Storage server failed. </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END NOTIFICATION DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN INBOX DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-inbox dropdown-dark" id="header_inbox_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-envelope-open"></i>
-						<span class="badge badge-danger">
-						4 </span>
-						</a>
-						<ul class="dropdown-menu">
-							<li class="external">
-								<h3>You have <span class="bold">7 New</span> Messages</h3>
-								<a href="inbox.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">Just Now </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">16 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar1.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Bob Nilson </span>
-										<span class="time">2 hrs </span>
-										</span>
-										<span class="message">
-										Vivamus sed nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar2.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Lisa Wong </span>
-										<span class="time">40 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed auctor 40% nibh congue nibh... </span>
-										</a>
-									</li>
-									<li>
-										<a href="inbox.html?a=view">
-										<span class="photo">
-										<img src="<?php echo base_url()?>public/assets/admin/layout3/img/avatar3.jpg" class="img-circle" alt="">
-										</span>
-										<span class="subject">
-										<span class="from">
-										Richard Doe </span>
-										<span class="time">46 mins </span>
-										</span>
-										<span class="message">
-										Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END INBOX DROPDOWN -->
-					<li class="separator hide">
-					</li>
-					<!-- BEGIN TODO DROPDOWN -->
-					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-					<li class="dropdown dropdown-extended dropdown-tasks dropdown-dark" id="header_task_bar">
-						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<i class="icon-calendar"></i>
-						<span class="badge badge-primary">
-						3 </span>
-						</a>
-						<ul class="dropdown-menu extended tasks">
-							<li class="external">
-								<h3>You have <span class="bold">12 pending</span> tasks</h3>
-								<a href="page_todo.html">view all</a>
-							</li>
-							<li>
-								<ul class="dropdown-menu-list scroller" style="height: 275px;" data-handle-color="#637283">
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New release v1.2 </span>
-										<span class="percent">30%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">40% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Application deployment</span>
-										<span class="percent">65%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">65% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile app release</span>
-										<span class="percent">98%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 98%;" class="progress-bar progress-bar-success" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">98% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Database migration</span>
-										<span class="percent">10%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 10%;" class="progress-bar progress-bar-warning" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">10% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Web server upgrade</span>
-										<span class="percent">58%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 58%;" class="progress-bar progress-bar-info" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">58% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">Mobile development</span>
-										<span class="percent">85%</span>
-										</span>
-										<span class="progress">
-										<span style="width: 85%;" class="progress-bar progress-bar-success" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">85% Complete</span></span>
-										</span>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-										<span class="task">
-										<span class="desc">New UI release</span>
-										<span class="percent">38%</span>
-										</span>
-										<span class="progress progress-striped">
-										<span style="width: 38%;" class="progress-bar progress-bar-important" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100"><span class="sr-only">38% Complete</span></span>
-										</span>
-										</a>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</li>
-					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
@@ -390,7 +85,15 @@
 						<span class="username username-hide-on-mobile">
 						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
-						<img alt="" class="img-circle" src="<?php echo base_url()?>public/assets/admin/layout4/img/avatar9.jpg"/>
+						<?php
+			              $query = $user_account->image;
+			              if (empty($query)) {
+			                $user_icon = 'avatar.png';
+			              } else {
+			                $user_icon = 'users/'.$user_account->image;
+			              }
+			            ?>
+				        <img alt="" class="img-circle" src="<?php echo base_url()?>public/attachments/<?php echo $user_icon?>"/>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
@@ -549,11 +252,6 @@
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
-								<li >
-									<a href="<?php echo base_url()?>admin/products/categories/add">
-									<i class="fa fa-check-square"></i>
-									Publish Sub Category</a>
-								</li>
 								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
@@ -564,14 +262,14 @@
 						</li>
 						<li>
 							<a href="javascript:;">
-							<i class="fa fa-bookmark"></i>
+							<i class="fa fa-tags"></i>
 							<span class="title">Tags</span>
 							<span class="arrow "></span>
 							</a>
 							<ul class="sub-menu">
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
-									<i class="fa fa-check-square-o"></i>
+									<i class="fa fa-tag"></i>
 									Publish Tags</a>
 								</li>
 								<li>
@@ -691,6 +389,7 @@
                 if ($this->session->flashdata('message')) {
                 ?>
                     <div class="alert alert-info">
+                        <button type="button" class="close" data-dismiss="alert"></button>
                         <div id="infoMessage"> <strong>Info!</strong><br/> <?php echo $message;?></div>
                     </div>
                     <?php
@@ -699,7 +398,7 @@
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1> Products Listing </h1>
+					<h1> <?php echo $title?> </h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -832,7 +531,7 @@
 												</a>
 												<ul class="dropdown-menu pull-right">
 													<li>
-														<a href="javascript:;">
+														<a href="<?php echo base_url()?>admin/products/export_to_excel">
 														Export to Excel </a>
 													</li>
 													<li>
@@ -895,138 +594,151 @@
 														</th>
 													</tr>
 													<tr role="row" class="filter">
-														<td>
-														</td>
-														<td>
-															<input type="text" class="form-control form-filter input-sm" name="product_id">
-														</td>
-														<td>
-															<input type="text" class="form-control form-filter input-sm" name="product_name">
-														</td>
-														<td>
-															<select name="product_category" class="form-control form-filter input-sm">
-																<option value="">Select...</option>
-																<?php foreach ($categories as $category) {
-																	if ($category->parent_category == null) {
-																		?>
-																			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-																			<?php
-																				$this->db->order_by('categories.category');
-																				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
-
-																				foreach ($subcategories as $subcategory) {
-																					?>
-																						<option value="<?php echo $subcategory->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category;?></option>
-																						<?php
-																							$this->db->order_by('categories.category');
-																							$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
-
-																							foreach ($mini_categories as $mini_category) {
-																								?>
-																									<option value="<?php echo $mini_category->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $mini_category->category;?></option>
-																								<?php
-																							}
-																						?>
-																					<?php
-																				}
+														<?php echo form_open('auth/search_products')?>
+															<td>
+															</td>
+															<td>
+															</td>
+															<td>
+																<input type="text" class="form-control form-filter input-sm" name="product_name">
+															</td>
+															<td>
+																<select name="category" class="form-control select2me form-filter input-sm">
+																	<option value="">Select...</option>
+																	<?php foreach ($categories as $category) {
+																		if ($category->parent_category == null) {
 																			?>
+																				<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
+																				<?php
+																					$this->db->order_by('categories.category');
+																					$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+																					foreach ($subcategories as $subcategory) {
+																						?>
+																							<option value="<?php echo $subcategory->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category;?></option>
+																							<?php
+																								$this->db->order_by('categories.category');
+																								$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
+
+																								foreach ($mini_categories as $mini_category) {
+																									?>
+																										<option value="<?php echo $mini_category->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $mini_category->category;?></option>
+																									<?php
+																								}
+																							?>
+																						<?php
+																					}
+																				?>
+																			<?php
+																		}?>
 																		<?php
-																	}?>
-																	<?php
-																}?>	
-															</select>
-														</td>
-														<td>
-															<div class="margin-bottom-5">
-																<input type="text" class="form-control form-filter input-sm" name="product_price_from" placeholder="From"/>
-															</div>
-															<input type="text" class="form-control form-filter input-sm" name="product_price_to" placeholder="To"/>
-														</td>
-														<td>
-															<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
-																<input type="text" class="form-control form-filter input-sm" readonly name="product_created_from" placeholder="From">
-																<span class="input-group-btn">
-																<button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button>
-																</span>
-															</div>
-															<div class="input-group date date-picker" data-date-format="dd/mm/yyyy">
-																<input type="text" class="form-control form-filter input-sm" readonly name="product_created_to " placeholder="To">
-																<span class="input-group-btn">
-																<button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button>
-																</span>
-															</div>
-														</td>
-														<td>
-															<select name="product_status" class="form-control form-filter input-sm">
-																<option value="">Select...</option>
-																<option value="published">Published</option>
-																<option value="notpublished">Not Published</option>
-																<option value="deleted">Deleted</option>
-															</select>
-														</td>
-														<td>
-															<div class="margin-bottom-5">
-																<button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
-															</div>
-															<button class="btn btn-sm red filter-cancel"><i class="fa fa-times"></i> Reset</button>
-														</td>
+																	}?>	
+																</select>
+															</td>
+															<td>
+																<div class="margin-bottom-5">
+																	<input type="text" class="form-control form-filter input-sm" name="product_price_from" placeholder="From"/>
+																</div>
+																<input type="text" class="form-control form-filter input-sm" name="product_price_to" placeholder="To"/>
+															</td>
+															<td>
+																<div class="input-group date date-picker margin-bottom-5" data-date-format="dd/mm/yyyy">
+																	<input type="text" class="form-control form-filter input-sm" readonly name="product_created_from" placeholder="From">
+																	<span class="input-group-btn">
+																	<button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button>
+																	</span>
+																</div>
+																<div class="input-group date date-picker" data-date-format="dd/mm/yyyy">
+																	<input type="text" class="form-control form-filter input-sm" readonly name="product_created_to " placeholder="To">
+																	<span class="input-group-btn">
+																	<button class="btn btn-sm default" type="button"><i class="fa fa-calendar"></i></button>
+																	</span>
+																</div>
+															</td>
+															<td>
+																<select name="status" class="form-control select2me form-filter input-sm">
+																	<option value="">Select...</option>
+																	<option value="0">Pending Approval</option>
+																	<option value="1">Published</option>
+																	<option value="2">Draft</option>
+																</select>
+															</td>
+															<td>
+																<div class="margin-bottom-5">
+																	<button type="submit" class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
+																</div>
+																<button class="btn btn-sm red filter-cancel"><i class="fa fa-times"></i> Reset</button>
+															</td>
+														<?php echo form_close()?>
 													</tr>
 												</thead>
 												<tbody>
-													<?php foreach ($products as $product):?>
-														<tr>
-															<td></td>
-															<td>
-		                                                        <?php
-		                                                            echo $i = $i + 1;
-		                                                        ?>                                       
-		                                                    </td>
-												            <td><?php echo htmlspecialchars(ucwords($product->name),ENT_QUOTES,'UTF-8');?> </td>
-												            <td>
-												            	<?php 
-													            	$arr = (array)json_decode($product->categories);
+													<?php
+														foreach ($products as $product) {
+															?>
+																<tr>
+																	<td>
+																		<input type="checkbox" class="group-checkable">
+																	</td>
+																	<td>
+				                                                        <?php
+				                                                            echo $i++;
+				                                                        ?>                                       
+				                                                    </td>
+														            <td><?php echo htmlspecialchars(ucwords($product->name),ENT_QUOTES,'UTF-8');?> </td>
+														            <td>
+														            	<?php 
+															            	$arr = (array)json_decode($product->categories);
 
-													            	foreach ($arr as $category) {
-													            		echo $category, ' ';
-													            	}
-												            	?>
-												            </td>
-		                                                    <td>
-		                                                        <?php echo $currency, ' ', number_format($product->sale_price, 2);?>
-		                                                    </td>
-															<td>
-		                                                        <?php echo date('jS M, Y', $product->date_created);?> at <?php echo date('H:i:s', $product->date_created);?>
-															</td>
-															<td>
-																<?php
-																	if ($product->status == 1) {
-																		?>
-																			<span >
-																				<a data-target="#unpublish" data-toggle="modal" href="#unpublish" class="label label-sm label-success"> Published</a>
-					                                                        </span>
+															            	foreach ($arr as $category) {
+															            		echo $category, ' ';
+															            	}
+														            	?>
+														            </td>
+				                                                    <td>
+				                                                        <?php echo $currency, ' ', number_format($product->sale_price, 2);?>
+				                                                    </td>
+																	<td>
+				                                                        <?php echo date('jS M, Y', $product->date_created);?> at <?php echo date('H:i:s', $product->date_created);?>
+																	</td>
+																	<td>
 																		<?php
-																	} else {
+																			if ($product->status == 1) {
+																				?>
+																					<span >
+																						<a href="<?php echo base_url('admin/product/unpublish/'. $product->id)?>" class="label label-sm label-success"> Published </a>
+							                                                        </span>
+																				<?php
+																			} elseif ($product->status == 0) {
+																				?>
+																					<span >
+																						<a href="<?php echo base_url('admin/product/approve/'. $product->id)?>" class="label label-sm label-danger"> Pending Approval </a>
+							                                                        </span>
+																				<?php
+																			} else {
+																				?>
+																					<span >
+							                                                            <a href="<?php echo base_url('admin/product/publish/'. $product->id)?>" class="label label-sm label-warning"> Draft </a>
+							                                                        </span>
+																				<?php
+																			}
 																		?>
-																			<span >
-					                                                            <a href="<?php echo base_url('admin/product/publish/'. $product->id)?>" class="label label-sm label-info"> Not Published</a>
-					                                                        </span>
-																		<?php
-																	}
-																?>
-															</td>
-															<td>
-																<span >
-		                                                            <a href="<?php echo base_url('admin/product/edit/'. $product->id)?>" class="label label-sm label-warning"><i class="fa fa-edit"></i> Edit</a>
-		                                                        </span>
-		                                                        <span >
-			                                                        <a href="<?php echo base_url('admin/product/'.$product->id)?>" class="label label-sm label-info"><i class="fa fa-search"></i> View</a>
-			                                                    </span>
-			                                                    <span >
-			                                                        <a href="<?php echo base_url('admin/product/delete/'.$product->id)?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Delete</a>
-			                                                    </span>
-															</td>
-														</tr>
-													<?php endforeach;?>
+																	</td>
+																	<td>
+																		<span >
+				                                                            <a href="<?php echo base_url('admin/product/edit/'. $product->id)?>" class="label label-sm label-warning"><i class="fa fa-edit"></i> Edit</a>
+				                                                        </span>
+				                                                        <span >
+					                                                        <a href="<?php echo base_url('admin/product/'.$product->id)?>" class="label label-sm label-info"><i class="fa fa-search"></i> View</a>
+					                                                    </span>
+					                                                    <span >
+					                                                        <a href="<?php echo base_url('admin/product/delete/'.$product->id)?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Delete</a>
+					                                                    </span>
+																	</td>
+																</tr>
+															<?php
+														}
+													?>
 												</tbody>
 											</table>
 

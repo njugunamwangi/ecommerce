@@ -2893,4 +2893,55 @@ class Ion_auth_model extends CI_Model
 			return FALSE;
 		}
 	}
+
+	/**
+	 * add review
+	 *
+	 * @param int | string
+	 */
+	public function add_review() {
+		$data = [
+			'product_id' => $this->input->post('product_id'),
+			'customer_id' => $this->input->post('customer_id'),
+			'review' => $this->input->post('review'),
+			'date_created' => time(),
+			'ratings' => $this->input->post('ratings')
+		];
+
+		$this->db->insert('reviews', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_review_added');
+			return TRUE; 
+		} else {
+			$this->set_error('product_review_not_added');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * add to wishlist
+	 *
+	 * @param int | string
+	 *
+	 * @return bool
+	 */
+	public function add_to_wishlist() {
+		$data = [
+			'customer_id' => $this->input->post('customer_id'),
+			'product_id' => $this->input->post('product_id'),
+			'wishlist_code' => $this->input->post('wishlist_code'),
+			'time' => time()
+		];
+
+		$this->db->insert('wishlist', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_added_to_wishlist');
+			return TRUE; 
+		} else {
+			$this->set_error('product_not_added_to_wishlist');
+			return FALSE;
+		}
+	}
 }

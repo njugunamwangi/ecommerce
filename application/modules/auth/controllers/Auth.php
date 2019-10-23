@@ -71,6 +71,12 @@ class Auth extends MX_Controller
 
 			$data['categories'] = $this->ion_auth_model->get_categories();
 
+			$data['completed_orders'] = $this->completed_orders();
+
+			$data['pending_orders'] = $this->pending_orders();
+
+			$data['rejected_orders'] = $this->rejected_orders();
+
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/index', $data);
 			$this->_render_page('templates/footer');
@@ -408,9 +414,114 @@ class Auth extends MX_Controller
 			$data['name_of_store'] = $this->nameofstore();
 			$data['store_phone_number'] = $this->storephonenumber();
 			$data['store_email'] = $this->storeemailaddress();
+			$data['store_location'] = $this->storelocation();
 		}
 
 		$this->_render_page('pages/register', $data);
+	}
+
+	public function register_customer() {
+		$tables = $this->config->item('tables', 'ion_auth');
+		$identity_column = $this->config->item('identity', 'ion_auth');
+		$data['identity_column'] = $identity_column;
+
+		// validate form input
+		$this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'trim|required');
+		$this->form_validation->set_rules('last_name', $this->lang->line('create_user_validation_lname_label'), 'trim|required');
+		if ($identity_column !== 'email')
+		{
+			$this->form_validation->set_rules('identity', $this->lang->line('create_user_validation_identity_label'), 'trim|required|is_unique[' . $tables['users'] . '.' . $identity_column . ']');
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email', 
+				[
+					'valid_email' => $this->lang->line('use_valid_email')
+				]);
+		}
+		else
+		{
+			$this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email|is_unique[' . $tables['users'] . '.email]', 
+				[
+					'is_unique' => $this->lang->line('email_already_registered'),
+					'valid_email' => $this->lang->line('use_valid_email')
+				]);
+		}
+		$this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim|required|is_unique[users.phone]|min_length[10]');
+		$this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE)
+		{
+			$email = strtolower($this->input->post('email'));
+			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
+			$password = $this->input->post('password');
+
+			$additional_data = [
+				'first_name' => $this->input->post('first_name'),
+				'last_name' => $this->input->post('last_name'),
+				'phone' => $this->input->post('phone'),
+			];
+		}
+		if ($this->form_validation->run() === TRUE && $this->ion_auth->register($identity, $password, $email, $additional_data))
+		{
+			// check to see if we are creating the user
+			// redirect them back to the admin page
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect(base_url().'admin/orders/new#checkout');
+		}
+		else
+		{
+			// display the create user form
+			// set the flash data error message if there is one
+			$data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+			$data['first_name'] = [
+				'name' => 'first_name',
+				'id' => 'first_name',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('first_name'),
+			];
+			$data['last_name'] = [
+				'name' => 'last_name',
+				'id' => 'last_name',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('last_name'),
+			];
+			$data['identity'] = [
+				'name' => 'identity',
+				'id' => 'identity',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('identity'),
+			];
+			$data['email'] = [
+				'name' => 'email',
+				'id' => 'email',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('email'),
+			];
+			$data['phone'] = [
+				'name' => 'phone',
+				'id' => 'phone',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('phone'),
+			];
+			$data['password'] = [
+				'name' => 'password',
+				'id' => 'password',
+				'type' => 'password',
+				'value' => $this->form_validation->set_value('password'),
+			];
+			$data['password_confirm'] = [
+				'name' => 'password_confirm',
+				'id' => 'password_confirm',
+				'type' => 'password',
+				'value' => $this->form_validation->set_value('password_confirm'),
+			];
+
+			$data['name_of_store'] = $this->nameofstore();
+			$data['store_phone_number'] = $this->storephonenumber();
+			$data['store_email'] = $this->storeemailaddress();
+		}
+
+		redirect(base_url().'admin/orders/new#register');
 	}
 
 	/**
@@ -1267,6 +1378,7 @@ class Auth extends MX_Controller
 
 				$data = [
 					'category' => $this->input->post('category'),
+					'parent_category' => $this->input->post('parent_category'),
 					'slug' => $slug
 				];
 			}
@@ -1277,8 +1389,6 @@ class Auth extends MX_Controller
 				// on submit redirect to categories page
 				redirect('admin/products/categories', 'refresh');
 			} else {
-
-				$data['error_message'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
 
 				$data['category'] = [
 					'name' => 'category',
@@ -1291,11 +1401,137 @@ class Auth extends MX_Controller
 
 				$data['categories'] = $this->ion_auth_model->get_categories();
 
-				$data['name_of_store'] = $this->db->get_where('info', ['field' => 'name-of-store'])->row()->value;
+				$data['name_of_store'] = $this->nameofstore();
 
 				$this->_render_page('templates/header', $head);
 				$this->_render_page('auth/publish-category', $data);
 				$this->_render_page('templates/footer');
+			}
+		}
+	}
+
+	/**
+	 * list categories
+	 *
+	 * @return categories
+	 *
+	 * @param string
+	 */
+	public function categories() {
+		$head['title'] = $this->lang->line('list_categories_heading');
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+
+			# if the user is not logged in
+			// redirect to the login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// if the user is logged in but not an admin
+			// show error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['categories'] = $this->ion_auth_model->get_categories();
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$this->_render_page('templates/header', $head);
+			$this->_render_page('auth/list-categories', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * view category
+	 *
+	 * @return category
+	 *
+	 * @param string
+	 */
+	public function view_category($slug) {
+		$data['category'] = $this->ion_auth_model->get_categories($slug);
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+
+			# if the user is not logged in
+			// redirect to the login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// if the user is logged in but not an admin
+			// show error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// check whether the category exists
+			if (empty($data['category'])) {
+				// if the category does not exist
+				// show error
+				show_error($this->lang->line('category_does_not_exist'));
+			} else {
+				$head['title'] = $data['category']->category;
+
+				$data['name_of_store'] = $this->nameofstore();
+
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$this->_render_page('templates/header', $head);
+				$this->_render_page('auth/view-category', $data);
+				$this->_render_page('templates/footer');
+			}
+		}
+	}
+
+	/**
+	 * edit category
+	 *
+	 * @return category
+	 *
+	 * @param string
+	 */
+	public function edit_category($slug) {
+		$data['category'] = $this->ion_auth_model->get_categories($slug);
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// check whether the category exists
+			if (empty($data['category'])) {
+				// if the category does not exist
+				// show error
+				show_error($this->lang->line('category_does_not_exist'));
+			} else {
+				// form vlidation
+				$this->form_validation->set_rules('category', $this->lang->line('edit_category_category_validation_label'), 'required');
+				$this->form_validation->set_rules('parent_category', $this->lang->line('edit_category_parennt_category_validation_label'));
+
+				if ($this->form_validation->run() === TRUE) {
+					$this->ion_auth_model->update_category($data['category']->id);
+					$this->session->set_flashdata('message', $this->ion_auth->messages());
+					redirect('admin/products/categories', 'refresh');
+				} else {
+					$head['title'] = $data['category']->category;
+
+					$data['name_of_store'] = $this->nameofstore();
+
+					$data['user_account'] = $this->ion_auth->user()->row();
+
+					$data['categories'] = $this->ion_auth_model->get_categories();
+
+					$this->_render_page('templates/header', $head);
+					$this->_render_page('auth/edit-category', $data);
+					$this->_render_page('templates/footer');
+				}
 			}
 		}
 	}
@@ -1364,9 +1600,6 @@ class Auth extends MX_Controller
 				redirect('admin/products/tags');
 			} else {
 
-				// if the form does not pass the validation
-				$data['error_message'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
-
 				$data['tag'] = [
 					'name' => 'tag',
 					'type' => 'text',
@@ -1403,7 +1636,6 @@ class Auth extends MX_Controller
 			$this->db->insert('pd_tags', $tag);
 			redirect('admin/products/publish');
 		} else {
-			// echo $this->lang->line('form_error_message');
 			redirect(base_url().'/admin/products/publish#stack3');
 		}
 	}
@@ -1466,7 +1698,6 @@ class Auth extends MX_Controller
 			} else {
 
 				// if the form doesn't pass the form validations
-				// $data['form_error'] = $this->session->set_flashdata('message', $this->lang->line('form_error_message'));
 
 				$data['name'] = [
 					'name' => 'name',
@@ -1592,6 +1823,35 @@ class Auth extends MX_Controller
 	}
 
 	/**
+	 * search products
+	 *
+	 * @return products as per search criteria
+	 *
+	 * @param int|string
+	 */
+	public function search_products() {
+		$name = $this->input->post('product_name');
+		$category = $this->input->post('category');
+		$status = $this->input->post('status');
+
+		$data['title'] = $this->lang->line('search_products_heading');
+
+		$data['user_account'] = $this->ion_auth->user()->row();
+
+		$data['products'] = $this->ion_auth_model->search_products($name, $category, $status);
+
+		$data['categories'] = $this->ion_auth_model->get_categories();
+
+		$data['name_of_store'] = $this->nameofstore();
+
+		$data['currency'] = $this->storecurrency();
+
+		$this->_render_page('templates/header');
+		$this->_render_page('auth/list-products', $data);
+		$this->_render_page('templates/footer');
+	}
+
+	/**
 	 * edit product
 	 */
 	public function edit_product($id = NULL) {
@@ -1673,7 +1933,7 @@ class Auth extends MX_Controller
 			if (empty($data['product'])) {
 				show_404();
 			}
-
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			$data['title'] = $data['product']->name;
 			$data['name_of_store'] = $this->nameofstore();
 			$data['user_account'] = $this->ion_auth->user()->row();
@@ -1683,6 +1943,182 @@ class Auth extends MX_Controller
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/view-product', $data);
 			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * unpublish product | save it as draft 
+	 *
+	 * @param int
+	 *
+	 * @return product's status as draft
+	 */
+	public function unpublish($id = NULL) {
+		$data['product'] = $this->ion_auth_model->get_products($id);
+
+		if (empty($data['product'])) {
+			// if the product does not exist
+			// whoops, we dont have this product
+			show_404();
+		} else {
+			// login and user credentials check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect the to the login page
+				redirect('login', 'refresh');
+			} elseif (!$this->ion_auth->is_admin()) {
+				// if the user is logged in
+				// but is not an admin, show error
+				show_error($this->lang->line('admin_access_only'));
+			} else {
+				$id = $data['product']->id;
+				$this->ion_auth_model->_unpublish_product($id);
+    			$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			}
+		}
+	}
+
+	/**
+	 * approve product | save it as published 
+	 *
+	 * @param int
+	 *
+	 * @return product's status as published
+	 */
+	public function approve($id = NULL) {
+		$data['product'] = $this->ion_auth_model->get_products($id);
+
+		if (empty($data['product'])) {
+			// if the product does not exist
+			// whoops, we dont have this product
+			show_404();
+		} else {
+			// login and user credentials check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect the to the login page
+				redirect('login', 'refresh');
+			} elseif (!$this->ion_auth->is_admin()) {
+				// if the user is logged in
+				// but is not an admin, show error
+				show_error($this->lang->line('admin_access_only'));
+			} else {
+				$id = $data['product']->id;
+				$this->ion_auth_model->_publish_product($id);
+    			$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			}
+		}
+	}
+
+	/**
+	 * publish product | save it as published 
+	 *
+	 * @param int
+	 *
+	 * @return product's status as published
+	 */
+	public function publish($id = NULL) {
+		$data['product'] = $this->ion_auth_model->get_products($id);
+
+		if (empty($data['product'])) {
+			// if the product does not exist
+			// whoops, we dont have this product
+			show_404();
+		} else {
+			// login and user credentials check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect the to the login page
+				redirect('login', 'refresh');
+			} elseif (!$this->ion_auth->is_admin()) {
+				// if the user is logged in
+				// but is not an admin, show error
+				show_error($this->lang->line('admin_access_only'));
+			} else {
+				$id = $data['product']->id;
+				$this->ion_auth_model->_publish_product($id);
+    			$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			}
+		}
+	}
+
+	/**
+	 * export products to excel
+	 *
+	 * @param int |string
+	 *
+	 * @return products xls file
+	 */
+	public function export_products_to_excel() {
+		echo 'done';
+	}
+
+	/**
+	 * approve review
+	 *
+	 * @param int 
+	 *
+	 * @return bool
+	 */
+	public function approve_review($id = NULL) {
+		$data['review'] = $this->ion_auth_model->get_reviews($id);
+
+		if (empty($data['review'])) {
+			// if the review does not exist
+			// whoops, we dont have this review
+			show_404();
+		} else {
+			// login and user credentials check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect the to the login page
+				redirect('login', 'refresh');
+			} elseif (!$this->ion_auth->is_admin()) {
+				// if the user is logged in
+				// but is not an admin, show error
+				show_error($this->lang->line('admin_access_only'));
+			} else {
+				$id = $data['review']->id;
+				$this->ion_auth_model->_approve_review($id);
+    			$this->session->set_flashdata('message', $this->ion_auth->messages());
+    			redirect('admin/products', 'refresh');
+			}
+		}
+	}
+
+	/**
+	 * reject review
+	 *
+	 * @param int 
+	 *
+	 * @return bool
+	 */
+	public function reject_review($id = NULL) {
+		$data['review'] = $this->ion_auth_model->get_reviews($id);
+
+		if (empty($data['review'])) {
+			// if the review does not exist
+			// whoops, we dont have this review
+			show_404();
+		} else {
+			// login and user credentials check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect the to the login page
+				redirect('login', 'refresh');
+			} elseif (!$this->ion_auth->is_admin()) {
+				// if the user is logged in
+				// but is not an admin, show error
+				show_error($this->lang->line('admin_access_only'));
+			} else {
+				$id = $data['review']->id;
+				$this->ion_auth_model->_reject_review($id);
+    			$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			}
 		}
 	}
 
@@ -1722,7 +2158,6 @@ class Auth extends MX_Controller
 			if ($this->form_validation->run() === TRUE && $this->db->insert('shipment', $data)) {
 				// check whether we are creating a new shipment
 				// redirect to shipment listings page
-				$data['message'] = $this->session->set_flashdata('message', $this->lang->line('shipment_successfully_added'));
 				redirect('admin/shipments');
 			} else {
 
@@ -1786,6 +2221,7 @@ class Auth extends MX_Controller
 	 * @return total number of orders
 	 */
 	public function get_total_orders() {
+		$this->db->where('status', 4);
 		$query = $this->db->get('orders')->num_rows();
 		return $query;
 	}
@@ -1808,6 +2244,7 @@ class Auth extends MX_Controller
 			// show error
 			show_error($this->lang->line('admin_access_only'));
 		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			$data['user_account'] = $this->ion_auth->user()->row();
 
@@ -1817,10 +2254,46 @@ class Auth extends MX_Controller
 
 			$data['store_currency'] = $this->storecurrency();
 
+			$data['customers'] = $this->ion_auth->users()->result();
+
+			$data['shipments'] = $this->ion_auth_model->get_shipments();
+
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/list-orders', $data);
 			$this->_render_page('templates/footer');
 		}
+	}
+
+	/**
+	 * search orders
+	 *
+	 * @return orders from search criteria
+	 *
+	 * @param string
+	 */
+	public function search_orders() {
+		$order_id = $this->input->post('order_id');
+		$customer_id = $this->input->post('customer');
+		$ship_to = $this->input->post('ship_to');
+		$status = $this->input->post('status');
+
+		$data['title'] = $this->lang->line('search_orders_heading');
+
+		$data['orders'] = $this->ion_auth_model->search_orders($order_id, $customer_id, $ship_to, $status);
+
+		$data['user_account'] = $this->ion_auth->user()->row();
+
+		$data['name_of_store'] = $this->nameofstore();
+
+		$data['store_currency'] = $this->storecurrency();
+
+		$data['customers'] = $this->ion_auth->users()->result();
+
+		$data['shipments'] = $this->ion_auth_model->get_shipments();
+
+		$this->_render_page('templates/header');
+		$this->_render_page('auth/list-orders', $data);
+		$this->_render_page('templates/footer');
 	}
 
 	/**
@@ -1843,6 +2316,7 @@ class Auth extends MX_Controller
 			if (empty($data['order'])) {
 				show_404();
 			}
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
 			$data['title'] = $data['order']->order_id;
 
@@ -1852,9 +2326,83 @@ class Auth extends MX_Controller
 
 			$data['store_currency'] = $this->storecurrency();
 
+			$data['order_details'] = $this->db->get_where('orders_summary', ['order_id' => $data['order']->id])->result();
+
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/view-order', $data);
 			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * make product order available
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function make_available($id) {
+		$data['order'] = $this->ion_auth_model->get_orders_summary($id);
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			
+			// if the user is not logged in
+			// redirect them to the login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// if the user is logged in 
+			// but is not an admin, show error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// check if the order exists
+			if (empty($data['order'])) {
+				
+				// if the order does not exist, show error
+				show_error($this->lang->line('order_does_not_exist')); 
+			} else {
+				$slug = $this->db->get_where('orders', ['id' => $data['order']->order_id])->row()->slug;
+				$this->ion_auth_model->_make_available($data['order']->id);
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/order/'.$slug, 'refresh');
+			}
+		}
+	}
+
+	/**
+	 * make product order unavailable
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function make_unavailable($id) {
+		$data['order'] = $this->ion_auth_model->get_orders_summary($id);
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			
+			// if the user is not logged in
+			// redirect them to the login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			
+			// if the user is logged in 
+			// but is not an admin, show error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// check if the order exists
+			if (empty($data['order'])) {
+				
+				// if the order does not exist, show error
+				show_error($this->lang->line('order_does_not_exist')); 
+			} else {
+				$slug = $this->db->get_where('orders', ['id' => $data['order']->order_id])->row()->slug;
+				$this->ion_auth_model->_make_unavailable($data['order']->id);
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/order/'.$slug, 'refresh');
+			}
 		}
 	}
 
@@ -1865,6 +2413,42 @@ class Auth extends MX_Controller
 		$this->db->limit(10);
 		$this->db->order_by('orders.order_id', 'desc');
 		return $this->db->get('orders')->result();
+	}
+
+	/**
+	 * completed orders
+	 *
+	 * @return delivered and closed orders
+	 */
+	public function completed_orders() {
+		$this->db->where('status', 4);
+		$this->db->order_by('orders.order_id', 'desc');
+		$orders = $this->db->get('orders')->result();
+		return $orders;
+	}
+
+	/**
+	 * completed orders
+	 *
+	 * @return delivered and closed orders
+	 */
+	public function pending_orders() {
+		$this->db->where('status', 0);
+		$this->db->order_by('orders.order_id', 'desc');
+		$orders = $this->db->get('orders')->result();
+		return $orders;
+	}
+
+	/**
+	 * completed orders
+	 *
+	 * @return delivered and closed orders
+	 */
+	public function rejected_orders() {
+		$this->db->where('status', 3);
+		$this->db->order_by('orders.order_id', 'desc');
+		$orders = $this->db->get('orders')->result();
+		return $orders;
 	}
 
 	/**
@@ -2026,6 +2610,7 @@ class Auth extends MX_Controller
 	 * @return total sales
 	 */
 	public function total_sales() {
+		$this->db->where('status', 4);
 		$this->db->select_sum('total_orders');
 		$result =  $this->db->get('orders')->row();
 		return $result->total_orders;
@@ -2178,6 +2763,129 @@ class Auth extends MX_Controller
 		} else {
 			echo 'error';
 		}
+	}
+
+	/**
+	 * account settings
+	 *
+	 * @return account info
+	 *
+	 */
+	public function account_settings() {
+		$data['title'] = $this->lang->line('account_settings_heading');
+
+		// login and user  credendtials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['store_email'] = $this->storeemailaddress();
+
+			$data['store_phone_number'] = $this->storephonenumber();
+
+			$data['store_currency'] = $this->storecurrency();
+
+			$data['store_location'] = $this->storelocation();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/account-settings', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * upload profile picture
+	 *
+	 * @return profile picture
+	 */
+	public function upload_profile_picture() {
+		$config['upload_path'] = './public/attachments/users';
+		$config['allowed_types'] = 'jpeg|jpg|png|gif';
+		$config['max_size'] = 2048;
+		$this->upload->initialize($config);
+
+		$this->upload->do_upload('profile_picture');
+		$upload_data = $this->upload->data();
+
+		$file_name = '';
+		if ($upload_data) {
+			$file_name = $upload_data['file_name'];
+			$file_type = $upload_data['file_type'];
+			$file_size = $upload_data['file_size'];
+		} else {
+			$upload_error = $this->upload->display_errors();
+		}
+
+		$this->ion_auth_model->upload_profile_picture($file_name);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/account#profile_picture', 'refresh');
+	}
+
+	/**
+	 * cancel order
+	 *
+	 * @return order status
+	 */
+	public function cancel_order($id) {
+		$this->ion_auth_model->_cancel_order($id);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/orders', 'refresh');
+	}
+
+	/**
+	 * process order
+	 *
+	 * @return order status
+	 */
+	public function process_order($id) {
+		$this->ion_auth_model->_process_order($id);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/orders', 'refresh');
+	}
+
+	/**
+	 * order in transit
+	 *
+	 * @return order status
+	 */
+	public function in_transit($id) {
+		$this->ion_auth_model->_in_transit($id);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/orders', 'refresh');
+	}
+
+	/**
+	 * order pending
+	 *
+	 * @return order status
+	 */
+	public function order_pending($id) {
+		$this->ion_auth_model->_order_pending($id);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/orders', 'refresh');
+	}
+
+	/**
+	 * order in transit
+	 *
+	 * @return order status
+	 */
+	public function deliver_order($id) {
+		$this->ion_auth_model->_deliver_order($id);
+		$this->session->set_flashdata('message', $this->ion_auth->messages());
+		redirect('admin/orders', 'refresh');
 	}
 
 	/**

@@ -152,8 +152,10 @@ $lang['publish_category_heading']								= 'Publish Category';
 $lang['publish_category_validation_category_label']				= 'Category';
 $lang['publish_parent_category_validation_subcategory_label']	= 'Parent Category';
 $lang['form_error_message']										= 'Your form appears to have some errors';
-
-
+$lang['list_categories_heading']								= 'Categories';
+$lang['category_does_not_exist']								= 'The category does not exist';
+$lang['edit_category_category_validation_label']				= 'Category';
+$lang['edit_category_parennt_category_validation_label']		= 'Parent Category';
 
 // Product Tags
 $lang['publish_tag_heading']					= 'Publish Tag';
@@ -176,7 +178,11 @@ $lang['publish_product_validation_available_from_label']	= 'Available From';
 $lang['publish_product_validation_available_to_label']		= 'Available To';
 $lang['publish_product_validation_status_to_label'] 		= 'Status';
 $lang['product_added_successfully']							= 'Product added Successfully';
-$lang['error_adding_product']								= 'Error adding product';		
+$lang['error_adding_product']								= 'Error adding product';
+$lang['product_successfully_saved_as_draft']				= 'Product saved as draft!';
+$lang['product_not_updated']								= 'Product not updated';
+$lang['product_successfully_saved_as_published']			= 'Product saved as published!';
+$lang['search_products_heading']							= 'Search Products';
 
 // Edit product
 $lang['edit_product_heading']								= 'Edit';
@@ -214,6 +220,20 @@ $lang['use_valid_email']						= 'Please use a valid email';
 
 // Orders
 $lang['orders_heading']							= 'Orders';
+$lang['order_successfully_cancelled']			= 'Order successfully cancelled';
+$lang['order_not_cancelled']					= 'Order not cancelled';
+$lang['order_successfully_processed']			= 'Order successfully processed';
+$lang['order_not_processed']					= 'Order not processed';
+$lang['order_successfully_in_transit']			= 'Order in Transit';
+$lang['order_not_in_transit']					= 'Order not transit';
+$lang['order_successfully_pending']				= 'Order successfully pending';
+$lang['order_not_pending']						= 'Order not pending';
+$lang['order_successfully_delivered']			= 'Order successfully delivered and closed';
+$lang['order_not_delivered']					= 'Order not delivered';
+$lang['search_orders_heading']					= 'Search Orders';
+$lang['order_does_not_exist']					= 'Order does not exist';
+$lang['product_order_made_available']			= 'Product order available';
+$lang['product_order_not_available']			= 'Product order not available';
 
 // settings
 $lang['general_settings_heading']					= 'General Settings';
@@ -269,3 +289,14 @@ $lang['confirm_order_method_of_payment_validation_label']		= 'Method of Payment'
 
 // View user
 $lang['view_user_heading']					= 'View User';
+
+// Reviews
+$lang['review_approved']				= 'Review Approved';
+$lang['review_not_approved']			= 'Review not Approved';
+$lang['review_rejected']				= 'Review Rejected';
+$lang['review_not_rejected']			= 'Review not Rejected';
+
+// Account Settings
+$lang['account_settings_heading']			= 'Account Settings';
+$lang['profile_picture_successfully_updated']	= 'Profile picture updated successfully';
+$lang['profile_picture_not_updated']			= 'Profile picture not updated';

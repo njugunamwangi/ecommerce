@@ -238,6 +238,16 @@ License: You must have a valid license purchased only from themeforest (the abov
             <li><a href="<?php echo base_url()?>">Home</a></li>
             <li class="active"><?php echo ucwords($product->name)?></li>
         </ul>
+        <?php
+          if ($this->session->flashdata('message')) {
+            ?>
+              <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert"></button>
+                <div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', ucfirst($message);?></div>
+              </div>
+            <?php
+          }
+        ?>
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40">
 
@@ -296,9 +306,13 @@ License: You must have a valid license purchased only from themeforest (the abov
                   <?php echo form_close()?>
                   <div class="review">
                     <?php
+                      $this->db->where('status', 1);
                       $this->db->where('product_id', $product->id);
                       $this->db->select_sum('ratings');
                       $result =  $this->db->get('reviews')->row()->ratings;
+                      
+                      $this->db->where('status', 1);
+                      $this->db->where('product_id', $product->id);
                       $num_of_reviews = $this->db->get('reviews')->num_rows();
                       if ($num_of_reviews < 1) {
                         $average = 0;
@@ -306,11 +320,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                         $average = $result/$num_of_reviews;
                       }
                     ?>
-                    <input type="range" value="<?php echo $average;?>" step="0.25" id="backing4">
-                    <div class="rateit" data-rateit-backingfld="#backing4" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
-                    </div>
-                    <a href="javascript:;"><?php
+                    <div class="rateit" data-rateit-value="<?php echo $average?>" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+                    <a href="javascript:;">
+                      <?php
                         $this->db->where('product_id', $product->id);
+                        $this->db->where('status', 1);
                         $num_of_reviews = $this->db->get('reviews')->num_rows();
                         echo $num_of_reviews
                       ?> review(s)</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#write-a-review">Write a review</a>
@@ -391,13 +405,20 @@ License: You must have a valid license purchased only from themeforest (the abov
                       <!--<p>There are no reviews for this product.</p>-->
                       <?php
                         $this->db->order_by('reviews.date_created', 'asc');
-                        $reviews = $this->db->get_where('reviews', ['product_id' => $product->id])->result();
+                        $this->db->where('status', 1);
+                        $this->db->where('product_id', $product->id);
+                        $reviews = $this->db->get('reviews')->result();
 
                         foreach ($reviews as $review) {
                           ?>
                             <div class="review-item clearfix">
                               <div class="review-item-submitted">
-                                <strong><?php echo $review->name?></strong>
+                                <strong>
+                                  <?php 
+                                    $customer = $this->db->from('users')->where('id', $review->customer_id)->get()->row();
+                                    echo $customer->first_name, ' ', $customer->last_name;
+                                  ?>  
+                                </strong>
                                 <em><?php echo date('jS M, Y',$review->date_created)?> at <?php echo date('H:i:s',$review->date_created)?></em>
                                 <div class="rateit" data-rateit-value="<?php echo $review->ratings?>" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
                               </div>                                              
@@ -411,54 +432,38 @@ License: You must have a valid license purchased only from themeforest (the abov
                         
 
                       <!-- BEGIN FORM-->
-                      <?php echo form_open('pages/add_review'); ?>
-                        <?php echo form_hidden('product_id', $product->id);?>
-                        <?php echo form_hidden('slug', $product->slug);?>
-                        <h2>Write a review</h2>
                         <?php
                           if ($this->ion_auth->logged_in()) {
                             ?>
-                              <?php echo form_hidden('name', $user_account->first_name);?>
-                              <?php echo form_hidden('email', $user_account->email);?>
-                              <div class="form-group">
-                                <label for="review">Review <span class="require">*</span></label>
-                                <textarea class="form-control" rows="8" id="review" name="review"></textarea>
-                              </div>
-                              <div class="form-group">
-                                <label for="ratings">Rating <span class="require">*</span></label>
-                                <input type="range" value="4" step="0.25" id="backing5" name="ratings">
-                                <div class="rateit" data-rateit-backingfld="#backing5" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
+                              <h2>Write a review</h2>
+                              <?php echo form_open('pages/add_review'); ?>
+                                <?php echo form_hidden('product_id', $product->id);?>
+                                <?php echo form_hidden('slug', $product->slug);?>
+                                <?php echo form_hidden('customer_id', $user_account->id);?>
+                                <div class="form-group">
+                                  <label for="review">Review <span class="require">*</span></label>
+                                  <textarea class="form-control" rows="8" id="review" name="review"></textarea>
                                 </div>
-                              </div>
+                                <div class="form-group">
+                                  <label for="ratings">Rating <span class="require">*</span></label>
+                                  <input type="range" value="4" step="0.25" id="backing5" name="ratings">
+                                  <div class="rateit" data-rateit-backingfld="#backing5" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
+                                  </div>
+                                </div>
+                          
+                                <div class="padding-top-20">                  
+                                  <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
+                              <?php echo form_close()?>
                             <?php
                           } else {
                             ?>
-                              <div class="form-group">
-                                <label for="name">Name <span class="require">*</span></label>
-                                <input type="text" class="form-control" id="name" name="name">
-                              </div>
-                              <div class="form-group">
-                                <label for="email">Email <span class="require">*</span></label>
-                                <input type="text" class="form-control" id="email" name="email">
-                              </div>
-                              <div class="form-group">
-                                <label for="review">Review <span class="require">*</span></label>
-                                <textarea class="form-control" rows="8" id="review" name="review"></textarea>
-                              </div>
-                              <div class="form-group">
-                                <label for="ratings">Rating <span class="require">*</span></label>
-                                <input type="range" value="4" step="0.25" id="backing5" name="ratings">
-                                <div class="rateit" data-rateit-backingfld="#backing5" data-rateit-resetable="false"  data-rateit-ispreset="true" data-rateit-min="0" data-rateit-max="5">
-                                </div>
-                              </div>
+                              Login/register to write a review
+                              <br><br>
+                              <a href="<?php echo base_url()?>login" class="btn btn-primary"><i class="fa fa-key"> Login </i></a>
                             <?php
                           }
                         ?>
-                        
-                        <div class="padding-top-20">                  
-                          <button type="submit" class="btn btn-primary">Send</button>
-                        </div>
-                      <?php echo form_close()?>
                       <!-- END FORM--> 
                     </div>
                   </div>
