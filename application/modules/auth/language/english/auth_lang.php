@@ -202,9 +202,11 @@ $lang['edit_product_status_validation_label']				= 'Status';
 $lang['product_updated_successfully']						= 'Product updated Successfully';
 $lang['product_update_failed']								= 'Product update failed';
 
-// List Products
+// Products
 $lang['list_products_heading']					= 'Products';
-
+$lang['product_doesnt_exist']					= 'The product does not exist';
+$lang['product_successfully_deleted']			= 'Product successfully deleted';
+$lang['product_not_deleted']					= 'Product not deleted';
 
 // Shipment
 $lang['add_shipment_heading']					= 'Add Shipment';
@@ -237,6 +239,7 @@ $lang['product_order_not_available']			= 'Product order not available';
 
 // settings
 $lang['general_settings_heading']					= 'General Settings';
+$lang['m_pesa_credentials_heading']					= 'M-Pesa Credentials';
 $lang['settings']									= 'Settings';
 $lang['add_field_name_validation_label']			= 'Field';
 $lang['add_name_of_store_validation_label']			= 'Name of Store';
@@ -254,6 +257,18 @@ $lang['store_location_updated_successfully']		= 'Store location successfully upd
 $lang['store_location_update_failed']				= 'Store location update failed';
 $lang['store_currency_updated_successfully']		= 'Store currency successfully updated';
 $lang['store_currency_update_failed']				= 'Store currency update failed';
+$lang['edit_consumer_key_validation_label']			= 'Consumer Key';
+$lang['consumer_key_updated_successfully']			= 'Consumer Key successfully updated';
+$lang['consumer_key_update_failed']					= 'Consumer Key update failed';
+$lang['edit_consumer_secret_validation_label']		= 'Consumer Secret';
+$lang['consumer_secret_updated_successfully']		= 'Consumer Secret successfully updated';
+$lang['consumer_secret_update_failed']				= 'Consumer Secret update failed';
+$lang['edit_till_number_validation_label']			= 'Till Number';
+$lang['till_number_updated_successfully']			= 'Till Number successfully updated';
+$lang['till_number_update_failed']					= 'Till Number update failed';
+$lang['edit_pass_key_validation_label']				= 'Pass Key';
+$lang['pass_key_updated_successfully']				= 'Pass Key successfully updated';
+$lang['pass_key_update_failed']						= 'Pass Key update failed';
 
 // Users
 $lang['users']						= 'Users';

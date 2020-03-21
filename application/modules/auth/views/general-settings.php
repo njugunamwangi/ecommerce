@@ -1,4 +1,4 @@
-	<title><?php echo $title;?> | <?php echo $name_of_store?></title>
+	<title><?php echo $title, ' ', $name_of_store?></title>
 </head>
 <?php $i=0;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
@@ -8,9 +8,9 @@
 	<div class="page-header-inner">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="<?php echo base_url()?>admin">
+			<!-- <a href="<?php echo base_url()?>admin">
 			<img src="../../assets/admin/layout4/img/logo-light.png" alt="logo" class="logo-default"/>
-			</a>
+			</a> -->
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
 			</div>
@@ -351,6 +351,11 @@
 							<i class="fa fa-cog"></i>
 							<?php echo $this->lang->line('general_settings_heading')?> </a>
 						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
+						</li>
 					</ul>
 				</li>
 			</ul>
@@ -523,7 +528,7 @@
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">
-											<i class="icon-basket"></i>
+											<i class="fa fa-shopping-cart"></i>
 											</span>
 											<input type="text" name="name_of_store" class="form-control" placeholder="e.g. Jumia, Kilimall" value="<?php echo $name_of_store?>">
 										</div>
@@ -654,7 +659,7 @@
 								<div class="form-body">
 									<div class="form-group">
 										<div class="input-group col-md-12">
-											<textarea class="ckeditor form-control" name="store_location" placeholder="99-01020 Ruiru, Kiambu" rows="6" value="<?php echo $store_location?>"></textarea>
+											<textarea class="ckeditor form-control" name="store_location" placeholder="99-01020 Ruiru, Kiambu" rows="6" value=""><?php echo $store_location?></textarea>
 										</div>
 									</div>
 								</div>
@@ -665,6 +670,59 @@
 									</div>
 								</div>
 							<?php echo form_close();?>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="portlet box purple ">
+						<div class="portlet-title">
+							<div class="caption">
+								Favicon
+							</div>
+							<div class="tools">
+								<a href="" class="reload">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body form">
+							<form method="post" action="<?php echo base_url('auth/favicon')?>" enctype="multipart/form-data">
+								<div class="form-body">
+									<div class="form-group">
+										<div class="input-group">
+											<div class="form-group">
+												<div class="fileinput fileinput-new" data-provides="fileinput">
+					                                <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: auto; height: auto;"> 
+					                                	<?php
+					                                		if (empty($favicon)) {
+					                                			$site_icon = 'avatar.png';
+					                                		} else {
+					                                			$site_icon = 'favicon/'.$favicon;
+					                                		}
+					                                	?>
+					                                	<img src="<?php echo base_url()?>public/attachments/<?php echo $site_icon; ?>" alt=""/>
+					                                </div>
+					                                <div>
+					                                    <span class="btn red btn-outline btn-file">
+					                                    	<span class="fileinput-new">Select Image</span>
+					                                    	<span class="fileinput-exists">Change</span>
+					                                        <input type="file" name="favicon" value="<?php echo set_value('')?>">
+					                                    </span>
+					                                    <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">Remove</a>
+					                                </div>
+					                            </div>
+											</div>
+											<!-- <div class="margin-top-10">
+											</div> -->
+										</div>
+									</div>
+								</div>
+								<div class="form-actions" >
+									<div class="pull-right">
+										<button type="button" class="btn btn-xs default">Cancel</button>
+										<button type="submit" class="btn btn-xs purple">Save Changes</button>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

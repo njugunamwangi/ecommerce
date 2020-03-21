@@ -521,9 +521,8 @@
                                         <?php foreach ($users as $user):?>
 											<tr>
 												<?php 
-													$baseurl = base_url();
-													$baseurlinfo = explode('//', $baseurl, 2);
-													$base = $baseurlinfo[1];
+													$domain = explode('.', $_SERVER['HTTP_HOST'], 3);
+													$base = $domain[0].'.'.$domain[1];
 												?>
 												<td>
                                                     <?php
@@ -607,7 +606,7 @@
                                                         if ($group->name === 'vendor') {
                                                             ?>
                                                             <span >
-                                                                <a href="<?php echo prep_url($user->created_on.'.'.$base.'./vendor')?>" class="label label-sm label-default" target="_blank" ><i class="fa fa-user-secret"></i> <?php echo lang('login_as_an_admin')?></a>
+                                                                <a href="<?php echo prep_url($user->created_on.'.'.$base.'/vendor')?>" class="label label-sm label-default" target="_blank" ><i class="fa fa-user-secret"></i> <?php echo lang('login_as_an_admin')?></a>
                                                             </span> 
                                                             <?php
                                                         } elseif ($group->name === 'customer') {

@@ -2842,7 +2842,6 @@ class Ion_auth_model extends CI_Model
 	 * @author Desmond Njuguna
 	 */
 	public function set_order() {
-		$cart_items = $this->cart->contents();
 		$customer_id = $this->ion_auth->user()->row()->id;
 		$method_of_payment = $this->input->post('payment_method');
 		$status = 0;
@@ -2850,7 +2849,6 @@ class Ion_auth_model extends CI_Model
 		$data = [
 			'customer_id' => $customer_id,
 			'order_id' => time(),
-			'orders' => json_encode($cart_items),
 			'total_orders' => $this->cart->total(),
 			'first_name' => $this->input->post('first_name'),
 			'last_name' => $this->input->post('last_name'),

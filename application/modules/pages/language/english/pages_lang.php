@@ -77,3 +77,7 @@ $lang['order_not_set']						= 'Please check your form';
 // Product Review
 $lang['product_review_added']  			= 'Product review added successfully, wait for approval and then the review will appear';
 $lang['product_review_not_added']  		= 'Product review not added';
+
+// Lipa na mpesa
+$lang['lipa_na_mpesa_heading']				= 'Lipa na Mpesa';
+$lang['order_does_not_exist']				= 'Sorry, but the order does not exist';

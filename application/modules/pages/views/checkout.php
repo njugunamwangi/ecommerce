@@ -437,10 +437,10 @@ License: You must have a valid license purchased only from themeforest (the abov
                                     <p>Please select the preferred payment method to use on this order.</p>
                                     <div class="radio-list">
                                       <label>
-                                        <input type="radio" name="payment_method" value="Cash on Delivery"> Cash On Delivery
+                                        <input type="radio" name="payment_method" value="M Pesa">Lipa na M-Pesa
                                       </label>
                                       <label>
-                                        <input type="radio" name="payment_method" value="Cheque Deposit"> Cheque Deposit
+                                        <input type="radio" name="payment_method" value="Cheque Deposit"> Cheque Deposit (KCB Account Number 1257336967)
                                       </label>
                                       <div class="caption-subject" style="color: red;">
                                         <?php echo form_error('payment_method')?>

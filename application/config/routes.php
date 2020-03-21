@@ -81,6 +81,8 @@ $route['my-account/order/(:any)']		= 'pages/view_order/$1';
 $route['my-account/wishlist']			= 'pages/my_wishlist';
 $route['my-account/edit']				= 'pages/edit_account';
 $route['my-account/reset-password']		= 'pages/reset_password';
+$route['lipa-na-mpesa/(:any)']			= 'pages/lipa_na_mpesa/$1';
+$route['make-payment']					= 'pages/lipa';
 
 
 // Admin Dashboard
@@ -95,6 +97,7 @@ $route['admin/products']					= 'auth/products';
 $route['admin/product/publish/(:any)']		= 'auth/publish/$1';
 $route['admin/product/unpublish/(:any)']	= 'auth/unpublish/$1';
 $route['admin/product/approve/(:any)']		= 'auth/approve/$1';
+$route['admin/product/delete/(:any)']		= 'auth/delete_product/$1';
 $route['admin/products/export_to_excel']	= 'auth/export_products_to_excel';
 $route['admin/product/edit/(:any)']			= 'auth/edit_product/$1';
 $route['admin/product/(:any)']				= 'auth/view_product/$1';
@@ -106,6 +109,7 @@ $route['admin/order/not-available/(:any)']	= 'auth/make_unavailable/$1';
 $route['admin/order/available/(:any)']		= 'auth/make_available/$1';
 $route['admin/products']					= 'auth/list_products';
 $route['admin/settings/general']			= 'auth/general_settings';
+$route['admin/settings/m-pesa-credentials']	= 'auth/m_pesa_credentials';
 $route['admin/users']						= 'auth/users';
 $route['admin/user/(:any)']					= 'auth/view_user/$1';
 $route['admin/user/edit/(:any)']			= 'auth/edit_user/$1';
@@ -122,3 +126,4 @@ $route['admin/order/process/(:any)']		= 'auth/process_order/$1';
 $route['admin/order/in-transit/(:any)']		= 'auth/in_transit/$1';
 $route['admin/order/deliver/(:any)']		= 'auth/deliver_order/$1';
 $route['admin/order/pending/(:any)']		= 'auth/order_pending/$1';
+$route['admin/orders/(:num)']				= 'auth/search_orders/$1';

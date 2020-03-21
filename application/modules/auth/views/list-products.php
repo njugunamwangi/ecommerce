@@ -715,6 +715,12 @@
 																						<a href="<?php echo base_url('admin/product/approve/'. $product->id)?>" class="label label-sm label-danger"> Pending Approval </a>
 							                                                        </span>
 																				<?php
+																			} elseif ($product->status == 3) {
+																				?>
+																					<span >
+																						<a href="<?php echo base_url('admin/product/approve/'. $product->id)?>" class="label label-sm label-default"> Deleted </a>
+							                                                        </span>
+																				<?php
 																			} else {
 																				?>
 																					<span >

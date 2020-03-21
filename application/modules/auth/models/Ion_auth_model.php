@@ -3062,6 +3062,28 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * delete product 
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function _delete_product($id) {
+		$data = ['status' =>3];
+
+		$this->db->where('id', $id);
+		$this->db->update('products', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('product_successfully_deleted');
+			return TRUE;
+		} else {
+			$this->set_error('product_not_deleted');
+			return FALSE;
+		}
+	}
+
+	/**
 	 * set name of the store
 	 *
 	 * @param string
@@ -3150,6 +3172,94 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * set consumer key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function set_consumer_key() {
+		$this->db->where('id', 8);
+		$data = ['value' => $this->input->post('consumer_key')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('consumer_key_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('consumer_key_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set consumer key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function set_consumer_secret() {
+		$this->db->where('id', 9);
+		$data = ['value' => $this->input->post('consumer_secret')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('consumer_secret_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('consumer_secret_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set consumer key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function set_till_number() {
+		$this->db->where('id', 10);
+		$data = ['value' => $this->input->post('till_number')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('till_number_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('till_number_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set pass key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function set_pass_key() {
+		$this->db->where('id', 11);
+		$data = ['value' => $this->input->post('pass_key')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('pass_key_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('pass_key_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
 	 * set store currency
 	 *
 	 * @param string
@@ -3206,7 +3316,6 @@ class Ion_auth_model extends CI_Model
 	 */
 	public function set_order() {
 		$customer_info = $this->ion_auth_model->get_customerinfo($this->input->post('customer_id'));
-		$cart_items = $this->cart->contents();
 		$first_name = $customer_info->first_name;
 		$last_name = $customer_info->last_name;
 		$email = $customer_info->email;
@@ -3217,7 +3326,6 @@ class Ion_auth_model extends CI_Model
 		$data = [
 			'customer_id' => $this->input->post('customer_id'),
 			'order_id' => time(),
-			'orders' => json_encode($cart_items),
 			'total_orders' => $this->cart->total(),
 			'first_name' => $first_name,
 			'last_name' => $last_name,

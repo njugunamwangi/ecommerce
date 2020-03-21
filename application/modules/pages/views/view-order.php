@@ -465,25 +465,27 @@ License: You must have a valid license purchased only from themeforest (the abov
                               </thead>
                               <tbody>
                                 <?php
-                                  $arr = json_decode($my_order->orders);
+                                  $arr = $this->db->get_where('orders_summary', ['order_id' => $my_order->id])->result();
                                   foreach ($arr as $cart_item) {
                                     ?>
                                       <tr>
                                         <td>
-                                          <?php echo ucwords($cart_item->name) ?>
+                                            <?php
+                                                echo $this->db->get_where('products', ['id' => $cart_item->product_id])->row()->name;
+                                            ?>
                                         </td>
                                         <td>
                                           <span class="label label-sm label-success">
                                           Available
                                         </td>
                                         <td>
-                                          <?php echo $store_currency?> <?php echo number_format($cart_item->price, 2)?>
+                                          <?php echo $store_currency, ' ', number_format($cart_item->price, 2)?>
                                         </td>
                                         <td>
                                           <?php echo $cart_item->qty?>
                                         </td>
                                         <td>
-                                          <?php echo $store_currency?> <?php echo number_format($cart_item->subtotal, 2)?>
+                                          <?php echo $store_currency, ' ', number_format($cart_item->subtotal, 2)?>
                                         </td>
                                       </tr>
                                     <?php

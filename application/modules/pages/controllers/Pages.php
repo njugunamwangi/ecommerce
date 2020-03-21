@@ -302,25 +302,31 @@ class Pages extends MX_Controller {
 	 * @return each order
 	 */
 	public function view_order($order_id = NULL) {
-		if (!$this->ion_auth->logged_in()) {
-			redirect('login', 'refresh');
+		$data['my_order'] = $this->pages_model->my_orders($order_id);
+
+		// check whether the order exists
+		if (empty($data['my_order'])) {
+			// if the order does not exist
+			// show error
+			show_error('This order does not exist');
 		} else {
-			$data['my_order'] = $this->pages_model->my_orders($order_id);
+			// login check
+			if (!$this->ion_auth->logged_in()) {
+				// if the user is not logged in
+				// redirect them to the login page
+				redirect('login', 'refresh');
+			} else {
+				$data['title'] = $data['my_order']->order_id;
+				$data['name_of_store'] = $this->name_of_store();
+				$data['store_email'] = $this->store_email();
+				$data['store_phone_number'] = $this->store_phone_number();
+				$data['store_currency'] = $this->store_currency();
+				$data['cart_items'] = $this->cart->contents();
+				$data['user_account'] = $this->ion_auth->user()->row();
+				$data['store_location'] = $this->store_location();
 
-			if (empty($data['my_order'])) {
-				show_404();
+				$this->_render_page('pages/view-order', $data);
 			}
-
-			$data['title'] = $data['my_order']->order_id;
-			$data['name_of_store'] = $this->name_of_store();
-			$data['store_email'] = $this->store_email();
-			$data['store_phone_number'] = $this->store_phone_number();
-			$data['store_currency'] = $this->store_currency();
-			$data['cart_items'] = $this->cart->contents();
-			$data['user_account'] = $this->ion_auth->user()->row();
-			$data['store_location'] = $this->store_location();
-
-			$this->_render_page('pages/view-order', $data);
 		}
 	}
 
@@ -340,6 +346,8 @@ class Pages extends MX_Controller {
 		$this->form_validation->set_rules('payment_method', $this->lang->line('confirm_order_validation_payment_method_label'), 'required');
 
 		if ($this->form_validation->run() === TRUE) {
+
+			$method_of_payment = $this->input->post('payment_method');
 			
 			$this->ion_auth_model->set_order();
 			$this->cart->destroy();
@@ -356,6 +364,100 @@ class Pages extends MX_Controller {
 
 			$this->_render_page('checkout', $data);
 		} 
+	}
+
+	public function lipa_na_mpesa($order_id) {
+		$data['order'] = $this->pages_model->my_orders($order_id);
+
+		// check whether the order exists
+		if (empty($data['order'])) {
+			// if the order does not exist
+			// show error
+			show_error($this->lang->line('order_does_not_exist'));
+		}  else {
+			$data['title'] = $this->lang->line('lipa_na_mpesa_heading');
+			$data['name_of_store'] = $this->name_of_store();
+			$data['store_email'] = $this->store_email();
+			$data['store_phone_number'] = $this->store_phone_number();
+			$data['store_currency'] = $this->store_currency();
+			$data['cart_items'] = $this->cart->contents();
+			$data['user_account'] = $this->ion_auth->user()->row();
+			$data['store_location'] = $this->store_location();
+
+			$this->_render_page('lipa-na-mpesa', $data);
+		}
+	}
+
+	public function lipa() {
+		// access token
+	    $consumerKey = (string)$this->db->get_where('info', ['field' => 'consumer-key'])->row()->value;
+	    $consumerSecret = (string)$this->db->get_where('info', ['field' => 'consumer-secret'])->row()->value;
+
+	    $headers = ['Content-Type: application/json; charset=utf8'];
+
+	    $access_token_url = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials';
+
+	    $curl = curl_init($access_token_url);
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+
+	    curl_setopt($curl, CURLOPT_HEADER, FALSE);
+
+	    curl_setopt($curl, CURLOPT_USERPWD, $consumerKey.':'.$consumerSecret);
+
+	    $result = curl_exec($curl);
+	    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	    $result = json_decode($result);
+	    $access_token = $result->access_token;
+	    curl_close($curl);
+
+	    // initiate the transaction
+
+	    // define the variables
+	    $initiate_url = 'https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest';
+
+	    $stkheader = ['Content-Type:application/json','Authorization:Bearer '.$access_token];
+
+	    $BusinessShortCode = (string)$this->db->get_where('info', ['field' => 'till-number'])->row()->value;
+	    $Timestamp = date('YmdHis');
+	    $PartyA = (string)$this->input->post('phone');
+	    $CallBackURL = 'https://test.rabaii.co.ke/callback_url.php';
+	    $AccountReference = (string)$this->input->post('order_id');
+	    $TransactionDesc = 'Checkout';
+	    $Amount = (string)$this->input->post('amount');
+	    $PassKey = (string)$this->db->get_where('info', ['field' => 'pass-key'])->row()->value;
+	    $Password = base64_encode($BusinessShortCode.$PassKey.$Timestamp);
+
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_URL, $initiate_url);
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, $stkheader); //setting custom header
+
+
+	    $curl_post_data = array(
+	    //Fill in the request parameters with valid values
+	    'BusinessShortCode' => $BusinessShortCode,
+	    'Password' => $Password,
+	    'Timestamp' => $Timestamp,
+	    'TransactionType' => 'CustomerPayBillOnline',
+	    'Amount' => $Amount,
+	    'PartyA' => $PartyA,
+	    'PartyB' => $BusinessShortCode,
+	    'PhoneNumber' => $PartyA,
+	    'CallBackURL' => $CallBackURL,
+	    'AccountReference' => $AccountReference,
+	    'TransactionDesc' => $TransactionDesc
+	    );
+
+	    $data_string = json_encode($curl_post_data);
+
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($curl, CURLOPT_POST, true);
+	    curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
+
+	    $curl_response = curl_exec($curl);
+	    print_r($curl_response);
+
+	    echo $curl_response;
 	}
 
 	/**
@@ -599,12 +701,17 @@ class Pages extends MX_Controller {
     }
 
     public function updateadd($rowid) {
-    	$this->cart->insert([
-    		'rowid' => $rowid,
-    		'qty' => 1
-    	]);
+    	// $i = 1;
+    	// $data = [
+    	// 	'rowid' => $rowid,
+    	// 	'qty' => $i++,
+    	// 	'price' => 20
+    	// ];
 
-    	redirect('cart');
+    	// $this->cart->update($data);
+
+    	// redirect('cart');
+    	echo $rowid;
     }
 
     public function removefromhome($rowid) {

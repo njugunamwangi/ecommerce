@@ -379,6 +379,16 @@ License: You must have a valid license purchased only from themeforest (the abov
                                             <?php
                                           }
                                         ?>
+                                        <br>
+                                        <?php
+                                            if ($my_order->paid == 0 && $my_order->method_of_payment == 'M Pesa') {
+                                                ?>
+                                                    <span>
+                                                        <a href="<?php echo base_url('lipa-na-mpesa/'.$my_order->order_id)?>" data-toggle="modal" class="label label-sm label-warning"><i class="fa fa-money"></i> Proceed to Pay </a>
+                                                    </span>
+                                                <?php
+                                            }
+                                        ?>
                                       </td>
                                     </tr>
                                   <?php

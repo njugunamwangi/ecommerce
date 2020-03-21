@@ -123,11 +123,10 @@ class Auth extends MX_Controller
 					
 					// if the user is a vendor
 					$vendor_id = $this->ion_auth->user()->row()->created_on;
-					$baseurl = base_url();
-					$baseurlinfo = explode('//', $baseurl, 2);
-					$base = $baseurlinfo[1];
+					$domain_arr = explode('.', $_SERVER['HTTP_HOST'], 3);
+					$domain_name = $domain_arr[0].'.'.$domain_arr[1];
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
-					redirect(prep_url($vendor_id.'.'.$base.'./vendor'), 'refresh');
+					redirect(prep_url($vendor_id.'.'.$domain_name.'/vendor'), 'refresh');
 				}
 			}
 			else
@@ -162,6 +161,8 @@ class Auth extends MX_Controller
 			$data['store_phone_number'] = $this->storephonenumber();
 
 			$data['store_email'] = $this->storeemailaddress();
+			
+			$data['store_location'] = $this->storelocation();
 
 			$this->_render_page('auth/login', $data);
 		}
@@ -1938,11 +1939,45 @@ class Auth extends MX_Controller
 			$data['name_of_store'] = $this->nameofstore();
 			$data['user_account'] = $this->ion_auth->user()->row();
 			$data['orders'] = $this->ion_auth_model->get_orders();
+			$data['product_sales'] = $this->db->get_where('orders_summary', ['product_id' => $id])->result();
 			$data['currency'] = $this->storecurrency();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/view-product', $data);
 			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * delete product
+	 *
+	 * @return bool
+	 *
+	 * @param int
+	 */
+	public function delete_product($id) {
+		$data['product'] = $this->ion_auth_model->get_products($id);
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect then to the login page
+			redirect('login', 'refresh');
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show access restriction error
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// check whether the product exists
+			if (empty($data['product'])) {
+				// if the product does not exist
+				// show error
+				show_error($this->lang->line('product_doesnt_exist'));
+			} else {
+				$this->ion_auth_model->_delete_product($id);
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/products', 'refresh');
+			}
 		}
 	}
 
@@ -2552,20 +2587,6 @@ class Auth extends MX_Controller
     		redirect(base_url().'admin/orders/new#checkout');
     	}
     }
-	
-	public function orders() {
-		$orders = $this->db->get('orders')->result();
-		foreach ($orders as $order) {
-			$cart_items = json_decode($order->orders);
-			foreach ($cart_items as $cart_item) {
-				echo '<pre>';
-				$cart_item_array = (array) $cart_item;
-				
-				print_r($cart_item_array);
-				// echo $cart_item->qty;
-			}
-		}
-	}
 
 	/**
 	 * settings
@@ -2598,8 +2619,49 @@ class Auth extends MX_Controller
 
 			$data['store_location'] = $this->storelocation();
 
+			$data['favicon'] = $this->get_favicon();
+
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/general-settings', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
+	 * m-pesa credentials
+	 *
+	 * @return bool
+	 */
+	public function m_pesa_credentials() {
+		$data['title'] = $this->lang->line('m_pesa_credentials_heading');
+
+		// login check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['consumer_key'] = $this->consumer_key();
+
+			$data['consumer_secret'] = $this->consumer_secret();
+
+			$data['till_number'] = $this->till_number();
+
+			$data['pass_key'] = $this->pass_key();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/m-pesa-credentials', $data);
 			$this->_render_page('templates/footer');
 		}
 	}
@@ -2681,10 +2743,45 @@ class Auth extends MX_Controller
 	}
 
 	/**
+	 * @return store fav icon
+	 */
+	public function get_favicon() {
+		return $this->db->get_where('info', ['field' => 'favicon'])->row()->value;
+	}
+
+	/**
 	 * @return store location
 	 */
 	public function storelocation() {
 		return $this->db->get_where('info', ['field' => 'location'])->row()->value;
+	}
+
+	/**
+	 * @return consumer key
+	 */
+	public function consumer_key() {
+		return $this->db->get_where('info', ['field' => 'consumer-key'])->row()->value;
+	}
+
+	/**
+	 * @return consumer secret
+	 */
+	public function consumer_secret() {
+		return $this->db->get_where('info', ['field' => 'consumer-secret'])->row()->value;
+	}
+
+	/**
+	 * @return till number
+	 */
+	public function till_number() {
+		return $this->db->get_where('info', ['field' => 'till-number'])->row()->value;
+	}
+
+	/**
+	 * @return till number
+	 */
+	public function pass_key() {
+		return $this->db->get_where('info', ['field' => 'pass-key'])->row()->value;
 	}
 
 	/**
@@ -2760,6 +2857,70 @@ class Auth extends MX_Controller
 			$this->ion_auth_model->set_store_location();
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect('admin/settings/general', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * update consumer key
+	 */
+	public function edit_consumer_key() {
+		// form validation
+		$this->form_validation->set_rules('consumer_key', $this->lang->line('edit_consumer_key_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->set_consumer_key();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/m-pesa-credentials', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * update consumer key
+	 */
+	public function edit_consumer_secret() {
+		// form validation
+		$this->form_validation->set_rules('consumer_secret', $this->lang->line('edit_consumer_secret_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->set_consumer_secret();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/m-pesa-credentials', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * update till number
+	 */
+	public function edit_till_number() {
+		// form validation
+		$this->form_validation->set_rules('till_number', $this->lang->line('edit_till_number_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->set_till_number();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/m-pesa-credentials', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * update till number
+	 */
+	public function edit_pass_key() {
+		// form validation
+		$this->form_validation->set_rules('pass_key', $this->lang->line('edit_pass_key_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->set_pass_key();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/m-pesa-credentials', 'refresh');
 		} else {
 			echo 'error';
 		}

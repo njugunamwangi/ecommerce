@@ -895,79 +895,68 @@
 													</thead>
 													<tbody>
 														<?php
-															$orders = $this->db->get('orders')->result();
-															foreach ($orders as $order) {
-																$cart_items = json_decode($order->orders);
-																foreach ($cart_items as $cart_item) {
-																	if ($cart_item->id == $product->id) {
-																		?>
-																			<tr>
-																				<td>
-																					<?php echo date('jS M, Y', $order->order_id)?> at <?php echo date('H:i:s', $order->order_id)?>
-																				</td>
-																				<td>
-																					<?php
-																						$this->db->where('id', $order->customer_id);
-																						$customer_info = $this->db->get('users')->row();
-																						echo $customer_info->first_name, ' ', $customer_info->last_name;
-																					?>
-																				</td>
-																				<td>
-																					<?php 
-																						if ($cart_item->qty == 1) {
-																							echo number_format($cart_item->qty), ' item';
-																						} else {
-																							echo number_format($cart_item->qty), ' items';
-																						}
-																					?>
-																				</td>
-																				<td>
-																					<?php echo $currency, ' ', number_format($cart_item->subtotal, 2)?>
-																				</td>
-																				<td>
-																					<?php
-											                                          if ($order->status == 0) {
-											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_processing');
-											                                          } elseif ($order->status == 1) {
-											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('processed');
-											                                          } elseif ($order->status == 2) {
-											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_delivery');
-											                                          } elseif ($order->status == 3) {
-											                                            echo $this->lang->line('order_cancelled');
-											                                          } else {
-											                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('delivery_closed');
-											                                          }
-											                                        ?>
-																				</td>
-																				<td>
-																					<?php
-											                                          if ($order->status == 0) {
-											                                            ?>
-											                                              <span class="label label-sm label-danger">Pending</span>
-											                                            <?php
-											                                          } elseif ($order->status == 1) {
-											                                            ?>
-											                                              <span class="label label-sm label-info">Processed</span>
-											                                            <?php
-											                                          } elseif ($order->status == 2) {
-											                                            ?>
-											                                              <span class="label label-sm label-warning">In Transit</span>
-											                                            <?php
-											                                          } elseif ($order->status == 3) {
-											                                            ?>
-											                                              <span class="label label-sm label-default">Cancelled</span>
-											                                            <?php
-											                                          } else {
-											                                            ?>
-											                                              <span class="label label-sm label-success">Delivered & Closed</span>
-											                                            <?php
-											                                          }
-											                                        ?>
-																				</td>
-																			</tr>
-																		<?php
-																	}
-																}
+															foreach ($product_sales as $product_sale) {
+																$product_sale_info = $this->db->get_where('orders', ['id' => $product_sale->order_id])->row();
+																?>
+																	<tr>
+																		<td>
+																			<?php echo date('jS M, Y', $product_sale_info->order_id)?> at <?php echo date('H:i:s', $product_sale_info->order_id)?>
+																		</td>
+																		<td>
+																			<?php
+																				$customer = $this->db->get_where('users', ['id' => $product_sale->customer_id])->row();
+
+																				echo $customer->first_name, ' ', $customer->last_name;
+																			?>
+																		</td>
+																		<td>
+																			<?php echo number_format($product_sale->qty); ?>
+																		</td>
+																		<td>
+																			<?php echo $currency, ' ', number_format($product_sale->subtotal, 2) ?>
+																		</td>
+																		<td>
+																			<?php
+										                                          if ($product_sale_info->status == 0) {
+										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_processing');
+										                                          } elseif ($product_sale_info->status == 1) {
+										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('processed');
+										                                          } elseif ($product_sale_info->status == 2) {
+										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('pending_delivery');
+										                                          } elseif ($product_sale_info->status == 3) {
+										                                            echo $this->lang->line('order_cancelled');
+										                                          } else {
+										                                            echo $this->lang->line('purchased_product'), '. ', $this->lang->line('delivery_closed');
+										                                          }
+										                                  	?>
+																		</td>
+																		<td>
+																			<?php
+											                                           if ($product_sale_info->status == 0) {
+											                                             ?>
+											                                               <span class="label label-sm label-danger">Pending</span>
+											                                             <?php
+											                                           } elseif ($product_sale_info->status == 1) {
+											                                             ?>
+											                                               <span class="label label-sm label-info">Processed</span>
+											                                             <?php
+											                                           } elseif ($product_sale_info->status == 2) {
+											                                             ?>
+											                                               <span class="label label-sm label-warning">In Transit</span>
+											                                          <?php
+											                                           } elseif ($product_sale_info->status == 3) {
+											                                             ?>
+											                                               <span class="label label-sm label-default">Cancelled</span>
+											                                             <?php
+											                                           } else {
+											                                             ?>
+											                                               <span class="label label-sm label-success">Delivered & Closed</span>
+											                                          <?php
+											                                           }
+											                                ?>
+																		</td>
+																	</tr>
+																<?php
 															}
 														?>
 														<tr>

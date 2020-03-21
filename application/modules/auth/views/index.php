@@ -349,24 +349,10 @@
 							<i class="fa fa-cog"></i>
 							<?php echo $this->lang->line('general_settings_heading')?>  </a>
 						</li>
-						<li>
-							<a href="javascript:;">
-							<i class="fa fa-file-code-o"></i>
-							<span class="title">Pages</span>
-							<span class="arrow "></span>
-							</a>
-							<ul class="sub-menu">
-								<li >
-									<a href="<?php echo base_url()?>admin/settings/pages/add">
-									<i class="fa fa-check-square-o"></i>
-									Add Page </a>
-								</li>
-								<li>
-									<a href="<?php echo base_url()?>admin/settings/pages">
-									<i class="fa fa-list"></i>
-									List Pages</a>
-								</li>
-							</ul>
+						<li >
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
 						</li>
 					</ul>
 				</li>

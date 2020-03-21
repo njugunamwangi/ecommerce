@@ -38,25 +38,26 @@ License: You must have a valid license purchased only from themeforest (the abov
   <link rel="shortcut icon" href="favicon.ico">
 
   <!-- Fonts START -->
-  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
+  <link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|PT+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css"> 
   <!-- Fonts END -->
 
   <!-- Global styles START -->          
-  <link href="<?php echo base_url(); ?>public/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>public/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Global styles END --> 
    
   <!-- Page level plugin styles START -->
-  <link href="<?php echo base_url(); ?>public/assets/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>public/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url()?>public/assets/global/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.css" rel="stylesheet">
   <!-- Page level plugin styles END -->
 
   <!-- Theme styles START -->
-  <link href="<?php echo base_url(); ?>public/assets/global/css/components.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>public/assets/frontend/layout/css/style.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
-  <link href="<?php echo base_url(); ?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
-  <link href="<?php echo base_url(); ?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/global/css/components.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/frontend/pages/css/style-shop.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
+  <link href="<?php echo base_url()?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
+  <link href="<?php echo base_url()?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
   <!-- Theme styles END -->
 </head>
 <!-- Head END -->
@@ -80,7 +81,7 @@ License: You must have a valid license purchased only from themeforest (the abov
       </div>
     </div> -->
     <!-- END BEGIN STYLE CUSTOMIZER --> 
-    
+
     <!-- BEGIN TOP BAR -->
     <div class="pre-header">
         <div class="container">
@@ -89,6 +90,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <div class="col-md-6 col-sm-6 additional-shop-info">
                     <ul class="list-unstyled list-inline">
                         <li><i class="fa fa-phone"></i><span><?php echo $store_phone_number?></span></li>
+                        <!-- BEGIN CURRENCIES -->
+                        <li class="shop-currencies">
+                            <a href="javascript:void(0);" class="current"><?php echo $store_currency?></a>
+                        </li>
+                        <!-- END CURRENCIES -->
                         <li><a href="mailto:<?php echo $store_email?>"><i class="fa fa-envelope-o"></i><span><?php echo $store_email?></span></a></li>
                     </ul>
                 </div>
@@ -96,8 +102,44 @@ License: You must have a valid license purchased only from themeforest (the abov
                 <!-- BEGIN TOP BAR MENU -->
                 <div class="col-md-6 col-sm-6 additional-nav">
                     <ul class="list-unstyled list-inline pull-right">
-                        <li><a href="<?php echo base_url()?>login">Log In</a></li>
-                        <li><a href="<?php echo base_url()?>register">Register</a></li>
+                      <?php
+                        if (!$this->ion_auth->logged_in()) {
+                          ?>
+                            <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
+                            <li><a href="<?php echo base_url();?>login">Log In</a></li>
+                            <li><a href="<?php echo base_url();?>register">Register</a></li>
+                          <?php
+                        } else {
+                          ?>
+                            <?php
+                              $this->db->where('customer_id', $user_account->id);
+                              $query = $this->db->get('wishlist')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
+                            <?php
+                              if ($this->ion_auth->is_admin()) {
+                                ?>
+                                <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                              } elseif ($this->ion_auth->is_vendor()) {
+                                $baseurl = base_url();
+                                $baseurlinfo = explode('//', $baseurl, 2);
+                                $base = $baseurlinfo[1];
+                                ?>
+                                <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                              } else {
+                                ?>
+                                  <li><a href="<?php echo base_url();?>my-account"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                              }
+                            ?>
+                            
+                            <li><a href="<?php echo base_url();?>logout">Log Out</a></li>
+                          <?php
+                        }
+                      ?>
                     </ul>
                 </div>
                 <!-- END TOP BAR MENU -->
@@ -105,12 +147,56 @@ License: You must have a valid license purchased only from themeforest (the abov
         </div>        
     </div>
     <!-- END TOP BAR -->
+
     <!-- BEGIN HEADER -->
     <div class="header">
       <div class="container">
-        <!-- <a class="site-logo" href="<?php echo base_url(); ?>"><img src="<?php echo base_url();?>public/assets/frontend/layout/img/logos/logo-shop-red.png" alt="Metronic Shop UI"></a> -->
+        <!-- <a class="site-logo" href="shop-index.html"><img src="<?php echo base_url()?>public/assets/frontend/layout/img/logos/logo-shop-red.png" alt="Metronic Shop UI"></a> -->
         <a class="site-logo" style="text-decoration: none;" href="<?php echo base_url()?>" ><h2><strong><?php echo $name_of_store?></strong></h2></a>
         <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-bars"></i></a>
+
+        <!-- BEGIN CART -->
+        <div class="top-cart-block">
+          <div class="top-cart-info">
+            <a href="javascript:void(0);" class="top-cart-info-count"><?php echo $this->cart->total_items()?> item(s)</a>
+            <a href="javascript:void(0);" class="top-cart-info-value"><?php echo $store_currency?> <?php echo number_format($this->cart->total(), 2)?></a>
+          </div>
+          <i class="fa fa-shopping-cart"></i>
+                        
+          <div class="top-cart-content-wrapper">
+            <div class="top-cart-content">
+              <?php
+                if (!empty($this->cart->contents())) {
+                  ?>
+                    <ul class="scroller" style="height: 200px;">
+                      <?php foreach($cart_items as $cart_item):?>
+                        <li>
+                          <a href="<?php echo base_url($cart_item['slug'])?>"><img src="<?php echo base_url()?>public/attachments/products/<?php echo $cart_item['image']?>" alt="<?php echo $cart_item['name']?>" width="37" height="34"></a>
+                          <span class="cart-content-count">x <?php echo $cart_item['qty']?></span>
+                          <strong><a href="<?php echo $cart_item['slug']?>"><?php echo $cart_item['name']?></a></strong>
+                          <em><?php echo $store_currency?> <?php echo number_format($cart_item['price'], 2)?></em>
+                          <?php echo anchor('pages/removefromhome/'.$cart_item['rowid'], 'x')?>
+                        </li>
+                      <?php endforeach?>
+                    </ul>
+                    <div class="text-right">
+                      <a href="<?php echo base_url()?>cart" class="btn btn-default">View Cart</a>
+                      <a href="<?php echo base_url()?>pages/clearcart" class="btn btn-danger">Clear Cart</a>
+                      <a href="<?php echo base_url()?>checkout" class="btn btn-primary">Checkout</a>
+                    </div>
+                  <?php
+                } else {
+                  ?>
+                    <ul class="scroller" style="height: 50px;">
+                      <p><?php echo $this->lang->line('empty_cart')?></p>
+                    </ul>
+                  <?php
+                }
+              ?>
+            </div>
+          </div>            
+        </div>
+        <!--END CART -->
 
         <!-- BEGIN NAVIGATION -->
         <div class="header-navigation">
@@ -142,67 +228,76 @@ License: You must have a valid license purchased only from themeforest (the abov
       </div>
     </div>
     <!-- Header END -->
-
+    
     <div class="main">
       <div class="container">
         <ul class="breadcrumb">
             <li><a href="<?php echo base_url()?>">Home</a></li>
-            <li class="active">Login</li>
+            <li class="active"><?php echo $title?></li>
         </ul>
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40">
-          <!-- BEGIN SIDEBAR -->
-          <div class="sidebar col-md-3 col-sm-3">
-            <ul class="list-group margin-bottom-25 sidebar-menu">
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>register"><i class="fa fa-angle-right"></i> Register</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/reset-password"><i class="fa fa-angle-right"></i> Restore Password</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account"><i class="fa fa-angle-right"></i> My account</a></li>
-              <li class="list-group-item clearfix"><a href="<?php echo base_url()?>my-account/wishlist"><i class="fa fa-angle-right"></i> Wish list</a></li>
-            </ul>
-          </div>
-          <!-- END SIDEBAR -->
 
-          <!-- BEGIN CONTENT -->
-          <div class="col-md-9 col-sm-9">
-            <h1>Login</h1>
-            <div class="content-form-page">
-              <div class="row">
-                <div class="col-md-7 col-sm-7">
-                  <form class="form-horizontal form-without-legend" action="<?php echo base_url()?>login" method="post">
-                    <div class="form-group">
-                      <label for="identity" class="col-lg-4 control-label">Email <span class="require">*</span></label>
-                      <div class="col-lg-8">
-                        <input type="text" class="form-control" id="identity" name="identity" value="<?php echo set_value('identity')?>">
-                      </div>
+          <?php
+            if (!$this->ion_auth->logged_in()) {
+              ?>
+                <div class="col-md-12 col-sm-12">
+                  <h1><?php echo $this->lang->line('shopping_cmy_account_headingart_heading')?></h1>
+                  <div class="shopping-cart-page">
+                    <h1><?php echo $title?></h1>
+                    <div class="shopping-cart-data clearfix">
+                      <p><?php echo $this->lang->line('my_account_login_message')?></p>
                     </div>
-                    <div class="form-group">
-                      <label for="password" class="col-lg-4 control-label">Password <span class="require">*</span></label>
-                      <div class="col-lg-8">
-                        <input type="password" class="form-control" id="password" name="password" value="<?php echo set_value('password')?>">
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-8 col-md-offset-4 padding-left-0">
-                        <a href="<?php echo base_url()?>forgot_password">Forget Password?</a>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-8 col-md-offset-4 padding-left-0 padding-top-20">
-                        <button type="submit" class="btn btn-primary">Login</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="col-md-4 col-sm-4 pull-right">
-                  <div class="form-info">
-                    <h2><em>Important</em> Information</h2>
-                    <p>Log in to access your account information</p>
+                    <a href="<?php echo base_url()?>login" class="btn btn-primary"><i class="fa fa-key"> Login </i></a>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <!-- END CONTENT -->
+              <?php
+            } else {
+              	?>
+              		<!-- BEGIN CONTENT -->
+              		<?php echo form_open('pages/lipa')?>
+	              		<div class="row">
+		              		<div class="col-md-12 col-sm-6">
+		                        <div class="form-group">
+		                            <label for="phone">Phone Number <span class="require">*</span></label>
+		                                <input type="text" id="phone" class="form-control" name="phone" minlength="12" maxlength="12" placeholder="254700100200" value="<?php echo $user_account->phone?>">
+		                                <span class="help-block">Please enter the phone number in this form: 2547xxxxxxxx</span>
+		                            <div class="caption-subject" style="color: red;">
+		                                <?php echo form_error('phone')?>
+		                            </div>
+		                        </div>
+		                        <div class="form-group">
+		                        	<?php
+				                    	echo '<strong>Sub Total:</strong> '.$store_currency, ' ', number_format($order->total_orders, 2);
+				                    ?>
+		                        </div>
+		                        <div class="form-group">
+		                        	<?php
+				                    	$shipment_fee = $this->db->get_where('shipment', ['ship_to' => $order->subcounty])->row()->fee;
+
+				                    	echo '<strong>Shipment Fee:</strong> '.$store_currency, ' ', number_format($shipment_fee, 2); 
+		                        	?>
+		                        </div>
+		                        <div class="form-group">
+		                        	<?php
+		                        		$grand_total = $order->total_orders+$shipment_fee;
+		                        		echo '<strong>Grand Total:</strong> '.$store_currency, ' ', number_format($grand_total, 2);
+		                        		echo form_hidden('order_id', $order->order_id);
+		                        		echo form_hidden('amount', $grand_total);
+		                        	?>
+		                        </div>
+		                    </div>
+	              		</div>
+	              		<div class="row">
+	              			<div class="col-md-6 col-sm-6">
+	              				<button class="btn btn-primary pull-right" type="submit" id="button-confirm">Make Payment</button>
+	              			</div>
+	              		</div>
+	                <?php echo form_close()?>
+              		<!-- END CONTENT -->
+              	<?php
+            }
+          ?>
         </div>
         <!-- END SIDEBAR & CONTENT -->
       </div>
@@ -238,7 +333,7 @@ License: You must have a valid license purchased only from themeforest (the abov
             <h2>Our Contacts</h2>
             <address class="margin-bottom-40">
               <?php echo $store_location?>
-              Phone: <?php echo $store_phone_number?><br>
+              Phone: <?php echo $store_phone_number?><br><br>
               Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
             </address>
           </div>
@@ -312,25 +407,26 @@ License: You must have a valid license purchased only from themeforest (the abov
     <!-- END FOOTER -->
 
     <!-- Load javascripts at bottom, this will reduce page load time -->
-    <!-- BEGIN CORE PLUGINS (REQUIRED FOR ALL PAGES) -->
+    <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
     <!--[if lt IE 9]>
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/respond.min.js"></script>
-    <![endif]--> 
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
-    <script src="<?php echo base_url(); ?>public/assets/frontend/layout/scripts/back-to-top.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/global/plugins/respond.min.js"></script>  
+    <![endif]-->  
+    <script src="<?php echo base_url()?>public/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
+    <script src="<?php echo base_url()?>public/assets/frontend/layout/scripts/back-to-top.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
     <!-- END CORE PLUGINS -->
 
     <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
-    <script src="<?php echo base_url(); ?>public/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
+    <script src="<?php echo base_url()?>public/assets/global/plugins/carousel-owl-carousel/owl-carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
 
-    <script src="<?php echo base_url(); ?>public/assets/frontend/layout/scripts/layout.js" type="text/javascript"></script>
+    <script src="<?php echo base_url()?>public/assets/frontend/layout/scripts/layout.js" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            Layout.init();
-            Layout.initUniform();
+            Layout.init();    
+            Layout.initOWL();
             Layout.initTwitter();
         });
     </script>
