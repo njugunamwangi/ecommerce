@@ -3050,6 +3050,84 @@ class Auth extends MX_Controller
 	}
 
 	/**
+	 * add mode of payment
+	 *
+	 * @return bool
+	 */
+	public function add_mode_of_payment() {
+		$data['title'] = $this->lang->line('add_mode_of_payment_title');
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$config['upload_path']		= './public/attachments/modes_of_payment';
+			$config['allowed_types']	= 'gif|jpg|jpeg|png|JPEG|JPG|PNG';
+			$config['max_size']			= 2048;
+			$this->upload->initialize($config);
+
+			// form validation
+			$this->form_validation->set_rules('mode_of_payment', $this->lang->line('add_mode_of_payment_validation_mode_of_payment'), 'required');
+			$this->form_validation->set_rules('status', $this->lang->line('add_mode_of_payment_validation_status'));
+
+			$this->upload->do_upload('image');
+			$upload_data = $this->upload->data();
+
+			if ($this->form_validation->run() === TRUE) {
+				$file_name = '';
+				if ($upload_data) {
+					$file_name = $upload_data['file_name'];
+					$file_type = $upload_data['file_type'];
+					$file_size = $upload_data['file_size'];
+				} else {
+					$upload_error = $this->upload->display_errors();
+				}
+
+				$this->ion_auth_model->set_mode_of_payment($file_name);
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin', 'refresh');
+			} else {
+				$data['categories'] = $this->ion_auth_model->get_categories();
+
+				$data['tags'] = $this->ion_auth_model->get_tags();
+
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$data['name_of_store'] = $this->nameofstore();
+
+				$this->_render_page('templates/header');
+				$this->_render_page('auth/add-mode-of-payment', $data);
+				$this->_render_page('templates/footer');
+			}
+		}
+	}
+
+	public function modes_of_payments() {
+		$data['title'] = $this->lang->line('list_modes_of_payments');
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			
+		}
+	}
+
+	/**
 	 * @return array A CSRF key-value pair
 	 */
 	public function _get_csrf_nonce()

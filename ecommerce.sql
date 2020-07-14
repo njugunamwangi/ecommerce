@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2020 at 12:50 PM
+-- Generation Time: Jul 14, 2020 at 03:34 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -41,7 +41,9 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`id`, `category`, `parent_category`, `slug`) VALUES
 (1, 'Household', '', 'household'),
-(2, 'Trolley', 'Household', 'trolley');
+(2, 'Trolley', 'Household', 'trolley'),
+(3, 'Chairs', 'Household', 'chairs'),
+(4, 'Basins', 'Household', 'basins');
 
 -- --------------------------------------------------------
 
@@ -337,7 +339,17 @@ INSERT INTO `logins` (`id`, `customer_id`, `ip_address`, `time`) VALUES
 (144, 7, '127.0.0.1', 1584658259),
 (145, 7, '127.0.0.1', 1584685929),
 (146, 7, '127.0.0.1', 1584705602),
-(147, 7, '127.0.0.1', 1584769780);
+(147, 7, '127.0.0.1', 1584769780),
+(148, 7, '127.0.0.1', 1589215025),
+(149, 7, '127.0.0.1', 1589291158),
+(150, 7, '127.0.0.1', 1589894950),
+(151, 7, '127.0.0.1', 1593806062),
+(152, 7, '127.0.0.1', 1594380351),
+(153, 7, '127.0.0.1', 1594467661),
+(154, 7, '127.0.0.1', 1594484226),
+(155, 7, '127.0.0.1', 1594517396),
+(156, 7, '127.0.0.1', 1594603756),
+(157, 7, '127.0.0.1', 1594643234);
 
 -- --------------------------------------------------------
 
@@ -351,6 +363,30 @@ CREATE TABLE `login_attempts` (
   `login` varchar(100) NOT NULL,
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modes_of_payment`
+--
+
+CREATE TABLE `modes_of_payment` (
+  `id` tinyint(1) UNSIGNED NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `mode_of_payment` varchar(45) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `slug` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `modes_of_payment`
+--
+
+INSERT INTO `modes_of_payment` (`id`, `image`, `mode_of_payment`, `status`, `slug`) VALUES
+(1, '', 'M-Pesa', 1, 'm-pesa'),
+(2, '', 'Master Card / Visa', 1, 'master-card-visa'),
+(3, '', 'Cheque Deposit', 1, 'cheque-deposit'),
+(4, '', 'Pay Pal', 0, 'pay-pal');
 
 -- --------------------------------------------------------
 
@@ -393,7 +429,10 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customer_id`, `order_id`, `total_orders`, `first_name`, `last_name`, `email`, `phone`, `address`, `postal_code`, `subcounty`, `county`, `method_of_payment`, `status`, `paid`, `slug`) VALUES
-(9, 7, 1584771478, '600', 'Test', 'Account 1', 'testaccount1@gmail.com', '0700010203', '455', '00232', 'Kiambu', 'Kiambu', 'M Pesa', 0, 0, '1584771478');
+(1, 7, 1593806166, '6000', 'Test', 'Account 1', 'testaccount1@gmail.com', '254704502454', '455', '00232', 'Nairobi', 'Nairobi', '1', 0, 0, '1593806166'),
+(2, 7, 1594380387, '280', 'Test', 'Account 1', 'testaccount1@gmail.com', '254704502454', '455', '00232', 'Kiambu', 'Nairobi', '1', 0, 0, '1594380387'),
+(3, 7, 1594467932, '280', 'Test', 'Account 1', 'testaccount1@gmail.com', '254704502454', '455', '00232', 'Kiambu', 'Kiambu', '2', 0, 0, '1594467932'),
+(4, 7, 1594608776, '1160', 'Desmond', 'Njuguna', 'testaccount1@gmail.com', '0704502454', '77 Grayston Drive', '2057', 'Kiambu', 'Kiambu', '1', 0, 0, '1594608776');
 
 -- --------------------------------------------------------
 
@@ -418,7 +457,11 @@ CREATE TABLE `orders_summary` (
 --
 
 INSERT INTO `orders_summary` (`id`, `order_id`, `customer_id`, `product_id`, `vendor_id`, `qty`, `price`, `subtotal`, `status`) VALUES
-(8, 9, 7, 1, 1563556647, 1, 600, 600, 0);
+(1, 1, 7, 1, 1563556647, 10, 600, 6000, 0),
+(2, 2, 7, 2, 1563556647, 1, 280, 280, 0),
+(3, 3, 7, 2, 1563556647, 1, 280, 280, 0),
+(4, 4, 7, 2, 1563556647, 2, 280, 560, 0),
+(5, 4, 7, 1, 1563556647, 1, 600, 600, 0);
 
 -- --------------------------------------------------------
 
@@ -465,7 +508,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `vendor_id`, `image`, `name`, `description`, `snippet`, `categories`, `tags`, `colors`, `sizes`, `regular_price`, `sale_price`, `wholesale_price`, `date_created`, `date_updated`, `slug`, `available_from`, `available_to`, `status`) VALUES
-(1, 1563556647, 'Ezee-Trolley.gif', 'Ezee Trolley', '<p>Trolley</p>', 'Trolley', '[\"Household\",\"Trolley\"]', '[\"Household, Kenpoly, Ezee Trolley\"]', '[\"\"]', '[\"\"]', '650', '600', '550', 1582476878, NULL, 'ezee-trolley', NULL, NULL, 1);
+(1, 1563556647, 'Chair-2014.gif', 'Chair 2014', '<p>Chair</p>', 'Chair', '[\"Household\",\"Chairs\"]', '[\"Household, Kenpoly, Chairs, Chair 2014\"]', '[\"blue, green, yellow\"]', '[\"\"]', '650', '600', '550', 1589299150, NULL, 'chair-2014', NULL, NULL, 1),
+(2, 1563556647, 'Basin-45-Football.gif', 'Football Basin', '<p>Basin</p>', 'Basin', '[\"Household\",\"Basins\"]', '[\"Household, Kenpoly, Basins, Football Basin\"]', '[\"blue, green, yellow\"]', '[\"\"]', '300', '280', '250', 1589299413, NULL, 'football-basin', NULL, NULL, 1),
+(3, 1563556647, 'Century-Basin.gif', 'Century Basin', '<p>Basin</p>', 'Basin', '[\"Household\",\"Basins\"]', '[\"Household, Kenpoly, Basins, Century Basin\"]', '[\"\"]', '[\"\"]', '255', '240', '200', 1589300126, 1593806464, 'century-basin', NULL, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -484,6 +529,27 @@ CREATE TABLE `products_updates` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_sales`
+--
+
+CREATE TABLE `product_sales` (
+  `id` int(20) UNSIGNED NOT NULL,
+  `product_id` int(20) UNSIGNED NOT NULL,
+  `sales` int(20) UNSIGNED DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `product_sales`
+--
+
+INSERT INTO `product_sales` (`id`, `product_id`, `sales`) VALUES
+(1, 1, 0),
+(2, 2, 0),
+(3, 3, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `reviews`
 --
 
@@ -496,6 +562,13 @@ CREATE TABLE `reviews` (
   `ratings` float(10,2) NOT NULL,
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `product_id`, `customer_id`, `review`, `date_created`, `ratings`, `status`) VALUES
+(1, 1, 7, 'hi', 1593806117, 5.00, 1);
 
 -- --------------------------------------------------------
 
@@ -571,7 +644,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `image`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(7, '127.0.0.1', 'testaccount1@gmail.com', '$2y$12$a6sETxL3wsaFN3ThdalIwOmE6ml9S7Dznz0oPHLBbqRj0iixWihhu', 'testaccount1@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556647, 1584769780, 1, 'IMG_20170325_030608_829.jpg', 'Test', 'Account 1', NULL, '254704502454'),
+(7, '127.0.0.1', 'testaccount1@gmail.com', '$2y$12$a6sETxL3wsaFN3ThdalIwOmE6ml9S7Dznz0oPHLBbqRj0iixWihhu', 'testaccount1@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556647, 1594643234, 1, 'IMG_20170325_030608_829.jpg', 'Test', 'Account 1', NULL, '254704502454'),
 (8, '127.0.0.1', 'testaccount2@gmail.com', '$2y$10$cWKnrV1lhSSJFQKV02G5Re9IgaKo7EIu7q7BBpQWjKJnS512g6vk.', 'testaccount2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563556838, 1564660155, 1, NULL, 'Test', 'Account 2', NULL, '0700020202'),
 (9, '127.0.0.1', 'testaccount3@gmail.com', '$2y$10$2axejRFIvN2PsFZZ.M8LxesZLcoK9GWk4495CMPgBmGMckI0LEKO6', 'testaccount3@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557036, 1571320479, 1, 'FB_IMG_15444424547751.jpg', 'Test', 'Account 3', NULL, '0703030303'),
 (10, '127.0.0.1', 'testaccount4@gmail.com', '$2y$10$EvTTrf91Mx6KCF6OE96GYezAdLLVpsRnYOr0ZYmTcClowu99IRjgu', 'testaccount4@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1563557142, 1571053943, 1, NULL, 'Test', 'Account 4', NULL, '0704040404'),
@@ -617,6 +690,14 @@ CREATE TABLE `wishlist` (
   `wishlist_code` int(11) UNSIGNED NOT NULL,
   `time` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `wishlist`
+--
+
+INSERT INTO `wishlist` (`id`, `customer_id`, `product_id`, `wishlist_code`, `time`) VALUES
+(1, 7, 1, 71, 1593806076),
+(2, 7, 2, 72, 1594608739);
 
 --
 -- Indexes for dumped tables
@@ -668,6 +749,13 @@ ALTER TABLE `login_attempts`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `modes_of_payment`
+--
+ALTER TABLE `modes_of_payment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `slg` (`slug`);
+
+--
 -- Indexes for table `newsletter`
 --
 ALTER TABLE `newsletter`
@@ -705,6 +793,13 @@ ALTER TABLE `products`
 --
 ALTER TABLE `products_updates`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `product_sales`
+--
+ALTER TABLE `product_sales`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_product_sales_products_idx` (`product_id`);
 
 --
 -- Indexes for table `reviews`
@@ -763,7 +858,7 @@ ALTER TABLE `wishlist`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `counties`
@@ -793,13 +888,19 @@ ALTER TABLE `lipa`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT for table `login_attempts`
 --
 ALTER TABLE `login_attempts`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `modes_of_payment`
+--
+ALTER TABLE `modes_of_payment`
+  MODIFY `id` tinyint(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `newsletter`
@@ -811,13 +912,13 @@ ALTER TABLE `newsletter`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `orders_summary`
 --
 ALTER TABLE `orders_summary`
-  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pages`
@@ -829,7 +930,7 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `products_updates`
@@ -838,10 +939,16 @@ ALTER TABLE `products_updates`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `product_sales`
+--
+ALTER TABLE `product_sales`
+  MODIFY `id` int(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `shipment`
@@ -871,7 +978,7 @@ ALTER TABLE `users_groups`
 -- AUTO_INCREMENT for table `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -885,6 +992,12 @@ ALTER TABLE `orders_summary`
   ADD CONSTRAINT `orders_summary_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   ADD CONSTRAINT `orders_summary_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `orders_summary_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `product_sales`
+--
+ALTER TABLE `product_sales`
+  ADD CONSTRAINT `fk_product_sales_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `reviews`

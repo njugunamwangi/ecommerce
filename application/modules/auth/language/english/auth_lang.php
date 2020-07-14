@@ -312,6 +312,14 @@ $lang['review_rejected']				= 'Review Rejected';
 $lang['review_not_rejected']			= 'Review not Rejected';
 
 // Account Settings
-$lang['account_settings_heading']			= 'Account Settings';
+$lang['account_settings_heading']				= 'Account Settings';
 $lang['profile_picture_successfully_updated']	= 'Profile picture updated successfully';
 $lang['profile_picture_not_updated']			= 'Profile picture not updated';
+
+// Mode of payments
+$lang['add_mode_of_payment_title']							= 'Add Mode of Payment';
+$lang['add_mode_of_payment_validation_mode_of_payment']		= 'Mode of Payment';
+$lang['list_modes_of_payments']								= 'Modes of Payments';
+$lang['add_mode_of_payment_validation_status']				= 'Status';
+$lang['mode_of_payment_successfully_added']					= 'Mode of Payment successfully addded';
+$lang['mode_of_payment_not_added']							= 'Mode of Payment not addded';

@@ -58,6 +58,37 @@ License: You must have a valid license purchased only from themeforest (the abov
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
+  <script type="text/javascript">
+    function onVisaCheckoutReady (){
+      V.init({ 
+        apikey: "MYID2NYW0OS4283U8NHN212MI_2dOKkRhIcZo1f6iqRCt7jUg", 
+        encryptionKey: "UP9L+Jx3JG$IK0BqsS}EyCO{bwD7rpCR6ChT2b$0",
+        paymentRequest:{
+          currencyCode: "USD",
+          subtotal: "11.00"
+        }
+      });
+    }
+
+    V.on("payment.success", function(payment) {
+        visacheckout.getDetails("test", paymentInfoStr, function (errors, data) {
+            console.log("Card name: " + data.card.name);
+            console.log("Card four last digit: " + data.card.lastFourDigits);
+            console.log("Expiration: " + data.card.expiration);
+            console.log("Addrss name: " + data.address.name);
+
+            console.log("Street: " + data.address.street);
+            console.log("Number: " + data.address.number);
+
+            console.log(data.address.city + ", " + data.address.state + " - " + data.address.postalCode);
+            console.log(data.user.email);
+            console.log(data.user.phone);
+
+        });
+    });
+    V.on("payment.cancel", function(payment) {alert(JSON.stringify(payment)); });
+    V.on("payment.error", function(payment,error) {alert(JSON.stringify(error));});
+  </script>
   <!-- Theme styles END -->
 </head>
 <!-- Head END -->
@@ -112,10 +143,15 @@ License: You must have a valid license purchased only from themeforest (the abov
                         } else {
                           ?>
                             <?php
-                              $this->db->where('customer_id', $user_account->id);
-                              $query = $this->db->get('wishlist')->num_rows();
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_wishlist = $this->db->get('wishlist')->num_rows();
                             ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                            <?php
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_orders = $this->db->get('orders')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -318,7 +354,8 @@ License: You must have a valid license purchased only from themeforest (the abov
                                 </tr>
                               </thead>
                               <tbody>
-                                <?php foreach($my_orders as $my_order) {
+                                <?php foreach($orders as $my_order) {
+                                    $mode_of_payment = $this->db->get_where('modes_of_payment', ['id' => $my_order->method_of_payment])->row();
                                   ?>
                                     <tr>
                                       <?php echo form_hidden('order_id', $my_order->order_id);?>
@@ -331,9 +368,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                                       <td>
                                         <?php echo date('jS M, Y', $my_order->order_id)?>
                                       </td>
-                                      <td>
-                                        <?php echo $my_order->method_of_payment;?>
-                                      </td>
+                                        <td>
+                                            <?php
+                                                echo $mode_of_payment->mode_of_payment
+                                            ?>
+                                        </td>
                                       <td>
                                         <?php 
                                           $fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row();
@@ -371,31 +410,107 @@ License: You must have a valid license purchased only from themeforest (the abov
                                           <a href="<?php echo base_url('my-account/order/'.$my_order->order_id)?>" class="label label-sm label-success"><i class="fa fa-search"></i> View </a>
                                         </span>
                                         <?php
-                                          if ($my_order->status == 0) {
-                                            ?>
-                                              <span>
-                                                <a href="<?php echo base_url('my-account/orders#cancel')?>" data-toggle="modal" class="label label-sm label-danger"><i class="fa fa-times"></i> Cancel </a>
-                                              </span>
-                                            <?php
-                                          }
+                                            if ($my_order->status == 0) {
+                                                ?>
+                                                  <span>
+                                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#cancel<?php echo $my_order->order_id ?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Cancel </a>
+                                                  </span>
+                                                <?php
+                                            }
                                         ?>
                                         <br>
                                         <?php
-                                            if ($my_order->paid == 0 && $my_order->method_of_payment == 'M Pesa') {
+                                            if ($my_order->paid == 0 && $my_order->method_of_payment == 1) {
                                                 ?>
                                                     <span>
-                                                        <a href="<?php echo base_url('lipa-na-mpesa/'.$my_order->order_id)?>" data-toggle="modal" class="label label-sm label-warning"><i class="fa fa-money"></i> Proceed to Pay </a>
+                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#mpesa<?php echo $my_order->order_id ?>" class="label label-sm label-warning"><i class="fa fa-money"></i> Proceed to Pay </a>
+                                                    </span>
+                                                <?php
+                                            } elseif ($my_order->paid == 0 && $my_order->method_of_payment == 2) {
+                                                ?>
+                                                    <span>
+                                                        <img alt="Visa Checkout" class="v-button" role="button" src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png"/>
                                                     </span>
                                                 <?php
                                             }
                                         ?>
                                       </td>
+                                        <div class="modal fade" id="cancel<?php echo $my_order->order_id ?>" tabindex="-1" role="cancel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">Cancel Order</h4>
+                                              </div>
+                                                <?php echo form_open('order/cancel/'.$my_order->order_id) ?>
+                                                  <div class="modal-body">
+                                                    Are you sure you want to cancel order #<?php echo $my_order->order_id?>?
+                                                    <?php echo form_hidden('order_id', $my_order->order_id) ?>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn default" data-dismiss="modal">No</button>
+                                                    <button type="submit" class="btn red">Yes</button>
+                                                  </div>
+                                                <?php echo form_close() ?>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                          </div>
+                                          <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal fade" id="mpesa<?php echo $my_order->order_id ?>" tabindex="-1" role="cancel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">Proceed to Pay</h4>
+                                              </div>
+                                                <?php echo form_open('pages/lipa_na_mpesa')?>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="phone">Phone Number <span class="require">*</span></label>
+                                                                <input type="text" id="phone" class="form-control" name="phone" minlength="12" maxlength="12" placeholder="254700100200" value="<?php echo $user_account->phone?>">
+                                                                <span class="help-block">Please enter the phone number in this format: 2547xxxxxxxx</span>
+                                                            <div class="caption-subject" style="color: red;">
+                                                                <?php echo form_error('phone')?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                echo '<strong>Sub Total:</strong> '.$store_currency, ' ', number_format($my_order->total_orders, 2);
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $shipment_fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row()->fee;
+
+                                                                echo '<strong>Shipment Fee:</strong> '.$store_currency, ' ', number_format($shipment_fee, 2); 
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $grand_total = $my_order->total_orders+$shipment_fee;
+                                                                echo '<strong>Grand Total:</strong> '.$store_currency, ' ', number_format($grand_total, 2);
+                                                                echo form_hidden('order_id', $my_order->order_id);
+                                                                echo form_hidden('amount', $grand_total);
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary" type="submit" id="button-confirm">Make Payment</button>
+                                                    </div>
+                                                <?php echo form_close()?>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                          </div>
+                                          <!-- /.modal-dialog -->
+                                        </div>
                                     </tr>
                                   <?php
                                 }?>
                               </tbody>
                             </table>
-                            <div class="modal fade" id="cancel" tabindex="-1" role="cancel" aria-hidden="true">
+                            <?php echo $pagination_links?>
+                            <!-- <div class="modal fade" id="cancel" tabindex="-1" role="cancel" aria-hidden="true">
                               <div class="modal-dialog">
                                 <div class="modal-content">
                                   <div class="modal-header">
@@ -411,10 +526,8 @@ License: You must have a valid license purchased only from themeforest (the abov
                                     <button type="submit" class="btn red">Yes</button>
                                   </div>
                                 </div>
-                                <!-- /.modal-content -->
                               </div>
-                              <!-- /.modal-dialog -->
-                            </div>
+                            </div> -->
                           </div>
                         </div>
                       </div>
@@ -550,7 +663,8 @@ License: You must have a valid license purchased only from themeforest (the abov
     <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
     <!--[if lt IE 9]>
     <script src="<?php echo base_url()?>public/assets/global/plugins/respond.min.js"></script>  
-    <![endif]-->  
+    <![endif]-->
+    <script type="text/javascript" src="https://sandbox-assets.secure.checkout.visa.com/checkout-widget/resources/js/integration/v1/sdk.js"></script> 
     <script src="<?php echo base_url()?>public/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url()?>public/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      

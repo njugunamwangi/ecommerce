@@ -3,6 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pages extends MX_Controller {
 
+	// include_once base_url().'/vendor/masterpass/mpasscoresdk/MasterCardCoreSDK.phar';
+	// include_once base_url().'/vendor/masterpass/merchantcheckoutsdk/MastercardMerchantCheckout.phar';
+
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
@@ -256,6 +259,7 @@ class Pages extends MX_Controller {
 		$data['store_currency'] = $this->store_currency();
 		$data['store_location'] = $this->store_location();
 		$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+		$data['modes_of_payment'] = $this->pages_model->get_modes_of_payment();
 
 		$this->_render_page('pages/checkout', $data);
 	}
@@ -280,6 +284,14 @@ class Pages extends MX_Controller {
 	 * @return my-orders history
 	 */
 	public function my_orders() {
+		$this->load->library('pagination');
+		$data['user_account'] = $this->ion_auth->user()->row();
+
+		$config['base_url'] = base_url().'my-account/orders';
+		$config['total_rows'] = $this->db->get_where('orders', ['customer_id' => $data['user_account']->id])->num_rows();
+		$config['per_page'] = 2;
+		$this->pagination->initialize($config);
+
 		if (!$this->ion_auth->logged_in()) {
 			redirect('login', 'refresh');
 		} else {
@@ -289,10 +301,10 @@ class Pages extends MX_Controller {
 			$data['store_phone_number'] = $this->store_phone_number();
 			$data['store_currency'] = $this->store_currency();
 			$data['cart_items'] = $this->cart->contents();
-			$data['user_account'] = $this->ion_auth->user()->row();
-			$data['my_orders'] = $this->pages_model->my_orders();
+			$data['orders'] = $this->pages_model->my_orders();
 			$data['store_location'] = $this->store_location();
 			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$data['pagination_links'] = $this->pagination->create_links();
 
 			$this->_render_page('pages/my-orders', $data);
 		}
@@ -331,6 +343,15 @@ class Pages extends MX_Controller {
 	}
 
 	/**
+	 * Cancel order
+	 *
+	 * @return bool
+	 */
+	public function cancel_order($order_id) {
+
+	}
+
+	/**
 	 * confirm order
 	 */
 	public function confirm_order() {
@@ -366,7 +387,7 @@ class Pages extends MX_Controller {
 		} 
 	}
 
-	public function lipa_na_mpesa($order_id) {
+	public function lipa_na_mastercard($order_id) {
 		$data['order'] = $this->pages_model->my_orders($order_id);
 
 		// check whether the order exists
@@ -384,11 +405,11 @@ class Pages extends MX_Controller {
 			$data['user_account'] = $this->ion_auth->user()->row();
 			$data['store_location'] = $this->store_location();
 
-			$this->_render_page('lipa-na-mpesa', $data);
+			$this->_render_page('lipa-na-mastercard', $data);
 		}
 	}
 
-	public function lipa() {
+	public function lipa_na_mpesa() {
 		// access token
 	    $consumerKey = (string)$this->db->get_where('info', ['field' => 'consumer-key'])->row()->value;
 	    $consumerSecret = (string)$this->db->get_where('info', ['field' => 'consumer-secret'])->row()->value;
@@ -458,6 +479,50 @@ class Pages extends MX_Controller {
 	    print_r($curl_response);
 
 	    echo $curl_response;
+	}
+
+	public function paywmc() {
+		$plainText  = "1230161923853KE2018-08-09";
+		$privateKey = openssl_pkey_get_private(("file:///C:/xampp/htdocs/ecommerce/application/modules/pages/privatekey.pem"));
+		$token      = "5dZsmAKKBMC4Z2xylUxKuAfXFOGKUeHdx";
+
+		openssl_sign($plainText, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+
+
+		$curl        = curl_init();
+		$data_string = '{
+		    "countryCode":"KE",
+		    "accountId":"1230161923853",
+		    "date":"2018-08-09"
+		    }';
+
+		curl_setopt_array($curl, array(
+		    CURLOPT_URL => "https://sandbox.jengahq.io/account-test/v2/accounts/accountbalance/query",
+		    CURLOPT_RETURNTRANSFER => true,
+		    CURLOPT_ENCODING => "",
+		    CURLOPT_MAXREDIRS => 10,
+		    CURLOPT_TIMEOUT => 30,
+		    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		    CURLOPT_CUSTOMREQUEST => "POST",
+		    CURLOPT_POSTFIELDS => $data_string,
+		    CURLOPT_HTTPHEADER => array(
+		        "Authorization: Bearer " . $token,
+		        "cache-control: no-cache",
+		        "Content-Type: application/json",
+		        "signature: " . base64_encode($signature)
+		    )
+		));
+		$result = curl_exec($curl);
+		$err    = curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+		    echo "cURL Error #:" . $err;
+		} else {
+		    echo $result;
+		}
+
 	}
 
 	/**

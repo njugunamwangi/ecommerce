@@ -118,6 +118,7 @@ class Pages_model extends CI_Model {
 	public function my_orders($order_id = FALSE) {
 		if ($order_id === FALSE) {
 			$customer_id = $this->ion_auth->user()->row()->id;
+			$this->db->order_by('orders.order_id', 'desc');
 			$query = $this->db->get_where('orders', ['customer_id' => $customer_id])->result();
 			return $query;
 		}
@@ -140,5 +141,21 @@ class Pages_model extends CI_Model {
 
 		$query = $this->db->get_where('wishlist', ['wishlist_code' => $wishlist_code])->row();
 		return $query;
+	}
+
+	/**
+	 * modes of payment
+	 *
+	 * @return string
+	 */
+	public function get_modes_of_payment($id = FALSE) {
+		if ($id === FALSE) {
+			$this->db->where('status', 1);
+			$this->db->order_by('modes_of_payment.mode_of_payment', 'asc');
+			return $this->db->get('modes_of_payment')->result();
+		}
+
+		$mode = $this->db->get_where('modes_of_payment', ['id' => $id])->row();
+		return $mode;
 	}
 }

@@ -112,30 +112,35 @@ License: You must have a valid license purchased only from themeforest (the abov
                             <?php
                           } else {
                             ?>
-                              <?php
-                                $this->db->where('customer_id', $user_account->id);
-                                $query = $this->db->get('wishlist')->num_rows();
-                              ?>
-                              <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
-                              <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
-                              <?php
-                                if ($this->ion_auth->is_admin()) {
-                                  ?>
-                                  <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                <?php
+                                    $this->db->where('customer_id', $user_account->id);
+                                    $my_wishlist = $this->db->get('wishlist')->num_rows();
+                                ?>
+                                <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                                <?php
+                                    $this->db->where('customer_id', $user_account->id);
+                                    $my_orders = $this->db->get('orders')->num_rows();
+                                ?>
+                                <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
+                                <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                                   <?php
-                                } elseif ($this->ion_auth->is_vendor()) {
-                                  $baseurl = base_url();
-                                  $baseurlinfo = explode('//', $baseurl, 2);
-                                  $base = $baseurlinfo[1];
+                                    if ($this->ion_auth->is_admin()) {
+                                      ?>
+                                      <li><a href="<?php echo base_url();?>admin" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                      <?php
+                                    } elseif ($this->ion_auth->is_vendor()) {
+                                      $baseurl = base_url();
+                                      $baseurlinfo = explode('//', $baseurl, 2);
+                                      $base = $baseurlinfo[1];
+                                      ?>
+                                      <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                      <?php
+                                    } else {
+                                      ?>
+                                        <li><a href="<?php echo base_url();?>my-account"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
+                                      <?php
+                                    }
                                   ?>
-                                  <li><a href="<?php echo prep_url($user_account->created_on.'.'.$base.'./vendor')?>" target="_blank"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
-                                  <?php
-                                } else {
-                                  ?>
-                                    <li><a href="<?php echo base_url();?>my-account"><?php echo $user_account->first_name?> <?php echo $user_account->last_name?></a></li>
-                                  <?php
-                                }
-                              ?>
                               <li><a href="<?php echo base_url();?>logout">Log Out</a></li>
                             <?php
                           }
@@ -436,12 +441,24 @@ License: You must have a valid license purchased only from themeforest (the abov
                                   <div class="col-md-12">
                                     <p>Please select the preferred payment method to use on this order.</p>
                                     <div class="radio-list">
-                                      <label>
+                                        <?php
+                                            foreach ($modes_of_payment as $mode_of_payment) {
+                                                ?>
+                                                    <label>
+                                                        <input type="radio" name="payment_method" value="<?php echo $mode_of_payment->id?>"><?php echo $mode_of_payment->mode_of_payment ?>
+                                                      </label>
+                                                <?php
+                                            }
+                                        ?>
+                                      <!-- <label>
                                         <input type="radio" name="payment_method" value="M Pesa">Lipa na M-Pesa
                                       </label>
                                       <label>
                                         <input type="radio" name="payment_method" value="Cheque Deposit"> Cheque Deposit (KCB Account Number 1257336967)
                                       </label>
+                                      <label>
+                                        <input type="radio" name="payment_method" value="Master Card / Visa"> Master Card / Visa
+                                      </label> -->
                                       <div class="caption-subject" style="color: red;">
                                         <?php echo form_error('payment_method')?>
                                       </div>

@@ -3001,14 +3001,22 @@ class Ion_auth_model extends CI_Model
 			'regular_price' => $this->input->post('regular_price'),
 			'sale_price' => $this->input->post('sale_price'),
 			'wholesale_price' => $this->input->post('wholesale_price'),
-			'date_created' => time(),
+			'date_created' => date('YmdHis'),
 			'available_from' => $this->input->post('available_from'),
 			'available_to' => $this->input->post('available_to'),
-			'status' => $this->input->post('status'),
+			'status' => (empty($this->input->post('status'))) ? 1 : $this->input->post('status'),
 			'slug' => $slug
 		];
 
 		$this->db->insert('products', $data);
+
+		$product_id = $this->db->insert_id();
+
+		$sales = [
+			'product_id' => $product_id,
+		];		
+
+		$this->db->insert('product_sales', $sales);
 
 		if ($this->db->affected_rows() === 1) {
 			$this->set_message('product_added_successfully');
@@ -3635,5 +3643,50 @@ class Ion_auth_model extends CI_Model
 		$this->db->like($product);
 		$query = $this->db->get('products')->result();
 		return $query;
+	}
+
+	/**
+	 * add mode of payment
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function set_mode_of_payment($file_name) {
+		$input = $this->input->post();
+
+		$slug = url_title($input['mode_of_payment'], 'dash', TRUE);
+
+		$data = [
+			'image' => $file_name,
+			'mode_of_payment' => $input['mode_of_payment'],
+			'status' => (empty($input['status'])) ? 0 : 1,
+			'slug' => $slug
+		];
+
+		$this->db->insert('modes_of_payment', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('mode_of_payment_successfully_added');
+			return TRUE;
+		} else {
+			$this->set_error('mode_of_payment_not_added');
+			return TRUE;
+		}
+	}
+
+	/**
+	 * modes of payment
+	 *
+	 * @return string
+	 */
+	public function get_modes_of_payment($id = FALSE) {
+		if ($id === FALSE) {
+			$this->db->order_by('modes_of_payment.mode_of_payment', 'asc');
+			return $this->db->get('modes_of_payment')->result();
+		}
+
+		$mode = $this->db->get_where('modes_of_payment', ['id' => $id])->row();
+		return $mode;
 	}
 }

@@ -115,10 +115,15 @@ License: You must have a valid license purchased only from themeforest (the abov
                         } else {
                           ?>
                             <?php
-                              $this->db->where('customer_id', $user_account->id);
-                              $query = $this->db->get('wishlist')->num_rows();
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_wishlist = $this->db->get('wishlist')->num_rows();
                             ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                            <?php
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_orders = $this->db->get('orders')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -299,7 +304,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                     </div><hr>
                     <div class="product-page-cart">
                       <div class="product-quantity">
-                          <?php echo form_input('qty', '1',)?>
+                          <?php echo form_input('qty', '1')?>
                       </div>
                     </div>
                     <button class="btn btn-primary" type="submit">Add to cart</button>
@@ -452,7 +457,7 @@ License: You must have a valid license purchased only from themeforest (the abov
                                 </div>
                           
                                 <div class="padding-top-20">                  
-                                  <button type="submit" class="btn btn-primary">Send</button>
+                                  <button type="submit" class="btn btn-primary">Send Review</button>
                                 </div>
                               <?php echo form_close()?>
                             <?php

@@ -7,6 +7,10 @@ Coded in PHP and codeigniter framework, it provides four different user levels, 
 3. Retailer/Customer
 4. Vendor
 
+Modes of payment
+
+1. M-Pesa(Sandbox)
+
 The login credentials are as follows
 
 Admin

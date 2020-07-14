@@ -77,12 +77,15 @@ $route['register']						= 'auth/register';
 $route['(:any)']						= 'pages/product/$1';
 $route['category/(:any)']				= 'pages/categories/$1';
 $route['my-account/orders']				= 'pages/my_orders';
+$route['my-account/orders/(:num)'] 		= "pages/my_orders/$1";
 $route['my-account/order/(:any)']		= 'pages/view_order/$1';
 $route['my-account/wishlist']			= 'pages/my_wishlist';
 $route['my-account/edit']				= 'pages/edit_account';
 $route['my-account/reset-password']		= 'pages/reset_password';
 $route['lipa-na-mpesa/(:any)']			= 'pages/lipa_na_mpesa/$1';
 $route['make-payment']					= 'pages/lipa';
+$route['lipa-na-mastercard/(:any)']		= 'pages/lipa_na_mastercard/$1';
+$route['order/cancel/(:any)']			= 'pages/cancel_order/$1';
 
 
 // Admin Dashboard
@@ -127,3 +130,4 @@ $route['admin/order/in-transit/(:any)']		= 'auth/in_transit/$1';
 $route['admin/order/deliver/(:any)']		= 'auth/deliver_order/$1';
 $route['admin/order/pending/(:any)']		= 'auth/order_pending/$1';
 $route['admin/orders/(:num)']				= 'auth/search_orders/$1';
+$route['admin/payments/add-mode']			= 'auth/add_mode_of_payment';

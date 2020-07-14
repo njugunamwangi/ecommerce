@@ -306,6 +306,26 @@
 							<i class="fa fa-list"></i>
 							List Payment</a>
 						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-money"></i>
+							<span class="title">Modes of Payment</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li >
+									<a href="<?php echo base_url()?>admin/payments/add-mode">
+									<i class="fa fa-check-square-o"></i>
+									Add Mode of Payment</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/payments/modes">
+									<i class="fa fa-list"></i>
+									Modes of Payment</a>
+								</li>
+								
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>

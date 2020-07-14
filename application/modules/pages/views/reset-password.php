@@ -112,10 +112,15 @@ License: You must have a valid license purchased only from themeforest (the abov
                         } else {
                           ?>
                             <?php
-                              $this->db->where('customer_id', $user_account->id);
-                              $query = $this->db->get('wishlist')->num_rows();
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_wishlist = $this->db->get('wishlist')->num_rows();
                             ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                            <?php
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_orders = $this->db->get('orders')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {

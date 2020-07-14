@@ -1,6 +1,5 @@
 	<title><?php echo $title, ' | ', $name_of_store?></title>
 </head>
-<?php $i=1;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
@@ -34,7 +33,11 @@
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
-						<i class="fa fa-tag"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
+						<i class="fa fa-tags"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
+					</li>
+					<li>
+						<a href="javascript:;">
+						<i class="icon-share"></i> Share </a>
 					</li>
 					<li class="divider">
 					</li>
@@ -54,17 +57,6 @@
 		<!-- END PAGE ACTIONS -->
 		<!-- BEGIN PAGE TOP -->
 		<div class="page-top">
-			<!-- BEGIN HEADER SEARCH BOX -->
-			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<!-- <form class="search-form" action="extra_search.html" method="GET">
-				<div class="input-group">
-					<input type="text" class="form-control input-sm" placeholder="Search..." name="query">
-					<span class="input-group-btn">
-					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-					</span>
-				</div>
-			</form> -->
-			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
@@ -78,22 +70,23 @@
 					</li>
 					<li class="separator hide">
 					</li>
+					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 						<span class="username username-hide-on-mobile">
-						<?php echo $user_account->first_name, ' ', $user_account->last_name?> </span>
+						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
 						<?php
-			              $query = $user_account->image;
-			              if (empty($query)) {
-			                $user_icon = 'avatar.png';
-			              } else {
-			                $user_icon = 'users/'.$user_account->image;
-			              }
-			            ?>
-				        <img alt="" class="img-circle" src="<?php echo base_url()?>public/attachments/<?php echo $user_icon?>"/>
+							$query = $user_account->image;
+							if (empty($query)) {
+								$user_icon = 'avatar.png';
+							} else {
+								$user_icon = 'attachments/users/'.$user_account->image;
+							}
+						?>
+						<img alt="" class="img-circle" src="<?php echo base_url()?>public/<?php echo $user_icon?>"/>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
@@ -223,14 +216,14 @@
 						</li>
 					</ul>
 				</li>
-				<li class="active">
+				<li>
 					<a href="javascript:;">
 					<i class="fa fa-gift"></i>
 					<span class="title">Products</span>
-					<span class="arrow open"></span>
+					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-						<li >
+						<li>
 							<a href="<?php echo base_url()?>admin/products/publish">
 							<i class="fa fa-check-square-o"></i>
 							Publish Product</a>
@@ -240,11 +233,11 @@
 							<i class="fa fa-list"></i>
 							List Products</a>
 						</li>
-						<li class="active">
+						<li >
 							<a href="javascript:;">
 							<i class="fa fa-bookmark-o"></i>
 							<span class="title">Categories</span>
-							<span class="arrow open"></span>
+							<span class="arrow "></span>
 							</a>
 							<ul class="sub-menu">
 								<li >
@@ -252,7 +245,7 @@
 									<i class="fa fa-check-square-o"></i>
 									Publish Category</a>
 								</li>
-								<li class="active">
+								<li>
 									<a href="<?php echo base_url()?>admin/products/categories">
 									<i class="fa fa-list"></i>
 									List Categories</a>
@@ -269,7 +262,7 @@
 							<ul class="sub-menu">
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
-									<i class="fa fa-tag"></i>
+									<i class="fa fa-check-square-o"></i>
 									Publish Tags</a>
 								</li>
 								<li>
@@ -301,11 +294,11 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li class="active">
 					<a href="javascript:;">
 					<i class="fa fa-money"></i>
 					<span class="title">Payments</span>
-					<span class="arrow "></span>
+					<span class="arrow open"></span>
 					</a>
 					<ul class="sub-menu">
 						<li >
@@ -318,14 +311,14 @@
 							<i class="fa fa-list"></i>
 							List Payment</a>
 						</li>
-						<li>
+						<li class="active">
 							<a href="javascript:;">
 							<i class="fa fa-money"></i>
 							<span class="title">Modes of Payment</span>
-							<span class="arrow "></span>
+							<span class="arrow open"></span>
 							</a>
 							<ul class="sub-menu">
-								<li >
+								<li class="active">
 									<a href="<?php echo base_url()?>admin/payments/add-mode">
 									<i class="fa fa-check-square-o"></i>
 									Add Mode of Payment</a>
@@ -368,7 +361,7 @@
 					<ul class="sub-menu">
 						<li >
 							<a href="<?php echo base_url()?>admin/settings/general">
-							<i class="fa fa-check-square-o"></i>
+							<i class="fa fa-cog"></i>
 							<?php echo lang('general_settings_heading')?> </a>
 						</li>
 					</ul>
@@ -405,20 +398,10 @@
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->
 			<!-- BEGIN PAGE HEAD -->
-			<?php
-                if ($this->session->flashdata('message')) {
-                ?>
-                    <div class="alert alert-info">
-                        <button type="button" class="close" data-dismiss="alert"></button>
-                        <div id="infoMessage"> <strong>Info!</strong><br/> <?php echo $message;?></div>
-                    </div>
-                    <?php
-                }
-            ?>
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1> <?php echo $title?> </h1>
+					<h1> <?php echo $title ?></h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -518,223 +501,77 @@
 					<a href="<?php echo base_url()?>admin">Home</a>
 					<i class="fa fa-circle"></i>
 				</li>
+				<li>
+					<a href="<?php echo base_url()?>admin/payments/modes">Modes of Payments</a>
+					<i class="fa fa-circle"></i>
+				</li>
 				<li class="active">
-					<?php echo $title?>
+					<?php echo $title ?>
 				</li>
 			</ul>
 			<!-- END PAGE BREADCRUMB -->
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
-			<?php
-            	if (empty($categories)) {
-            		?>
-	            		<div class="alert alert-danger">
-	                        <div id="infoMessage"> No <?php echo $title?> added yet</div>
-	                    </div>
-                    <?php
-            	} else {
-            		?>
-		                <div class="row">
-							<div class="col-md-12">
-								<!-- Begin: life time stats -->
-								<div class="portlet light">
-									<div class="portlet-title">
-										<div class="caption">
-											<i class="fa fa-gift font-green-sharp"></i>
-											<span class="caption-subject font-green-sharp bold uppercase"><?php echo $title?></span>
-											<span class="caption-helper">manage <?php echo $title?>...</span>
-										</div>
-										<div class="actions">
-											<div class="btn-group">
-												<a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
-												<i class="fa fa-share"></i> Tools <i class="fa fa-angle-down"></i>
-												</a>
-												<ul class="dropdown-menu pull-right">
-													<li>
-														<a href="<?php echo base_url()?>admin/products/export_to_excel">
-														Export to Excel </a>
-													</li>
-													<li>
-														<a href="javascript:;">
-														Export to CSV </a>
-													</li>
-													<li>
-														<a href="javascript:;">
-														Export to XML </a>
-													</li>
-													<li class="divider">
-													</li>
-													<li>
-														<a href="javascript:;">
-														Print Invoices </a>
-													</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="portlet-body">
-										<div class="table-container">
-											<div class="table-actions-wrapper">
-												<span>
-												</span>
-												<select class="table-group-action-input form-control input-inline input-small input-sm">
-													<option value="">Select...</option>
-													<option value="publish">Publish</option>
-													<option value="unpublished">Un-publish</option>
-													<option value="delete">Delete</option>
-												</select>
-												<button class="btn btn-sm yellow table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
-											</div>
-											<table class="table table-striped table-bordered table-hover" id="datatable_products">
-												<thead>
-													<tr role="row" class="heading">
-														<th width="1%">
-															<input type="checkbox" class="group-checkable">
-														</th>
-														<th width="1%">
-															 ID
-														</th>
-														<th width="15%">
-															 Category
-														</th>
-														<th width="15%">
-															Parent&nbsp;Category
-														</th>
-														<th width="10%">
-															Products
-														</th>
-														<th width="15%">
-															 Actions
-														</th>
-													</tr>
-													<tr role="row" class="filter">
-														<?php echo form_open('auth/search_products')?>
-															<td>
-															</td>
-															<td>
-															</td>
-															<td>
-																<select name="category" class="form-control select2me form-filter input-sm">
-																	<option value="">Select...</option>
-																	<?php foreach ($categories as $category) {
-																		if ($category->parent_category == null) {
-																			?>
-																				<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-																				<?php
-																					$this->db->order_by('categories.category');
-																					$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
-
-																					foreach ($subcategories as $subcategory) {
-																						?>
-																							<option value="<?php echo $subcategory->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category;?></option>
-																							<?php
-																								$this->db->order_by('categories.category');
-																								$mini_categories = $this->db->get_where('categories', ['parent_category' => $subcategory->category])->result();
-
-																								foreach ($mini_categories as $mini_category) {
-																									?>
-																										<option value="<?php echo $mini_category->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $mini_category->category;?></option>
-																									<?php
-																								}
-																							?>
-																						<?php
-																					}
-																				?>
-																			<?php
-																		}?>
-																		<?php
-																	}?>	
-																</select>
-															</td>
-															<td>
-																<select name="category" class="form-control select2me form-filter input-sm">
-																	<option value="">Select...</option>
-																	<?php foreach ($categories as $category) {
-																		if ($category->parent_category == null) {
-																			?>
-																				<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
-																				<?php
-																					$this->db->order_by('categories.category');
-																					$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
-
-																					foreach ($subcategories as $subcategory) {
-																						?>
-																							<option value="<?php echo $subcategory->category;?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category;?></option>
-																						<?php
-																					}
-																				?>
-																			<?php
-																		}?>
-																		<?php
-																	}?>	
-																</select>
-															</td>
-															<td>
-																<div class="margin-bottom-5">
-																	<input type="text" class="form-control form-filter input-sm" name="product_price_from" placeholder="From"/>
-																</div>
-																<input type="text" class="form-control form-filter input-sm" name="product_price_to" placeholder="To"/>
-															</td>
-															<td>
-																<div class="margin-bottom-5">
-																	<button type="submit" class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> Search</button>
-																</div>
-																<button class="btn btn-sm red filter-cancel"><i class="fa fa-times"></i> Reset</button>
-															</td>
-														<?php echo form_close()?>
-													</tr>
-												</thead>
-												<tbody>
-													<?php
-														foreach ($categories as $category) {
-															?>
-																<tr>
-																	<td>
-																		<input type="checkbox" class="group-checkable">
-																	</td>
-																	<td>
-				                                                        <?php
-				                                                            echo $i++;
-				                                                        ?>                                       
-				                                                    </td>
-														            <td><?php echo $category->category;?> </td>
-														            <td>
-														            	<?php 
-															            	if ($category->parent_category == null) {
-															            		echo '-';
-															            	} else {
-															            		echo $category->parent_category;
-															            	}
-														            	?>
-														            </td>
-				                                                    <td>
-				                                                        
-				                                                    </td>
-																	<td>
-																		<span >
-				                                                            <a href="<?php echo base_url('admin/category/edit/'. $category->slug)?>" class="label label-sm label-warning"><i class="fa fa-edit"></i> Edit</a>
-				                                                        </span>
-				                                                        <span >
-					                                                        <a href="<?php echo base_url('admin/category/'.$category->slug)?>" class="label label-sm label-info"><i class="fa fa-search"></i> View</a>
-					                                                    </span>
-					                                                    <span >
-					                                                        <a href="<?php echo base_url('admin/category/delete/'.$category->slug)?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Delete</a>
-					                                                    </span>
-																	</td>
-																</tr>
-															<?php
-														}
-													?>
-												</tbody>
-											</table>
-
-										</div>
-
-									</div>
-
-								</div>
-								<!-- End: life time stats -->
-							</div>
+			<div class="row">
+				<div class="col-md-12">
+					<!-- BEGIN PORTLET-->
+					<div class="portlet box blue">
+						<div class="portlet-body form">
+							<form method="post" enctype="multipart/form-data" action="<?php echo base_url('auth/add_mode_of_payment')?>">
+                                <div class="form-body">
+                                	<div class="form-group">
+                                       	<label class="control-label" for="image">Image <!-- <span class="required"> *</span> --></label>
+                                    </div>
+									<div class="form-group">
+                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 150px; height: 150px;"> 
+                                            </div>
+                                            <div>
+                                                <span class="btn red btn-outline btn-file">
+                                                	<span class="fileinput-new">Select Image</span>
+                                                	<span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="image" >
+                                                </span>
+                                                <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="mode_of_payment">Mode of Payment <span class="required"> *</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-paragraph"></i>
+                                            </span>
+                                            <input type="text" name="mode_of_payment" style="text-transform: capitalize;" class="form-control" placeholder="Master Card" value="" id="mode_of_payment"> 
+                                        </div>
+                                        <div class="caption-subject" style="color: red;">
+                                        	<?php echo form_error('mode_of_payment')?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+	                                    <label for="status" class="control-label">Status</label>
+	                                    <div class="input-group">
+	                                    	<span class="input-group-addon">
+	                                            <i class="fa fa-exclamation"></i>
+	                                        </span>
+	                                    	<select id="status" class="form-control select2me" name="status" >
+	                                            <option value="">Select Status...</option>
+	                                            <option value="1">Publish</option>
+	                                            <option value="2">Draft</option>
+	                                        </select> 
+	                                    </div>
+	                                    <div class="caption-subject" style="color: red;">
+	                                        <?php echo form_error('status');?>
+	                                    </div>
+	                                </div>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="btn-set pull-right">
+                                        <button type="cancel" class="btn default">Cancel</button>
+                                        <button type="submit" class="btn blue"><i class="fa fa-check-square-o"></i><?php echo $title?></button>
+                                    </div>
+                                </div>
+                            </form>
 							<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -840,9 +677,10 @@
 								</div>
 							</div>
 						</div>
-		            <?php
-            	}
-            ?>
+					</div>
+					<!-- END PORTLET-->
+				</div>
+			</div>
 			<!-- END PAGE CONTENT-->
 		</div>
 	</div>

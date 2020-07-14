@@ -116,10 +116,15 @@ License: You must have a valid license purchased only from themeforest (the abov
                         } else {
                           ?>
                             <?php
-                              $this->db->where('customer_id', $user_account->id);
-                              $query = $this->db->get('wishlist')->num_rows();
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_wishlist = $this->db->get('wishlist')->num_rows();
                             ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                            <?php
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_orders = $this->db->get('orders')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -332,107 +337,111 @@ License: You must have a valid license purchased only from themeforest (the abov
     </div> -->
     <!-- END BRANDS -->
 
-    <!-- BEGIN PRE-FOOTER -->
-    <div class="pre-footer">
-      <div class="container">
-        <div class="row">
-          <!-- BEGIN BOTTOM ABOUT BLOCK -->
-          <div class="col-md-4 col-sm-6 pre-footer-col">
-            <h2>About us</h2>
-            
-          </div>
-          <!-- END BOTTOM ABOUT BLOCK -->
-          <!-- BEGIN BOTTOM INFO BLOCK -->
-          <div class="col-md-4 col-sm-6 pre-footer-col">
-            <h2>Information</h2>
-            <!-- <ul class="list-unstyled">
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Delivery Information</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Customer Service</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Order Tracking</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Shipping &amp; Returns</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="contacts.html">Contact Us</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Careers</a></li>
-              <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Payment Methods</a></li>
-            </ul> -->
-          </div>
-          <!-- END INFO BLOCK -->
-
-          <!-- BEGIN BOTTOM CONTACTS -->
-          <div class="col-md-4 col-sm-6 pre-footer-col">
-            <h2>Our Contacts</h2>
-            <address class="margin-bottom-40">
-              <?php echo $store_location?>
-              Phone: <?php echo $store_phone_number?><br><br>
-              Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
-            </address>
-          </div>
-          <!-- END BOTTOM CONTACTS -->
-        </div>
-        <hr>
-        <div class="row">
-          <!-- BEGIN SOCIAL ICONS -->
-          <div class="col-md-6 col-sm-6">
-            <!-- <ul class="social-icons">
-              <li><a class="rss" data-original-title="rss" href="javascript:;"></a></li>
-              <li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
-              <li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
-              <li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
-              <li><a class="linkedin" data-original-title="linkedin" href="javascript:;"></a></li>
-              <li><a class="youtube" data-original-title="youtube" href="javascript:;"></a></li>
-              <li><a class="vimeo" data-original-title="vimeo" href="javascript:;"></a></li>
-              <li><a class="skype" data-original-title="skype" href="javascript:;"></a></li>
-            </ul> -->
-          </div>
-          <!-- END SOCIAL ICONS -->
-          <!-- BEGIN NEWLETTER -->
-          <div class="col-md-6 col-sm-6">
-            <div class="pre-footer-subscribe-box pull-right">
-              <h2>Newsletter</h2>
-              <?php echo form_open('pages/newsletter');?>
-                <div class="input-group">
-                  <input type="text" placeholder="youremail@mail.com" class="form-control" name="email" id="email">
-                  <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">Subscribe</button>
-                  </span>
-                  <div class="caption-subject" style="color: red;">
-                    <?php echo form_error('email')?>
-                  </div>
-                </div>
-              <?php echo form_close();?>
-            </div> 
-          </div>
-          <!-- END NEWLETTER -->
-        </div>
-      </div>
-    </div>
-    <!-- END PRE-FOOTER -->
-
     <!-- BEGIN FOOTER -->
-    <div class="footer">
-      <div class="container">
-        <div class="row">
-          <!-- BEGIN COPYRIGHT -->
-          <div class="col-md-6 col-sm-6 padding-top-10">
-            <?php echo date('Y')?> © <?php echo $name_of_store?> ALL Rights Reserved. 
+    <?php
+      if (!empty($products)) {
+        ?>
+          <div class="pre-footer">
+            <div class="container">
+              <div class="row">
+                <!-- BEGIN BOTTOM ABOUT BLOCK -->
+                <div class="col-md-4 col-sm-6 pre-footer-col">
+                  <h2>About us</h2>
+                  
+                </div>
+                <!-- END BOTTOM ABOUT BLOCK -->
+                <!-- BEGIN BOTTOM INFO BLOCK -->
+                <div class="col-md-4 col-sm-6 pre-footer-col">
+                  <h2>Information</h2>
+                  <!-- <ul class="list-unstyled">
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Delivery Information</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Customer Service</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Order Tracking</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Shipping &amp; Returns</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="contacts.html">Contact Us</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Careers</a></li>
+                    <li><i class="fa fa-angle-right"></i> <a href="javascript:;">Payment Methods</a></li>
+                  </ul> -->
+                </div>
+                <!-- END INFO BLOCK -->
+
+                <!-- BEGIN BOTTOM CONTACTS -->
+                <div class="col-md-4 col-sm-6 pre-footer-col">
+                  <h2>Our Contacts</h2>
+                  <address class="margin-bottom-40">
+                    <?php echo $store_location?>
+                    Phone: <?php echo $store_phone_number?><br><br>
+                    Email: <a href="mailto:<?php echo $store_email?>"><?php echo $store_email?></a><br>
+                  </address>
+                </div>
+                <!-- END BOTTOM CONTACTS -->
+              </div>
+              <hr>
+              <div class="row">
+                <!-- BEGIN SOCIAL ICONS -->
+                <div class="col-md-6 col-sm-6">
+                  <!-- <ul class="social-icons">
+                    <li><a class="rss" data-original-title="rss" href="javascript:;"></a></li>
+                    <li><a class="facebook" data-original-title="facebook" href="javascript:;"></a></li>
+                    <li><a class="twitter" data-original-title="twitter" href="javascript:;"></a></li>
+                    <li><a class="googleplus" data-original-title="googleplus" href="javascript:;"></a></li>
+                    <li><a class="linkedin" data-original-title="linkedin" href="javascript:;"></a></li>
+                    <li><a class="youtube" data-original-title="youtube" href="javascript:;"></a></li>
+                    <li><a class="vimeo" data-original-title="vimeo" href="javascript:;"></a></li>
+                    <li><a class="skype" data-original-title="skype" href="javascript:;"></a></li>
+                  </ul> -->
+                </div>
+                <!-- END SOCIAL ICONS -->
+                <!-- BEGIN NEWLETTER -->
+                <div class="col-md-6 col-sm-6">
+                  <div class="pre-footer-subscribe-box pull-right">
+                    <h2>Newsletter</h2>
+                    <?php echo form_open('pages/newsletter');?>
+                      <div class="input-group">
+                        <input type="text" placeholder="youremail@mail.com" class="form-control" name="email" id="email">
+                        <span class="input-group-btn">
+                          <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </span>
+                        <div class="caption-subject" style="color: red;">
+                          <?php echo form_error('email')?>
+                        </div>
+                      </div>
+                    <?php echo form_close();?>
+                  </div> 
+                </div>
+                <!-- END NEWLETTER -->
+              </div>
+            </div>
           </div>
-          <!-- <div class="scroll-to-top">
-              <i class="icon-arrow-up"></i>
-          </div> -->
-          <!-- END COPYRIGHT -->
-          <!-- BEGIN PAYMENTS -->
-          <div class="col-md-6 col-sm-6">
-            <!-- <ul class="list-unstyled list-inline pull-right">
-              <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/western-union.jpg" alt="We accept Western Union" title="We accept Western Union"></li>
-              <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/american-express.jpg" alt="We accept American Express" title="We accept American Express"></li>
-              <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/MasterCard.jpg" alt="We accept MasterCard" title="We accept MasterCard"></li>
-              <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/PayPal.jpg" alt="We accept PayPal" title="We accept PayPal"></li>
-              <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/visa.jpg" alt="We accept Visa" title="We accept Visa"></li>
-            </ul> -->
+
+          <div class="footer">
+            <div class="container">
+              <div class="row">
+                <!-- BEGIN COPYRIGHT -->
+                <div class="col-md-6 col-sm-6 padding-top-10">
+                  <?php echo date('Y')?> © <?php echo $name_of_store?> ALL Rights Reserved. 
+                </div>
+                <!-- <div class="scroll-to-top">
+                    <i class="icon-arrow-up"></i>
+                </div> -->
+                <!-- END COPYRIGHT -->
+                <!-- BEGIN PAYMENTS -->
+                <div class="col-md-6 col-sm-6">
+                  <!-- <ul class="list-unstyled list-inline pull-right">
+                    <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/western-union.jpg" alt="We accept Western Union" title="We accept Western Union"></li>
+                    <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/american-express.jpg" alt="We accept American Express" title="We accept American Express"></li>
+                    <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/MasterCard.jpg" alt="We accept MasterCard" title="We accept MasterCard"></li>
+                    <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/PayPal.jpg" alt="We accept PayPal" title="We accept PayPal"></li>
+                    <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/visa.jpg" alt="We accept Visa" title="We accept Visa"></li>
+                  </ul> -->
+                </div>
+                <!-- END PAYMENTS -->
+              </div>
+            </div>
           </div>
-          <!-- END PAYMENTS -->
-        </div>
-      </div>
-    </div>
+        <?php
+      }
+    ?>
     <!-- END FOOTER -->
 
     <!-- BEGIN fast view of a product -->

@@ -58,6 +58,22 @@ License: You must have a valid license purchased only from themeforest (the abov
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
+  <script type="text/javascript">
+    function onVisaCheckoutReady (){
+      V.init({ 
+        apikey: "MYID2NYW0OS4283U8NHN212MI_2dOKkRhIcZo1f6iqRCt7jUg", 
+        encryptionKey: "UP9L+Jx3JG$IK0BqsS}EyCO{bwD7rpCR6ChT2b$0",
+        paymentRequest:{
+          currencyCode: "KES",
+          subtotal: "11.00"
+        }
+      });
+    }
+
+    V.on("payment.success", function(payment) {alert(JSON.stringify(payment)); });
+    V.on("payment.cancel", function(payment) {alert(JSON.stringify(payment)); });
+    V.on("payment.error", function(payment,error) {alert(JSON.stringify(error));});
+  </script>
   <!-- Theme styles END -->
 </head>
 <!-- Head END -->
@@ -112,10 +128,15 @@ License: You must have a valid license purchased only from themeforest (the abov
                         } else {
                           ?>
                             <?php
-                              $this->db->where('customer_id', $user_account->id);
-                              $query = $this->db->get('wishlist')->num_rows();
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_wishlist = $this->db->get('wishlist')->num_rows();
                             ?>
-                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $query?>)</a></li>
+                            <li><a href="<?php echo base_url();?>my-account/wishlist">My Wishlist (<?php echo $my_wishlist?>)</a></li>
+                            <?php
+                                $this->db->where('customer_id', $user_account->id);
+                                $my_orders = $this->db->get('orders')->num_rows();
+                            ?>
+                            <li><a href="<?php echo base_url();?>my-account/orders">My Orders (<?php echo $my_orders?>)</a></li>
                             <li><a href="<?php echo base_url();?>checkout">Checkout</a></li>
                             <?php
                               if ($this->ion_auth->is_admin()) {
@@ -255,17 +276,9 @@ License: You must have a valid license purchased only from themeforest (the abov
             } else {
               	?>
               		<!-- BEGIN CONTENT -->
-              		<?php echo form_open('pages/lipa')?>
+              		<?php echo form_open('pages/paywmc')?>
 	              		<div class="row">
 		              		<div class="col-md-12 col-sm-6">
-		                        <div class="form-group">
-		                            <label for="phone">Phone Number <span class="require">*</span></label>
-		                                <input type="text" id="phone" class="form-control" name="phone" minlength="12" maxlength="12" placeholder="254700100200" value="<?php echo $user_account->phone?>">
-		                                <span class="help-block">Please enter the phone number in this form: 2547xxxxxxxx</span>
-		                            <div class="caption-subject" style="color: red;">
-		                                <?php echo form_error('phone')?>
-		                            </div>
-		                        </div>
 		                        <div class="form-group">
 		                        	<?php
 				                    	echo '<strong>Sub Total:</strong> '.$store_currency, ' ', number_format($order->total_orders, 2);
