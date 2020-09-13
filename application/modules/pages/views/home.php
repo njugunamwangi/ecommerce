@@ -272,11 +272,11 @@ License: You must have a valid license purchased only from themeforest (the abov
                     <div class="product-item">
                       <?php echo form_open('pages/add')?>
                         <div class="pi-img-wrapper">
-                          <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="img-responsive" alt="<?php echo $product->name?>">
-                          <div>
-                            <a href="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="btn btn-default fancybox-button">Zoom</a>
-                            <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
-                          </div>
+                            <img src="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="img-responsive" alt="<?php echo $product->name?>">
+                            <div>
+                                <a href="<?php echo base_url()?>public/attachments/products/<?php echo $product->image?>" class="btn btn-default fancybox-button">Zoom</a>
+                                <a href="#product-pop-up" class="btn btn-default fancybox-fast-view">View</a>
+                            </div>
                         </div>
                         <h3><a href="<?php echo base_url($product->slug)?>"><?php echo ucwords($product->name)?></a></h3>
                         <?php

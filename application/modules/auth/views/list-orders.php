@@ -296,6 +296,25 @@
 							<i class="fa fa-list"></i>
 							List Orders</a>
 						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-star-half-o"></i>
+							<span class="title">Order Status</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/status/add">
+									<i class="fa fa-plus"></i>
+									Add Status</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/statuses">
+									<i class="fa fa-list"></i>
+									List Statuses</a>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -368,6 +387,16 @@
 							<i class="fa fa-cog"></i>
 							<?php echo lang('general_settings_heading')?> </a>
 						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/stripe-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('stripe_credentials_heading')?>  </a>
+						</li>s
 					</ul>
 				</li>
 			</ul>

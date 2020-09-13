@@ -259,7 +259,6 @@ License: You must have a valid license purchased only from themeforest (the abov
                           <th class="goods-page-image">Image</th>
                           <th class="goods-page-description">Description</th>
                           <th class="goods-page-quantity">Quantity</th>
-                          <th class="goods-page-quantity">Add/Remove</th>
                           <th class="goods-page-price">Unit price</th>
                           <th class="goods-page-total">Sub Total</th>
                         </tr>
@@ -279,15 +278,6 @@ License: You must have a valid license purchased only from themeforest (the abov
                             <td class="goods-page-quantity" >
                               <div class="product-quantity">
                                   <?php echo $cart_item['qty']?>      
-                              </div>
-                            </td>
-                            <td>
-                              <div class="btn-group btn-group-solid">
-                                <?php echo form_hidden('qty', $cart_item['qty'])?>
-                                <a href="<?php echo base_url('pages/updateadd/'.$cart_item['rowid'])?>" type="button" class="btn blue">+</a>
-                              </div>
-                              <div class="btn-group btn-group-solid">
-                                <a href="<?php echo base_url()?>pages/updateremove" type="button" class="btn red">-</a>
                               </div>
                             </td>
                             <td class="goods-page-price">

@@ -390,12 +390,12 @@
 							<i class="fa fa-cog"></i>
 							<?php echo $this->lang->line('general_settings_heading')?> </a>
 						</li>
-						<li class="active">
+						<li >
 							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
 							<i class="fa fa-money"></i>
 							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
 						</li>
-						<li>
+						<li class="active">
 							<a href="<?php echo base_url()?>admin/settings/stripe-credentials">
 							<i class="fa fa-money"></i>
 							<?php echo $this->lang->line('stripe_credentials_heading')?>  </a>
@@ -555,11 +555,11 @@
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div class="portlet box blue">
 						<div class="portlet-title">
 							<div class="caption">
-								Consumer Key
+								Secret Key
 							</div>
 							<div class="tools">
 								<a href="" class="reload">
@@ -567,14 +567,14 @@
 							</div>
 						</div>
 						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_consumer_key');?>
+							<?php echo form_open('auth/edit_stripe_secret_key');?>
 								<div class="form-body">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">
 											<i class="fa fa-unlock"></i>
 											</span>
-											<input type="text" name="consumer_key" class="form-control" placeholder="" value="<?php echo $consumer_key?>">
+											<input type="text" name="secret_key" class="form-control" placeholder="" value="<?php echo $stripe_secret_key?>">
 										</div>
 									</div>
 								</div>
@@ -588,79 +588,11 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="portlet box red">
-						<div class="portlet-title">
-							<div class="caption">
-								Consumer Secret
-							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_consumer_secret');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-unlock-alt"></i>
-											</span>
-											<input type="text" name="consumer_secret" class="form-control" value="<?php echo $consumer_secret?>">
-										</div>
-									</div>
-								</div>
-								<div class="form-actions">
-									<div class="pull-right">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs red">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="portlet box green ">
-						<div class="portlet-title">
-							<div class="caption">
-								Till Number
-							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_till_number');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-key"></i>
-											</span>
-											<input type="text" name="till_number" class="form-control" placeholder="600600" value="<?php echo $till_number?>">
-										</div>
-									</div>
-								</div>
-								<div class="form-actions" >
-									<div class="pull-right">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs green">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
 				<div class="col-md-6">
 					<div class="portlet box purple">
 						<div class="portlet-title">
 							<div class="caption">
-								Pass Key
+								Publishable Key
 							</div>
 							<div class="tools">
 								<a href="" class="reload">
@@ -668,14 +600,14 @@
 							</div>
 						</div>
 						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_pass_key');?>
+							<?php echo form_open('auth/edit_stripe_publishable_key');?>
 								<div class="form-body">
 									<div class="form-group">
 										<div class="input-group">
 											<span class="input-group-addon">
 											<i class="fa fa-unlock"></i>
 											</span>
-											<input type="text" name="pass_key" class="form-control" placeholder="" value="<?php echo $pass_key?>">
+											<input type="text" name="publishable_key" class="form-control" placeholder="" value="<?php echo $stripe_publishable_key?>">
 										</div>
 									</div>
 								</div>

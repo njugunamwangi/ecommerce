@@ -288,6 +288,25 @@
 							<i class="fa fa-list"></i>
 							List Orders</a>
 						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-star-half-o"></i>
+							<span class="title">Order Status</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/status/add">
+									<i class="fa fa-plus"></i>
+									Add Status</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/statuses">
+									<i class="fa fa-list"></i>
+									List Statuses</a>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -359,6 +378,16 @@
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
 							<?php echo lang('general_settings_heading')?> </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/stripe-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('stripe_credentials_heading')?>  </a>
 						</li>
 					</ul>
 				</li>
@@ -738,22 +767,20 @@
 												<div class="form-group">
 													<label class="control-label" for="method_of_payment"> Method of Payment <span class="require" style="color: red;">*</span> </label>
 													<div class="md-radio-list">
-														<div class="md-radio">
-															<input type="radio" id="cash_on_delovery" name="method_of_payment" class="md-radiobtn" value="Cash on Delivery">
-															<label for="cash_on_delovery">
-															<span></span>
-															<span class="check"></span>
-															<span class="box"></span>
-															Cash on Delivery </label>
-														</div>
-														<div class="md-radio">
-															<input type="radio" id="cheque_deposit" name="method_of_payment" class="md-radiobtn" value="Cheque Deposit" checked>
-															<label for="cheque_deposit">
-															<span></span>
-															<span class="check"></span>
-															<span class="box"></span>
-															Cheque Deposit </label>
-														</div>
+														<?php
+															foreach ($modes_of_payment as $mode_of_payment) {
+																?>
+																	<div class="md-radio">
+																		<input type="radio" id="<?php echo $mode_of_payment->id ?>" name="method_of_payment" class="md-radiobtn" value="<?php echo $mode_of_payment->id ?>">
+																		<label for="<?php echo $mode_of_payment->id ?>">
+																		<span></span>
+																		<span class="check"></span>
+																		<span class="box"></span>
+																		<?php echo $mode_of_payment->mode_of_payment ?> </label>
+																	</div>
+																<?php
+															}
+														?>
 													</div>
 													<div class="caption-subject" style="color: red;">
                                                     	<?php echo form_error('method_of_payment')?>

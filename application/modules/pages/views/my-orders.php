@@ -58,37 +58,6 @@ License: You must have a valid license purchased only from themeforest (the abov
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/style-responsive.css" rel="stylesheet">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/themes/red.css" rel="stylesheet" id="style-color">
   <link href="<?php echo base_url()?>public/assets/frontend/layout/css/custom.css" rel="stylesheet">
-  <script type="text/javascript">
-    function onVisaCheckoutReady (){
-      V.init({ 
-        apikey: "MYID2NYW0OS4283U8NHN212MI_2dOKkRhIcZo1f6iqRCt7jUg", 
-        encryptionKey: "UP9L+Jx3JG$IK0BqsS}EyCO{bwD7rpCR6ChT2b$0",
-        paymentRequest:{
-          currencyCode: "USD",
-          subtotal: "11.00"
-        }
-      });
-    }
-
-    V.on("payment.success", function(payment) {
-        visacheckout.getDetails("test", paymentInfoStr, function (errors, data) {
-            console.log("Card name: " + data.card.name);
-            console.log("Card four last digit: " + data.card.lastFourDigits);
-            console.log("Expiration: " + data.card.expiration);
-            console.log("Addrss name: " + data.address.name);
-
-            console.log("Street: " + data.address.street);
-            console.log("Number: " + data.address.number);
-
-            console.log(data.address.city + ", " + data.address.state + " - " + data.address.postalCode);
-            console.log(data.user.email);
-            console.log(data.user.phone);
-
-        });
-    });
-    V.on("payment.cancel", function(payment) {alert(JSON.stringify(payment)); });
-    V.on("payment.error", function(payment,error) {alert(JSON.stringify(error));});
-  </script>
   <!-- Theme styles END -->
 </head>
 <!-- Head END -->
@@ -420,18 +389,28 @@ License: You must have a valid license purchased only from themeforest (the abov
                                         ?>
                                         <br>
                                         <?php
-                                            if ($my_order->paid == 0 && $my_order->method_of_payment == 1) {
-                                                ?>
-                                                    <span>
-                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#mpesa<?php echo $my_order->order_id ?>" class="label label-sm label-warning"><i class="fa fa-money"></i> Proceed to Pay </a>
-                                                    </span>
-                                                <?php
-                                            } elseif ($my_order->paid == 0 && $my_order->method_of_payment == 2) {
-                                                ?>
-                                                    <span>
-                                                        <img alt="Visa Checkout" class="v-button" role="button" src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png"/>
-                                                    </span>
-                                                <?php
+                                            if ($my_order->status != 3) {
+                                                // if the order is not cancelled
+                                                // show methods of payment
+                                                if ($my_order->paid == 0 && $my_order->method_of_payment == 1) {
+                                                    ?>
+                                                        <span>
+                                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#mpesa<?php echo $my_order->order_id ?>" class="label label-sm label-warning"><i class="fa fa-money"></i> Pay with M-Pesa </a>
+                                                        </span>
+                                                    <?php
+                                                } elseif ($my_order->paid == 0 && $my_order->method_of_payment == 4) {
+                                                    ?>
+                                                        <span>
+                                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#paypal<?php echo $my_order->order_id ?>" class="label label-sm label-info"><i class="fa fa-money"></i> Pay with PayPal </a>
+                                                        </span>
+                                                    <?php
+                                                } elseif ($my_order->paid == 0 && $my_order->method_of_payment == 2) {
+                                                    ?>
+                                                        <span>
+                                                            <a href="javascript:void(0);" data-toggle="modal" data-target="#creditcard<?php echo $my_order->order_id ?>" class="label label-sm label-success"><i class="fa fa-money"></i> Pay with Credit Card </a>
+                                                        </span>
+                                                    <?php
+                                                }
                                             }
                                         ?>
                                       </td>
@@ -445,7 +424,6 @@ License: You must have a valid license purchased only from themeforest (the abov
                                                 <?php echo form_open('order/cancel/'.$my_order->order_id) ?>
                                                   <div class="modal-body">
                                                     Are you sure you want to cancel order #<?php echo $my_order->order_id?>?
-                                                    <?php echo form_hidden('order_id', $my_order->order_id) ?>
                                                   </div>
                                                   <div class="modal-footer">
                                                     <button type="button" class="btn default" data-dismiss="modal">No</button>
@@ -504,30 +482,114 @@ License: You must have a valid license purchased only from themeforest (the abov
                                           </div>
                                           <!-- /.modal-dialog -->
                                         </div>
+                                        <div class="modal fade" id="creditcard<?php echo $my_order->order_id ?>" tabindex="-1" role="cancel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">Pay with Credit Card</h4>
+                                              </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <?php
+                                                                echo '<strong>Sub Total:</strong> '.$store_currency, ' ', number_format($my_order->total_orders, 2);
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $shipment_fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row()->fee;
+
+                                                                echo '<strong>Shipment Fee:</strong> '.$store_currency, ' ', number_format($shipment_fee, 2); 
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $grand_total = $my_order->total_orders+$shipment_fee;
+                                                                $price = $grand_total/100;
+                                                                echo '<strong>Grand Total:</strong> '.$store_currency, ' ', number_format($grand_total, 2);
+                                                                echo form_hidden('order_id', $my_order->order_id);
+                                                                echo form_hidden('amount', $grand_total);
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <?php echo form_open('confirm-stripe-payment/'.$my_order->order_id) ?>
+                                                            <script
+                                                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                                                data-key="<?php echo (string)$publishable_key ?>"
+                                                                data-amount="<?php echo $price?>"
+                                                                data-name="Order ID: <?php echo $my_order->order_id ?>"
+                                                                data-description="Widget"
+                                                                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                                                data-locale="auto">
+                                                            </script>
+                                                        <?php echo form_close()?>
+                                                    </div>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                          </div>
+                                          <!-- /.modal-dialog -->
+                                        </div>
+                                        <div class="modal fade" id="paypal<?php echo $my_order->order_id ?>" tabindex="-1" role="cancel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                <h4 class="modal-title">Pay with PayPal</h4>
+                                              </div>
+                                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <?php
+                                                                echo '<strong>Sub Total:</strong> '.$store_currency, ' ', number_format($my_order->total_orders, 2);
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $shipment_fee = $this->db->get_where('shipment', ['ship_to' => $my_order->subcounty])->row()->fee;
+
+                                                                echo '<strong>Shipment Fee:</strong> '.$store_currency, ' ', number_format($shipment_fee, 2); 
+                                                            ?>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <?php
+                                                                $grand_total = $my_order->total_orders+$shipment_fee;
+                                                                echo '<strong>Grand Total:</strong> '.$store_currency, ' ', number_format($grand_total, 2);
+                                                                echo form_hidden('order_id', $my_order->order_id);
+                                                            ?>
+                                                            <input type="hidden" name="cmd" value="_xclick">
+                                                            <input type="hidden" name="business" value="LB8QSMHDDUD8N">
+                                                            <input type="hidden" name="lc" value="KE">
+                                                            <input type="hidden" name="item_name" value="<?php echo $my_order->order_id ?>">
+                                                            <input type="hidden" name="item_number" value="<?php echo $my_order->order_id ?>">
+                                                            <input type="hidden" name="amount" value="<?php echo $grand_total ?>">
+                                                            <input type="hidden" name="currency_code" value="<?php echo $store_currency ?>">
+                                                            <input type="hidden" name="button_subtype" value="services">
+                                                            <input type="hidden" name="no_note" value="1">
+                                                            <input type="hidden" name="no_shipping" value="1">
+                                                            <input type="hidden" name="rm" value="1">
+                                                            <input type="hidden" name="return" value="<?php echo base_url()?>/my-account/orders">
+                                                            <input type="hidden" name="cancel_return" value="<?php echo base_url()?>">
+                                                            <input type="hidden" name="bn" value="PP-BuyNowBF:btn_paynow_LG.gif:NonHosted">
+                                                            <input type="hidden" name="notify_url" value="<?php echo base_url()?>/pages/handler">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynow_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                                                        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- /.modal-content -->
+                                          </div>
+                                          <!-- /.modal-dialog -->
+                                        </div>
                                     </tr>
                                   <?php
                                 }?>
                               </tbody>
                             </table>
-                            <?php echo $pagination_links?>
-                            <!-- <div class="modal fade" id="cancel" tabindex="-1" role="cancel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                                    <h4 class="modal-title">Cancel Order</h4>
-                                  </div>
-                                  <div class="modal-body">
-                                    <?php $orderid = $this->input->post('order_id');?>
-                                    Are you sure you want to cancel order #<?php echo $orderid?>?
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn default" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn red">Yes</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div> -->
+                            <!-- <?php echo $pagination_links?> -->
                           </div>
                         </div>
                       </div>
@@ -645,13 +707,13 @@ License: You must have a valid license purchased only from themeforest (the abov
           <!-- END COPYRIGHT -->
           <!-- BEGIN PAYMENTS -->
           <div class="col-md-6 col-sm-6">
-            <!-- <ul class="list-unstyled list-inline pull-right">
+            <ul class="list-unstyled list-inline pull-right">
               <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/western-union.jpg" alt="We accept Western Union" title="We accept Western Union"></li>
               <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/american-express.jpg" alt="We accept American Express" title="We accept American Express"></li>
               <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/MasterCard.jpg" alt="We accept MasterCard" title="We accept MasterCard"></li>
               <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/PayPal.jpg" alt="We accept PayPal" title="We accept PayPal"></li>
               <li><img src="<?php echo base_url()?>public/assets/frontend/layout/img/payments/visa.jpg" alt="We accept Visa" title="We accept Visa"></li>
-            </ul> -->
+            </ul>
           </div>
           <!-- END PAYMENTS -->
         </div>
@@ -684,6 +746,21 @@ License: You must have a valid license purchased only from themeforest (the abov
             Layout.initTwitter();
         });
     </script>
+    <!-- <script type="text/javascript" src="https://sandbox.masterpass.com/integration/merchant.js"></script>
+    <script>
+        // Invoke below javascript method
+        masterpass.checkout({
+                "checkoutId": "7b0dbd9c02c04bc79aedaec6a334e3fa",                                   // Merchant checkout identifier received when merchant onboarded for masterpass
+                "allowedCardTypes": ["master,amex,diners,discover,jcb,maestro,visa"],               // Card types accepted by merchant
+                "amount": "789.53",                                                                 // Shopping cart subtotal
+                "currency": "USD",                                                                  // Currency code for cart
+                "shippingLocationProfile": "US,AU,BE",                                              // Shipping locations supported by merchant - configured in merchant portal
+                "suppress3Ds": true,                                                               // Set true when 3DS not mandatory for the spcecific country
+                "suppressShippingAddress": true,                                                   // Set true when cart items has digital goods only
+                "cartId": "1efed583-1824-436a-869f-286ebdb22ae2",                                   // Unique identifier for cart generated by merchant
+                "callbackUrl": "https://ecommerce.com"                                  // The URL to which the browser must redirect when checkout is complete
+        });
+    </script> -->
     <!-- END PAGE LEVEL JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

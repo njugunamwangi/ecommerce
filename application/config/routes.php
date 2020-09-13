@@ -86,7 +86,9 @@ $route['lipa-na-mpesa/(:any)']			= 'pages/lipa_na_mpesa/$1';
 $route['make-payment']					= 'pages/lipa';
 $route['lipa-na-mastercard/(:any)']		= 'pages/lipa_na_mastercard/$1';
 $route['order/cancel/(:any)']			= 'pages/cancel_order/$1';
-
+$route['confirm-stripe-payment/(:any)']	= 'pages/confirmStripePayment/$1';
+$route['success']						= 'pages/success';
+$route['cancel']						= 'pages/cancel';
 
 // Admin Dashboard
 $route['admin/products/categories'] 		= 'auth/categories';
@@ -113,6 +115,7 @@ $route['admin/order/available/(:any)']		= 'auth/make_available/$1';
 $route['admin/products']					= 'auth/list_products';
 $route['admin/settings/general']			= 'auth/general_settings';
 $route['admin/settings/m-pesa-credentials']	= 'auth/m_pesa_credentials';
+$route['admin/settings/stripe-credentials']	= 'auth/stripe_credentials';
 $route['admin/users']						= 'auth/users';
 $route['admin/user/(:any)']					= 'auth/view_user/$1';
 $route['admin/user/edit/(:any)']			= 'auth/edit_user/$1';
@@ -131,3 +134,5 @@ $route['admin/order/deliver/(:any)']		= 'auth/deliver_order/$1';
 $route['admin/order/pending/(:any)']		= 'auth/order_pending/$1';
 $route['admin/orders/(:num)']				= 'auth/search_orders/$1';
 $route['admin/payments/add-mode']			= 'auth/add_mode_of_payment';
+$route['admin/orders/status/add']			= 'auth/add_order_status';
+$route['admin/orders/statuses']				= 'auth/list_order_status';

@@ -299,6 +299,25 @@
 							<i class="fa fa-list"></i>
 							List Orders</a>
 						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-star-half-o"></i>
+							<span class="title">Order Status</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/status/add">
+									<i class="fa fa-plus"></i>
+									Add Status</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/statuses">
+									<i class="fa fa-list"></i>
+									List Statuses</a>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -370,6 +389,16 @@
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-check-square-o"></i>
 							<?php echo lang('general_settings_heading')?> </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/stripe-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('stripe_credentials_heading')?>  </a>
 						</li>
 					</ul>
 				</li>
@@ -726,25 +755,25 @@
 																			if ($product->status == 1) {
 																				?>
 																					<span >
-																						<a href="<?php echo base_url('admin/product/unpublish/'. $product->id)?>" class="label label-sm label-success"> Published </a>
+																						<a href="javascript:void(0);" data-toggle="modal" data-target="#draft<?php echo $product->id ?>" class="label label-sm label-success"> Published </a>
 							                                                        </span>
 																				<?php
 																			} elseif ($product->status == 0) {
 																				?>
 																					<span >
-																						<a href="<?php echo base_url('admin/product/approve/'. $product->id)?>" class="label label-sm label-danger"> Pending Approval </a>
+																						<a href="javascript:void(0);" data-toggle="modal" data-target="#approve<?php echo $product->id ?>" class="label label-sm label-danger"> Pending Approval </a>
 							                                                        </span>
 																				<?php
 																			} elseif ($product->status == 3) {
 																				?>
 																					<span >
-																						<a href="<?php echo base_url('admin/product/approve/'. $product->id)?>" class="label label-sm label-default"> Deleted </a>
+																						<a href="javascript:void(0);" data-toggle="modal" data-target="#approve<?php echo $product->id ?>" class="label label-sm label-default"> Deleted </a>
 							                                                        </span>
 																				<?php
 																			} else {
 																				?>
 																					<span >
-							                                                            <a href="<?php echo base_url('admin/product/publish/'. $product->id)?>" class="label label-sm label-warning"> Draft </a>
+																						<a href="javascript:void(0);" data-toggle="modal" data-target="#publish<?php echo $product->id ?>" class="label label-sm label-warning"> Draft </a>
 							                                                        </span>
 																				<?php
 																			}
@@ -758,10 +787,129 @@
 					                                                        <a href="<?php echo base_url('admin/product/'.$product->id)?>" class="label label-sm label-info"><i class="fa fa-search"></i> View</a>
 					                                                    </span>
 					                                                    <span >
-					                                                        <a href="<?php echo base_url('admin/product/delete/'.$product->id)?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Delete</a>
+					                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#delete<?php echo $product->id ?>" class="label label-sm label-danger"><i class="fa fa-times"></i> Delete</a>
+					                                                    </span>
+					                                                    <br>
+					                                                    <span >
+					                                                        <a href="javascript:void(0);" data-toggle="modal" data-target="#void<?php echo $product->id ?>" class="label label-sm label-danger"><i class="fa fa-trash-o"></i> Void</a>
 					                                                    </span>
 																	</td>
 																</tr>
+																<div id="draft<?php echo $product->id ?>" class="modal fade" tabindex="-1" data-width="400">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+																				<h4 class="modal-title">Save <?php echo $product->name ?> as draft?</h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-12">
+											                                            <?php echo form_open('admin/product/unpublish/'. $product->id); ?>
+											                                            	Are you sure you want to save <?php echo '<strong>',$product->name,'</strong>' ?> as draft?
+												                                            <div class="modal-footer">
+																								<button type="button" data-dismiss="modal" class="btn">Close</button>
+																								<button type="submit" class="btn blue">Save as Draft</button>
+																							</div>
+																						<?php echo form_close();?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div id="publish<?php echo $product->id ?>" class="modal fade" tabindex="-1" data-width="400">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+																				<h4 class="modal-title">Save <?php echo $product->name ?> as published?</h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-12">
+											                                            <?php echo form_open('admin/product/publish/'. $product->id); ?>
+											                                            	Are you sure you want to save <?php echo '<strong>',$product->name,'</strong>' ?> as published?
+												                                            <div class="modal-footer">
+																								<button type="button" data-dismiss="modal" class="btn">Close</button>
+																								<button type="submit" class="btn blue">Save as Published</button>
+																							</div>
+																						<?php echo form_close();?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div id="approve<?php echo $product->id ?>" class="modal fade" tabindex="-1" data-width="400">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+																				<h4 class="modal-title">Approve <?php echo $product->name ?></h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-12">
+											                                            <?php echo form_open('admin/product/approve/'. $product->id); ?>
+											                                            	Are you sure you want to approve <?php echo '<strong>',$product->name,'</strong>' ?>?
+												                                            <div class="modal-footer">
+																								<button type="button" data-dismiss="modal" class="btn">Close</button>
+																								<button type="submit" class="btn blue">Approve</button>
+																							</div>
+																						<?php echo form_close();?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div id="delete<?php echo $product->id ?>" class="modal fade" tabindex="-1" data-width="400">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+																				<h4 class="modal-title">Delete <?php echo $product->name ?></h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-12">
+											                                            <?php echo form_open('admin/product/delete/'. $product->id); ?>
+											                                            	Are you sure you want to delete <?php echo '<strong>',$product->name,'</strong>' ?>?
+												                                            <div class="modal-footer">
+																								<button type="button" data-dismiss="modal" class="btn">Close</button>
+																								<button type="submit" class="btn blue">Delete</button>
+																							</div>
+																						<?php echo form_close();?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div id="void<?php echo $product->id ?>" class="modal fade" tabindex="-1" data-width="400">
+																	<div class="modal-dialog">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+																				<h4 class="modal-title">Void <?php echo $product->name ?></h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-12">
+											                                            <?php echo form_open('admin/product/void/'. $product->id); ?>
+											                                            	Are you sure you want to void <?php echo '<strong>',$product->name,'</strong>' ?>? This process is irreversible!
+												                                            <div class="modal-footer">
+																								<button type="button" data-dismiss="modal" class="btn">Close</button>
+																								<button type="submit" class="btn blue">Void</button>
+																							</div>
+																						<?php echo form_close();?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
 															<?php
 														}
 													?>

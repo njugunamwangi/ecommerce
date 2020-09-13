@@ -1,6 +1,5 @@
 	<title><?php echo $title, ' | ', $name_of_store?></title>
 </head>
-<?php $i=0;?>
 <body class="page-md page-header-fixed page-sidebar-closed-hide-logo page-sidebar-fixed page-sidebar-closed-hide-logo">
 <!-- BEGIN HEADER -->
 <div class="page-header md-shadow-z-1-i navbar navbar-fixed-top">
@@ -29,12 +28,16 @@
 				</button>
 				<ul class="dropdown-menu" role="menu">
 					<li>
-						<a data-target="#stack1" data-toggle="modal" href="#stack1">
+						<a data-target="#stack2" data-toggle="modal" href="#stack2">
 						<i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('publish_category_heading')?> </a>
 					</li>
 					<li>
 						<a data-target="#stack3" data-toggle="modal" href="#stack3">
-						<i class="fa fa-tag"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
+						<i class="fa fa-tags"></i> <?php echo $this->lang->line('publish_tag_heading')?> </a>
+					</li>
+					<li>
+						<a href="javascript:;">
+						<i class="icon-share"></i> Share </a>
 					</li>
 					<li class="divider">
 					</li>
@@ -54,17 +57,6 @@
 		<!-- END PAGE ACTIONS -->
 		<!-- BEGIN PAGE TOP -->
 		<div class="page-top">
-			<!-- BEGIN HEADER SEARCH BOX -->
-			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<!-- <form class="search-form" action="extra_search.html" method="GET">
-				<div class="input-group">
-					<input type="text" class="form-control input-sm" placeholder="Search..." name="query">
-					<span class="input-group-btn">
-					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-					</span>
-				</div>
-			</form> -->
-			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
@@ -78,6 +70,7 @@
 					</li>
 					<li class="separator hide">
 					</li>
+					<!-- END TODO DROPDOWN -->
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user dropdown-dark">
@@ -86,14 +79,14 @@
 						<?php echo $user_account->first_name?> <?php echo $user_account->last_name?> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
 						<?php
-			              $query = $user_account->image;
-			              if (empty($query)) {
-			                $user_icon = 'avatar.png';
-			              } else {
-			                $user_icon = 'users/'.$user_account->image;
-			              }
-			            ?>
-			            <img alt="" class="img-circle" src="<?php echo base_url()?>public/attachments/<?php echo $user_icon?>"/>
+							$query = $user_account->image;
+							if (empty($query)) {
+								$user_icon = 'avatar.png';
+							} else {
+								$user_icon = 'attachments/users/'.$user_account->image;
+							}
+						?>
+						<img alt="" class="img-circle" src="<?php echo base_url()?>public/<?php echo $user_icon?>"/>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
@@ -223,19 +216,19 @@
 						</li>
 					</ul>
 				</li>
-				<li >
+				<li>
 					<a href="javascript:;">
 					<i class="fa fa-gift"></i>
 					<span class="title">Products</span>
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-						<li >
+						<li>
 							<a href="<?php echo base_url()?>admin/products/publish">
 							<i class="fa fa-check-square-o"></i>
 							Publish Product</a>
 						</li>
-						<li >
+						<li>
 							<a href="<?php echo base_url()?>admin/products">
 							<i class="fa fa-list"></i>
 							List Products</a>
@@ -269,7 +262,7 @@
 							<ul class="sub-menu">
 								<li >
 									<a href="<?php echo base_url()?>admin/products/tags/add">
-									<i class="fa fa-tag"></i>
+									<i class="fa fa-check-square-o"></i>
 									Publish Tags</a>
 								</li>
 								<li>
@@ -282,11 +275,11 @@
 						</li>
 					</ul>
 				</li>
-				<li>
+				<li class="active">
 					<a href="javascript:;">
 					<i class="fa fa-shopping-cart"></i>
 					<span class="title">Orders</span>
-					<span class="arrow "></span>
+					<span class="arrow open"></span>
 					</a>
 					<ul class="sub-menu">
 						<li >
@@ -299,14 +292,14 @@
 							<i class="fa fa-list"></i>
 							List Orders</a>
 						</li>
-						<li>
+						<li class="active">
 							<a href="javascript:;">
 							<i class="fa fa-star-half-o"></i>
 							<span class="title">Order Status</span>
-							<span class="arrow "></span>
+							<span class="arrow open"></span>
 							</a>
 							<ul class="sub-menu">
-								<li>
+								<li class="active">
 									<a href="<?php echo base_url()?>admin/orders/status/add">
 									<i class="fa fa-plus"></i>
 									Add Status</a>
@@ -338,25 +331,25 @@
 							List Payment</a>
 						</li>
 						<li>
-								<a href="javascript:;">
-								<i class="fa fa-money"></i>
-								<span class="title">Modes of Payment</span>
-								<span class="arrow "></span>
-								</a>
-								<ul class="sub-menu">
-									<li >
-										<a href="<?php echo base_url()?>admin/payments/add-mode">
-										<i class="fa fa-check-square-o"></i>
-										Add Mode of Payment</a>
-									</li>
-									<li>
-										<a href="<?php echo base_url()?>admin/payments/modes">
-										<i class="fa fa-list"></i>
-										Modes of Payment</a>
-									</li>
-									
-								</ul>
-							</li>
+							<a href="javascript:;">
+							<i class="fa fa-money"></i>
+							<span class="title">Modes of Payment</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/payments/add-mode">
+									<i class="fa fa-check-square-o"></i>
+									Add Mode of Payment</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/payments/modes">
+									<i class="fa fa-list"></i>
+									Modes of Payment</a>
+								</li>
+								
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -372,25 +365,25 @@
 							Add Shipment </a>
 						</li>
 						<li>
-							<a href="<?php echo base_url()?>admin/payments">
+							<a href="<?php echo base_url()?>admin/shipments">
 							<i class="fa fa-list"></i>
 							List Shipments</a>
 						</li>
 					</ul>
 				</li>
-				<li class="last active">
+				<li class="last">
 					<a href="javascript:;">
 					<i class="fa fa-cogs"></i>
 					<span class="title">Settings</span>
-					<span class="arrow open"></span>
+					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-						<li>
+						<li >
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
-							<?php echo $this->lang->line('general_settings_heading')?> </a>
+							<?php echo lang('general_settings_heading')?> </a>
 						</li>
-						<li class="active">
+						<li>
 							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
 							<i class="fa fa-money"></i>
 							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
@@ -434,20 +427,10 @@
 			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 			<!-- BEGIN PAGE HEADER-->
 			<!-- BEGIN PAGE HEAD -->
-			<?php
-				if ($this->session->flashdata('message')) {
-					?>
-						<div class="alert alert-info">
-							<button type="button" class="close" data-dismiss="alert"></button>
-							<div id="infoMessage"> <?php echo '<strong>Info!</strong>', ' ', $message;?></div>
-						</div>
-					<?php
-				}
-			?>
 			<div class="page-head">
 				<!-- BEGIN PAGE TITLE -->
 				<div class="page-title">
-					<h1> <?php echo $this->lang->line('settings')?> </h1>
+					<h1> <?php echo $title ?></h1>
 				</div>
 				<!-- END PAGE TITLE -->
 				<!-- BEGIN PAGE TOOLBAR -->
@@ -547,147 +530,163 @@
 					<a href="<?php echo base_url()?>admin">Home</a>
 					<i class="fa fa-circle"></i>
 				</li>
+				<li>
+					<a href="<?php echo base_url()?>admin/orders">Orders</a>
+					<i class="fa fa-circle"></i>
+				</li>
 				<li class="active">
-					<?php echo $this->lang->line('general_settings_heading')?>
+					<?php echo $title ?>
 				</li>
 			</ul>
 			<!-- END PAGE BREADCRUMB -->
 			<!-- END PAGE HEADER-->
 			<!-- BEGIN PAGE CONTENT-->
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-12">
+					<!-- BEGIN PORTLET-->
 					<div class="portlet box blue">
-						<div class="portlet-title">
-							<div class="caption">
-								Consumer Key
-							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
 						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_consumer_key');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-unlock"></i>
-											</span>
-											<input type="text" name="consumer_key" class="form-control" placeholder="" value="<?php echo $consumer_key?>">
+							<form method="post" action="<?php echo base_url('auth/add_order_status')?>">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="control-label" for="status"> Status <span class="required"> *</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-paragraph"></i>
+                                            </span>
+                                            <input type="text" name="status" class="form-control" placeholder="e.g. Processed" value="" id="status"> 
+                                        </div>
+                                        <div class="caption-subject" style="color: red;">
+                                        	<?php echo form_error('status')?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="badge"> Badge <span class="required"> *</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-paragraph"></i>
+                                            </span>
+                                            <input type="text" name="badge" class="form-control" placeholder="label label-sm label-danger" value="" id="badge"> 
+                                        </div>
+                                        <div class="caption-subject" style="color: red;">
+                                        	<?php echo form_error('badge')?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="btn-set pull-right">
+                                        <button type="cancel" class="btn default">Cancel</button>
+                                        <button type="submit" class="btn blue"><i class="fa fa-check-square-o"></i><?php echo $title?></button>
+                                    </div>
+                                </div>
+                            </form>
+							<div id="stack2" class="modal fade" tabindex="-1" data-width="400">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title">Add Category</h4>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-md-12">
+		                                            <?php echo form_open('auth/add_category'); ?>
+			                                            <div class="form-body">
+			                                                <div class="form-group">
+			                                                    <label class="control-label" for="pd_category"> Category <span class="required"> *</span></label>
+			                                                    <div class="input-group">
+			                                                        <span class="input-group-addon">
+			                                                            <i class="fa fa-paragraph"></i>
+			                                                        </span>
+			                                                        <input type="text" name="pd_category" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_category"> 
+			                                                    </div>
+			                                                    <div class="caption-subject" style="color: red;">
+			                                                    	<?php echo form_error('pd_category')?>
+			                                                    </div>
+			                                                </div>
+			                                                <div class="form-group">
+																<label class="control-label" for="pd_parent_category">Parent Category </label>
+				                                                <div class="input-group">
+				                                                    <span class="input-group-addon">
+				                                                        <i class="fa fa-institution"></i>
+				                                                    </span>
+			                                                        <select id="pd_parent_category" class="form-control select2me" name="pd_parent_category" >
+			                                                        	<option value="" >Select parent category...</option>
+			                                                            <?php foreach ($categories as $category ) {
+			                                                            	if ($category->parent_category == null) {
+			                                                            		?>
+			                                                            			<option value="<?php echo $category->category?>"><?php echo $category->category?></option>
+
+			                                                            			<?php
+			                                                            				$this->db->order_by('categories.category', 'asc');
+			                                                            				$subcategories = $this->db->get_where('categories', ['parent_category' => $category->category])->result();
+
+			                                                            				foreach ($subcategories as $subcategory) {
+			                                                            					?>
+			                                                            						<option value="<?php echo $subcategory->category?>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategory->category?></option>
+			                                                            					<?php
+			                                                            				}
+			                                                            			?>
+			                                                            		<?php
+			                                                            	}
+			                                                            }?>
+			                                                        </select>
+				                                                </div>
+				                                                <div class="caption-subject" style="color: red;">
+			                                                    	<?php echo form_error('pd_parent_category')?>
+			                                                    </div>
+															</div>
+			                                            </div>
+			                                            <div class="modal-footer">
+															<button type="button" data-dismiss="modal" class="btn">Close</button>
+															<button type="submit" class="btn blue"><?php echo $this->lang->line('publish_category_heading')?></button>
+														</div>
+													<?php echo form_close();?>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="form-actions">
-									<div class="pull-right ">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs blue">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="portlet box red">
-						<div class="portlet-title">
-							<div class="caption">
-								Consumer Secret
 							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_consumer_secret');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-unlock-alt"></i>
-											</span>
-											<input type="text" name="consumer_secret" class="form-control" value="<?php echo $consumer_secret?>">
+							<div id="stack3" class="modal fade" tabindex="-1">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title">Add Tag</h4>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-md-12">
+		                                            <?php echo form_open('auth/add_tag'); ?>
+			                                            <div class="form-body">
+			                                                <div class="form-group">
+			                                                    <label class="control-label" for="pd_tag">Tag <span class="required"> *</span></label>
+			                                                    <div class="input-group">
+			                                                        <span class="input-group-addon">
+			                                                            <i class="fa fa-paragraph"></i>
+			                                                        </span>
+			                                                        <input type="text" name="pd_tag" style="text-transform: capitalize;" class="form-control" placeholder="Tecno" value="" id="pd_tag"> 
+			                                                    </div>
+			                                                    <div class="caption-subject" style="color: red;">
+			                                                    	<?php echo form_error('pd_tag')?>
+			                                                    </div>
+			                                                </div>
+			                                            </div>
+			                                            <div class="modal-footer">
+															<button type="button" data-dismiss="modal" class="btn">Close</button>
+															<button type="submit" class="btn blue">Add Tag</button>
+														</div>
+													<?php echo form_close();?>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="form-actions">
-									<div class="pull-right">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs red">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="portlet box green ">
-						<div class="portlet-title">
-							<div class="caption">
-								Till Number
-							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_till_number');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-key"></i>
-											</span>
-											<input type="text" name="till_number" class="form-control" placeholder="600600" value="<?php echo $till_number?>">
-										</div>
-									</div>
-								</div>
-								<div class="form-actions" >
-									<div class="pull-right">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs green">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="portlet box purple">
-						<div class="portlet-title">
-							<div class="caption">
-								Pass Key
-							</div>
-							<div class="tools">
-								<a href="" class="reload">
-								</a>
-							</div>
-						</div>
-						<div class="portlet-body form">
-							<?php echo form_open('auth/edit_pass_key');?>
-								<div class="form-body">
-									<div class="form-group">
-										<div class="input-group">
-											<span class="input-group-addon">
-											<i class="fa fa-unlock"></i>
-											</span>
-											<input type="text" name="pass_key" class="form-control" placeholder="" value="<?php echo $pass_key?>">
-										</div>
-									</div>
-								</div>
-								<div class="form-actions">
-									<div class="pull-right ">
-										<button type="button" class="btn btn-xs default">Cancel</button>
-										<button type="submit" class="btn btn-xs purple">Save Changes</button>
-									</div>
-								</div>
-							<?php echo form_close();?>
-						</div>
-					</div>
+					<!-- END PORTLET-->
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->

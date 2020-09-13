@@ -2942,4 +2942,24 @@ class Ion_auth_model extends CI_Model
 			return FALSE;
 		}
 	}
+
+	/**
+	 * cancel order
+	 *
+	 * @return bool
+	 */
+	public function _cancel_order($order_id) {
+		$data = ['status' => 3];
+
+		$this->db->where('order_id', $order_id);
+		$this->db->update('orders', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_cancelled_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('order_not_cancelled');
+			return FALSE;
+		}
+	}
 }

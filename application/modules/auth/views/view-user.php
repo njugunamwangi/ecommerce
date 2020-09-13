@@ -300,6 +300,25 @@
 							<i class="fa fa-list"></i>
 							List Orders</a>
 						</li>
+						<li>
+							<a href="javascript:;">
+							<i class="fa fa-star-half-o"></i>
+							<span class="title">Order Status</span>
+							<span class="arrow "></span>
+							</a>
+							<ul class="sub-menu">
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/status/add">
+									<i class="fa fa-plus"></i>
+									Add Status</a>
+								</li>
+								<li>
+									<a href="<?php echo base_url()?>admin/orders/statuses">
+									<i class="fa fa-list"></i>
+									List Statuses</a>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -371,6 +390,16 @@
 							<a href="<?php echo base_url()?>admin/settings/general">
 							<i class="fa fa-cog"></i>
 							<?php echo $this->lang->line('general_settings_heading')?>  </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/m-pesa-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('m_pesa_credentials_heading')?>  </a>
+						</li>
+						<li>
+							<a href="<?php echo base_url()?>admin/settings/stripe-credentials">
+							<i class="fa fa-money"></i>
+							<?php echo $this->lang->line('stripe_credentials_heading')?>  </a>
 						</li>
 					</ul>
 				</li>
@@ -1168,57 +1197,43 @@
 																		</tr>
 																	</thead>
 																	<?php
-																		$my_product_orders = $this->db->get('orders')->result();
+																		$this->db->where('vendor_id', $user_account->created_on);
+																		$my_product_orders = $this->db->get('orders_summary')->result();
+
 																		foreach ($my_product_orders as $my_product_order) {
-																			$cart_items = json_decode($my_product_order->orders);
-																			foreach ($cart_items as $cart_item) {
-																				if ($cart_item->vendor_id == $user->created_on) {
-																					?>
-																						<tr>
-																							<td>
-																								<?php echo date('jS M, Y', $my_product_order->order_id) ?> at <?php echo date('H:i:s', $my_product_order->order_id) ?>
-																							</td>
-																							<td>
-																								<?php echo $my_product_order->first_name?> <?php echo $my_product_order->last_name?>
-																							</td>
-																							<td>
-																								<?php echo $cart_item->name ?>
-																							</td>
-																							<td>
-																								<?php echo $cart_item->qty ?>
-																							</td>
-																							<td>
-																								<?php
-														                                          if ($my_product_order->status == 0) {
-														                                            ?>
-														                                              <span class="label label-sm label-danger">Not Processed</span>
-														                                            <?php
-														                                          } elseif ($my_product_order->status == 1) {
-														                                            ?>
-														                                              <span class="label label-sm label-info">Processed</span>
-														                                            <?php
-														                                          } elseif ($my_product_order->status == 2) {
-														                                            ?>
-														                                              <span class="label label-sm label-warning">In Transit</span>
-														                                            <?php
-														                                          } elseif ($my_product_order->status == 3) {
-														                                            ?>
-														                                              <span class="label label-sm label-default">Cancelled</span>
-														                                            <?php
-														                                          } else {
-														                                            ?>
-														                                              <span class="label label-sm label-success">Delivered & Closed</span>
-														                                            <?php
-														                                          }
-														                                        ?>
-																							</td>
-																						</tr>
-																					<?php
-																				}
-																			}
+																			?>
+																				<tr>
+																					<td>
+																						<?php
+																							$order_date = $this->db->get_where('orders', ['id' => $my_product_order->order_id])->row();
+
+																							echo date('jS M, Y', $order_date->order_id), ' at ', date('H:i:s', $order_date->order_id)
+																						?>
+																					</td>
+																					<td>
+																						<?php
+																							$customer = $this->db->get_where('users', ['id' => $my_product_order->customer_id])->row();
+
+																							echo $customer->first_name, ' ', $customer->last_name;
+																						?>
+																					</td>
+																					<td>
+																						<?php
+																							$product = $this->db->get_where('products', ['id' => $my_product_order->product_id])->row();
+
+																							echo $product->name;
+																						?>
+																					</td>
+																					<td>
+																						<?php echo $my_product_order->qty ?>
+																					</td>
+																					<td>
+																						<?php echo $my_product_order->status ?>
+																					</td>
+																				</tr>
+																			<?php
 																		}
 																	?>
-																	
 																</table>
 															</div>
 														</div>

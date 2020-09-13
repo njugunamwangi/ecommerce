@@ -236,10 +236,17 @@ $lang['search_orders_heading']					= 'Search Orders';
 $lang['order_does_not_exist']					= 'Order does not exist';
 $lang['product_order_made_available']			= 'Product order available';
 $lang['product_order_not_available']			= 'Product order not available';
+$lang['add_order_status_heading']				= 'Add Order Status';
+$lang['add_order_status_validation_status_label']	= 'Status';
+$lang['add_order_status_validation_badge_label']	= 'Badge';
+$lang['order_status_successfully_added']			= 'Order Status successfully added';
+$lang['order_status_not_added']						= 'Order status not added';
+$lang['list_order_status_heading']					= 'Order Statuses';
 
 // settings
 $lang['general_settings_heading']					= 'General Settings';
 $lang['m_pesa_credentials_heading']					= 'M-Pesa Credentials';
+$lang['stripe_credentials_heading']					= 'Stripe Credentials';
 $lang['settings']									= 'Settings';
 $lang['add_field_name_validation_label']			= 'Field';
 $lang['add_name_of_store_validation_label']			= 'Name of Store';
@@ -269,6 +276,12 @@ $lang['till_number_update_failed']					= 'Till Number update failed';
 $lang['edit_pass_key_validation_label']				= 'Pass Key';
 $lang['pass_key_updated_successfully']				= 'Pass Key successfully updated';
 $lang['pass_key_update_failed']						= 'Pass Key update failed';
+$lang['edit_stripe_secret_key_validation_label']	= 'Secret Key';
+$lang['secret_key_updated_successfully']			= 'Secret Key successfully updated';
+$lang['secret_key_update_failed']					= 'Secret Key update failed';
+$lang['edit_stripe_publishable_key_validation_label']	 = 'Publishable Key';
+$lang['publishable_key_updated_successfully']			= 'Publishable Key successfully updated';
+$lang['publishable_key_update_failed']					= 'Publishable Key update failed';
 
 // Users
 $lang['users']						= 'Users';

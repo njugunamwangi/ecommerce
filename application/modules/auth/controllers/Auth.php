@@ -119,7 +119,7 @@ class Auth extends MX_Controller
 					// if the user is a customer
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
 					redirect('/', 'refresh');
-				} else {
+				} elseif ($this->ion_auth->is_vendor()) {
 					
 					// if the user is a vendor
 					$vendor_id = $this->ion_auth->user()->row()->created_on;
@@ -127,7 +127,7 @@ class Auth extends MX_Controller
 					$domain_name = $domain_arr[0].'.'.$domain_arr[1];
 					$this->session->set_flashdata('message', $this->ion_auth->messages());
 					redirect(prep_url($vendor_id.'.'.$domain_name.'/vendor'), 'refresh');
-				}
+				} 
 			}
 			else
 			{
@@ -1193,6 +1193,7 @@ class Auth extends MX_Controller
 			$data['name_of_store'] = $this->nameofstore();
 			$data['user_groups'] = $this->ion_auth->get_users_groups($id)->result();
 			$data['currency'] = $this->storecurrency();
+			
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/view-user', $data);
 			$this->_render_page('templates/footer');
@@ -2006,7 +2007,6 @@ class Auth extends MX_Controller
 				// but is not an admin, show error
 				show_error($this->lang->line('admin_access_only'));
 			} else {
-				$id = $data['product']->id;
 				$this->ion_auth_model->_unpublish_product($id);
     			$this->session->set_flashdata('message', $this->ion_auth->messages());
 				redirect('admin/products', 'refresh');
@@ -2515,6 +2515,7 @@ class Auth extends MX_Controller
 			$data['customers'] = $this->ion_auth->users()->result();
 			$data['subcounties'] = $this->ion_auth_model->get_shipments();
 			$data['counties'] = $this->ion_auth_model->get_counties();
+			$data['modes_of_payment'] = $this->ion_auth_model->get_modes_of_payment();
 
 			$this->_render_page('templates/header');
 			$this->_render_page('auth/new-order', $data);
@@ -2667,6 +2668,52 @@ class Auth extends MX_Controller
 	}
 
 	/**
+	 * m-pesa credentials
+	 *
+	 * @return bool
+	 */
+	public function stripe_credentials() {
+		$data['title'] = $this->lang->line('stripe_credentials_heading');
+
+		// login check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/stripe-credentials', $data);
+			$this->_render_page('templates/footer');
+
+			$data['stripe_secret_key'] = $this->stripe_secret_key();
+
+			$data['stripe_publishable_key'] = $this->stripe_publishable_key();
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/stripe-credentials', $data);
+			$this->_render_page('templates/footer');
+		}
+	}
+
+	/**
 	 * @param int
 	 *
 	 * @return total sales
@@ -2692,6 +2739,85 @@ class Auth extends MX_Controller
 				echo '<pre>';
 				echo $shipping->fee;
 			}
+		}
+	}
+
+	/**
+	 * add order status
+	 *
+	 * @param array
+	 *
+	 * @return bool
+	 */
+	public function add_order_status() {
+		$data['title'] = $this->lang->line('add_order_status_heading');
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			// validate form validation
+			$this->form_validation->set_rules('status', $this->lang->line('add_order_status_validation_status_label'), 'required|is_unique[order_status.status]', 
+				[
+					'is_unique' => 'Please use a different status'
+				]
+			);
+			$this->form_validation->set_rules('badge', $this->lang->line('add_order_status_validation_badge_label'), 'required|is_unique[order_status.badge]', 
+				[
+					'is_unique' => 'Please use a different badge'
+				]
+			);
+
+			if ($this->form_validation->run() === TRUE) {
+				$this->ion_auth_model->_set_order_status();
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect('admin/orders/statuses', 'refresh');
+			} else {
+				$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+				$data['user_account'] = $this->ion_auth->user()->row();
+
+				$data['name_of_store'] = $this->nameofstore();
+
+				$this->_render_page('templates/header');
+				$this->_render_page('auth/add-order-status', $data);
+				$this->_render_page('templates/footer');
+			}
+		}
+	}
+
+	public function list_order_status() {
+		$data['title'] = $this->lang->line('list_order_status_heading');
+
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to login page
+			redirect('login', 'refresh');
+
+		} elseif (!$this->ion_auth->is_admin()) {
+			// if the user is logged in but not an admin
+			// show admin access only message
+			show_error($this->lang->line('admin_access_only'));
+		} else {
+			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$data['order_statuses'] = $this->ion_auth_model->_order_status();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/list-order-status', $data);
+			$this->_render_page('templates/footer');
 		}
 	}
 
@@ -2782,6 +2908,20 @@ class Auth extends MX_Controller
 	 */
 	public function pass_key() {
 		return $this->db->get_where('info', ['field' => 'pass-key'])->row()->value;
+	}
+
+	/**
+	 * @return consumer key
+	 */
+	public function stripe_secret_key() {
+		return $this->db->get_where('info', ['field' => 'stripe-secret-key'])->row()->value;
+	}
+
+	/**
+	 * @return consumer key
+	 */
+	public function stripe_publishable_key() {
+		return $this->db->get_where('info', ['field' => 'stripe-publishable-key'])->row()->value;
 	}
 
 	/**
@@ -2921,6 +3061,42 @@ class Auth extends MX_Controller
 			$this->ion_auth_model->set_pass_key();
 			$this->session->set_flashdata('message', $this->ion_auth->messages());
 			redirect('admin/settings/m-pesa-credentials', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * edit stripe secret key
+	 *
+	 * @return bool
+	 */
+	public function edit_stripe_secret_key() {
+		// form validation
+		$this->form_validation->set_rules('secret_key', $this->lang->line('edit_stripe_secret_key_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->update_secret_key();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/stripe-credentials', 'refresh');
+		} else {
+			echo 'error';
+		}
+	}
+
+	/**
+	 * edit stripe secret key
+	 *
+	 * @return bool
+	 */
+	public function edit_stripe_publishable_key() {
+		// form validation
+		$this->form_validation->set_rules('publishable_key', $this->lang->line('edit_stripe_publishable_key_validation_label'), 'required');
+
+		if ($this->form_validation->run() === TRUE) {
+			$this->ion_auth_model->update_publishable_key();
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('admin/settings/stripe-credentials', 'refresh');
 		} else {
 			echo 'error';
 		}
@@ -3123,7 +3299,15 @@ class Auth extends MX_Controller
 			// show admin access only message
 			show_error($this->lang->line('admin_access_only'));
 		} else {
-			
+			$data['modes_of_payment'] = $this->ion_auth_model->get_modes_of_payment();
+
+			$data['user_account'] = $this->ion_auth->user()->row();
+
+			$data['name_of_store'] = $this->nameofstore();
+
+			$this->_render_page('templates/header');
+			$this->_render_page('auth/list-modes-of-payment', $data);
+			$this->_render_page('templates/footer');
 		}
 	}
 

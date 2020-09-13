@@ -3268,6 +3268,50 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * set stripe secret key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function update_secret_key() {
+		$this->db->where('id', 12);
+		$data = ['value' => $this->input->post('secret_key')];
+
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('secret_key_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('secret_key_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * set stripe publishable key
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function update_publishable_key() {
+		$data = ['value' => $this->input->post('publishable_key')];
+
+		$this->db->where('id', 13);
+		$this->db->update('info', $data);
+
+		if ($this->db->affected_rows() === 1) {
+			$this->set_message('publishable_key_updated_successfully');
+			return TRUE;
+		} else {
+			$this->set_error('publishable_key_update_failed');
+			return FALSE;
+		}
+	}
+
+	/**
 	 * set store currency
 	 *
 	 * @param string
@@ -3688,5 +3732,47 @@ class Ion_auth_model extends CI_Model
 
 		$mode = $this->db->get_where('modes_of_payment', ['id' => $id])->row();
 		return $mode;
+	}
+
+	/**
+	 * add status
+	 *
+	 * @param string
+	 *
+	 * @return bool
+	 */
+	public function _set_order_status() {
+		$input = $this->input->post();
+
+		$data = [
+			'status' => $input['status'],
+			'badge' => $input['badge'],
+			'slug' => url_title($input['status'], 'dash', TRUE)
+		];
+
+		$this->db->insert('order_status', $data);
+
+		if ($this->db->affected_rows()) {
+			$this->set_message('order_status_successfully_added');
+			return TRUE;
+		} else {
+			$this->set_error('order_status_not_added');
+			return FALSE;
+		}
+	}
+
+	/**
+	 * list order status
+	 *
+	 * @param array
+	 */
+	public function _order_status($id = FALSE) {
+		if ($id === FALSE) {
+			$this->db->order_by('order_status.status', 'asc');
+			return $this->db->get('order_status')->result();
+		}
+
+		$order_status = $this->db->get_where('order_status', ['id' => $id]);
+		return $order_status->row();
 	}
 }

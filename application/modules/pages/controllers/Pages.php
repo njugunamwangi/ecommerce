@@ -65,6 +65,10 @@ class Pages extends MX_Controller {
 		$this->load->view('pages/product', $data);
 	}
 
+	public function stripe() {
+		$this->_render_page('pages/stripe');
+	}
+
 	/**
 	 * @return search results
 	 */
@@ -284,6 +288,8 @@ class Pages extends MX_Controller {
 	 * @return my-orders history
 	 */
 	public function my_orders() {
+		require_once('\vendor\stripe\stripe-php\init.php');
+
 		$this->load->library('pagination');
 		$data['user_account'] = $this->ion_auth->user()->row();
 
@@ -305,9 +311,49 @@ class Pages extends MX_Controller {
 			$data['store_location'] = $this->store_location();
 			$data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			$data['pagination_links'] = $this->pagination->create_links();
+			$data['publishable_key'] = $this->db->get_where('info', ['field' => 'stripe-publishable-key'])->row()->value;
+			$data['secret_key'] = (string)$this->db->get_where('info', ['field' => 'stripe-secret-key'])->row()->value;
+
+			\Stripe\Stripe::setApiKey($data['secret_key']);
 
 			$this->_render_page('pages/my-orders', $data);
 		}
+	}
+
+	public function confirmStripePayment($order_id) {
+		require_once('\vendor\stripe\stripe-php\init.php');
+
+		\Stripe\Stripe::setVerifySslCerts(false);
+
+		// Token is created using Checkout or Elements!
+		// Get the payment token ID submitted by the form:
+		// $order_id = 
+
+		if (!isset($_POST['stripeToken']) || !isset($order_id)) {
+			// header("Location: pricing.php");
+			exit();
+		}
+
+		$token = $_POST['stripeToken'];
+		$email = $_POST["stripeEmail"];
+
+		$order = $this->db->get_where('orders', ['order_id' => $order_id])->row();
+
+		$shipment = $this->db->get_where('shipment', ['ship_to' => $order->subcounty])->row()->fee;
+
+		$price = ($order->total_orders+$shipment)*100;
+
+		// Charge the user's card:
+		$charge = \Stripe\Charge::create(array(
+			"amount" => $price,
+			"currency" => "usd",
+			"description" => $order_id,
+			"source" => $token,
+		));
+
+		//send an email
+		//store information to the database
+		echo 'Success! You have been charged $' . $price/100;
 	}
 
 	/**
@@ -348,7 +394,23 @@ class Pages extends MX_Controller {
 	 * @return bool
 	 */
 	public function cancel_order($order_id) {
+		$data['my_order'] = $this->pages_model->my_orders($order_id);
+		$user_id = $this->ion_auth->user()->row()->id;
 
+		// login and user credentials check
+		if (!$this->ion_auth->logged_in()) {
+			// if the user is not logged in
+			// redirect to log in page
+			redirect('login', 'refresh');  
+		} elseif ($data['my_order']->customer_id != $user_id) {
+			// if the user did not place the order
+			// show error
+			show_error($this->lang->line('you_cannot_cancel_this_order'));
+		} else {
+			$this->ion_auth_model->_cancel_order($order_id);
+			$this->session->set_flashdata('message', $this->ion_auth->messages());
+			redirect('/my-account/orders', 'refresh');
+		}
 	}
 
 	/**
@@ -385,28 +447,6 @@ class Pages extends MX_Controller {
 
 			$this->_render_page('checkout', $data);
 		} 
-	}
-
-	public function lipa_na_mastercard($order_id) {
-		$data['order'] = $this->pages_model->my_orders($order_id);
-
-		// check whether the order exists
-		if (empty($data['order'])) {
-			// if the order does not exist
-			// show error
-			show_error($this->lang->line('order_does_not_exist'));
-		}  else {
-			$data['title'] = $this->lang->line('lipa_na_mpesa_heading');
-			$data['name_of_store'] = $this->name_of_store();
-			$data['store_email'] = $this->store_email();
-			$data['store_phone_number'] = $this->store_phone_number();
-			$data['store_currency'] = $this->store_currency();
-			$data['cart_items'] = $this->cart->contents();
-			$data['user_account'] = $this->ion_auth->user()->row();
-			$data['store_location'] = $this->store_location();
-
-			$this->_render_page('lipa-na-mastercard', $data);
-		}
 	}
 
 	public function lipa_na_mpesa() {
@@ -481,48 +521,16 @@ class Pages extends MX_Controller {
 	    echo $curl_response;
 	}
 
-	public function paywmc() {
-		$plainText  = "1230161923853KE2018-08-09";
-		$privateKey = openssl_pkey_get_private(("file:///C:/xampp/htdocs/ecommerce/application/modules/pages/privatekey.pem"));
-		$token      = "5dZsmAKKBMC4Z2xylUxKuAfXFOGKUeHdx";
+	public function paywithstripe() {
 
-		openssl_sign($plainText, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+	}
 
+	public function paywithpaypal() {
 
-		$curl        = curl_init();
-		$data_string = '{
-		    "countryCode":"KE",
-		    "accountId":"1230161923853",
-		    "date":"2018-08-09"
-		    }';
+	}
 
-		curl_setopt_array($curl, array(
-		    CURLOPT_URL => "https://sandbox.jengahq.io/account-test/v2/accounts/accountbalance/query",
-		    CURLOPT_RETURNTRANSFER => true,
-		    CURLOPT_ENCODING => "",
-		    CURLOPT_MAXREDIRS => 10,
-		    CURLOPT_TIMEOUT => 30,
-		    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		    CURLOPT_CUSTOMREQUEST => "POST",
-		    CURLOPT_POSTFIELDS => $data_string,
-		    CURLOPT_HTTPHEADER => array(
-		        "Authorization: Bearer " . $token,
-		        "cache-control: no-cache",
-		        "Content-Type: application/json",
-		        "signature: " . base64_encode($signature)
-		    )
-		));
-		$result = curl_exec($curl);
-		$err    = curl_error($curl);
-
-		curl_close($curl);
-
-		if ($err) {
-		    echo "cURL Error #:" . $err;
-		} else {
-		    echo $result;
-		}
-
+	public function handler() { 
+		$this->_render_page('pages/handler'); 
 	}
 
 	/**

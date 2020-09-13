@@ -10,6 +10,12 @@ Coded in PHP and codeigniter framework, it provides four different user levels, 
 Modes of payment
 
 1. M-Pesa(Sandbox)
+2. Paypal (Live)
+3. Credit Cards (live)
+
+APIs
+1. Daraja Api by Safaricom
+2. Stripe, for Credit Card payments
 
 The login credentials are as follows
 

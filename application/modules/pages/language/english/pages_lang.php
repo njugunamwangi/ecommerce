@@ -43,9 +43,14 @@ $lang['my_account_heading']						= 'My Account';
 $lang['my_account_login_message']				= 'Please login to view your account';
 
 // My Orders
-$lang['my_orders_heading']		= 'My Orders';
-$lang['order_heading']			= 'Order';
-$lang['no_orders']				= 'You have not made any orders yet';
+$lang['my_orders_heading']					= 'My Orders';
+$lang['order_heading']						= 'Order';
+$lang['no_orders']							= 'You have not made any orders yet';
+$lang['you_cannot_cancel_this_order']		= 'You cannot cancel this order';
+$lang['order_set_successfully']				= 'Your Order has been received. Thank you for shoping with us';
+$lang['order_not_set']						= 'Please check your form';
+$lang['order_cancelled_successfully']		= 'Order cancelled successfully';
+$lang['order_not_cancelled']				= 'Order not cancelled';
 
 // Pages
 $lang['wishlist_page_heading']	= 'Wishlist';
@@ -69,10 +74,6 @@ $lang['email_already_registered']							= 'The email address is registered by an
 $lang['phone_already_registered']							= 'The phone number is registered by another user';
 $lang['reset_password_validation_password_label']			= 'Password';
 $lang['reset_password_validation_password_confirm_label']	= 'Password Confirm';
-
-// Set order
-$lang['order_set_successfully']				= 'Your Order has been received. Thank you for shoping with us';
-$lang['order_not_set']						= 'Please check your form';
 
 // Product Review
 $lang['product_review_added']  			= 'Product review added successfully, wait for approval and then the review will appear';
